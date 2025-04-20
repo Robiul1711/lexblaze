@@ -18,8 +18,8 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			primary: '#22404B',
-  			secondary: '#5A5C5F',
+  			primary: '#FDE300',
+  			secondary: '#0E1060',
   			dark: '#000'
   		},
   		backgroundImage: {

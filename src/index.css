@@ -2,7 +2,7 @@
 
 /* google fonts */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
 /* google fonts */
 
 @tailwind base;
@@ -10,7 +10,7 @@
 @tailwind utilities;
 
 body {
-  font-family: "Plus Jakarta Sans", serif;
+  font-family: "Reddit Sans", sans-serif;
   overflow-x: hidden;
 }
 
@@ -51,3 +51,13 @@ body {
     padding-bottom: 100px;
   }
 }
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+
