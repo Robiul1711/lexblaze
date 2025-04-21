@@ -3,6 +3,7 @@ import { useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { Switch } from "antd";
 import { UploadIcons } from "@/lib/Icons";
+import { Link } from "react-router-dom";
 
 
 const BusinessProfileForm = () => {
@@ -22,7 +23,7 @@ const BusinessProfileForm = () => {
     console.log(`switch to ${checked}`);
   };
   return (
-    <div className="max-w-[590px] mx-auto mt-16 px-4">
+    <div className="max-w-[590px] mx-auto mt-16 pb-[220px] px-4">
    <div className="mb-16">
     <Title48 title2="Crear Perfil de Negocio" />
    </div>
@@ -128,12 +129,12 @@ const BusinessProfileForm = () => {
           <span>Términos y Condiciones</span>
         </div>
 <div className="flex flex-col items-center gap-2 mt-6">
-        <button
+        <Link to='/create-event'
           type="submit"
           className="bg-[#11D619]  hover:bg-green-600 text-white font-semibold py-3 px-14 text-3xl rounded-[20px] mt-4"
         >
           Crear Cuenta
-        </button>
+        </Link>
 
 </div>
       </form>

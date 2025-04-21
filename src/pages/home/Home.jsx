@@ -32,7 +32,7 @@ const Home = () => {
         </div>
       </div>
       {/* Footer  */}
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-10 pb-[120px]">
        <img src={bottomImg} alt="" />
       </div>
     </div>

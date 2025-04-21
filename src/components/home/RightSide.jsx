@@ -4,7 +4,7 @@ const RightSide = () => {
   return (
     <div>
       <button className='bg-[#D40000] py-3 w-full mb-3 rounded-xl font-bold text-xl text-white'>EVENTOS DESTACADOS</button>
-        <img src={rightImg} alt="" />
+        <img src={rightImg} alt="w-full" />
     </div>
   )
 }

@@ -5,13 +5,14 @@ const navLinks = [
   { name: 'Iniciar Sesión de Negocios', href: 'log-in' },
   { name: 'Crear Cuenta de Negocios', href: 'profile' },
   { name: 'Tutoriales', href: 'tutorials' },
-  { name: 'Acerca de Nosotros', href: '/' }, // 
+  { name: 'Acerca de Nosotros', href: 'about-us' }, // 
 ];
 
 const MenuDropdown = () => {
   return (
     <div className="w-full max-w-[600px] mx-auto bg-primary backdrop-blur-md text-black p-6 rounded-xl shadow-xl">
       <nav className="space-y-4 md:space-y-5">
+        
         {navLinks.map((item, index) => (
           <Link
             key={index}
