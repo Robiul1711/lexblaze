@@ -3,7 +3,8 @@ import { TiktokIcons, YoutubeIcons } from "@/lib/Icons";
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary mt-40 text-white px-6 pt-40 pb-10 relative">
+    // mt-40
+    <footer className="bg-secondary  text-white px-6 pt-40 pb-10 relative">
       {/* Logo in a curved container */}
       <div className="absolute top-[-100px] left-1/2 transform -translate-x-1/2 w-[500px] h-[250px] bg-secondary rounded-[50%] flex items-center justify-center">
         <img src={logo} alt="Logo" className="h-auto w-auto" />

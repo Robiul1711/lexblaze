@@ -58,7 +58,7 @@ const TodoEventDropdown = () => (
   <Dropdown    arrow menu={{ items }} trigger={['click']}>
     <a onClick={e => e.preventDefault()}>
       <Space>
-      <button className="flex items-center gap-4 text-2xl font-medium"><SettingsIcons /> Todos Eventos</button>
+      <button className="flex items-center gap-4 text-2xl font-medium "><SettingsIcons /> Todos Eventos</button>
      
       </Space>
     </a>

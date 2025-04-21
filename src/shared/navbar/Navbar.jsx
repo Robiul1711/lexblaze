@@ -6,6 +6,7 @@ import { Dropdown, Space } from "antd";
 import CalenderDropdown from "./CalenderDropdown";
 import TodoEventDropdown from "./TodoEventDropdown";
 import { Link } from "react-router-dom";
+import SearchModal from "@/components/common/SearchModal";
 const Navbar = () => {
   return (
     <header className="bg-secondary sticky top-0 z-40 text-primary section-padding-x py-1  flex justify-between items-center">
@@ -16,15 +17,16 @@ const Navbar = () => {
           placement="bottomLeft"
           arrow
         >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
+         
+         
               <div className="flex items-center gap-1 cursor-pointer">
                 <Menu className="size-12" />
               </div>
-            </Space>
-          </a>
+            
+       
         </Dropdown>
-        <Search className="size-12" />
+        <SearchModal />
+        {/* <Search className="size-12" /> */}
       </div>
       <Link to="/">
         <img src={logo} alt="" />
