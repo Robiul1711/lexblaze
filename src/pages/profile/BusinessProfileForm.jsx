@@ -85,7 +85,22 @@ const BusinessProfileForm = () => {
         />
         <div className="flex items-center justify-between  font-bold text-2xl">
           <label>*Mostrar Teléfono en el perfil</label>
-          <Switch  onChange={onChange} />
+          <Switch
+  className="
+    /* OFF state (unchecked) */
+    [&:not(.ant-switch-checked)]:!bg-gray-400
+    
+    /* Hover state for OFF */
+    [&:not(.ant-switch-checked):hover]:!bg-gray-500
+    
+    /* ON state (checked) - BLACK */
+    [&.ant-switch-checked]:!bg-black
+    
+    /* Disabled state */
+    [&.ant-switch-disabled]:!opacity-50
+  "
+  onChange={onChange}
+/>
         </div>
 
         <input
@@ -96,7 +111,22 @@ const BusinessProfileForm = () => {
         />
         <div className="flex items-center justify-between font-bold text-2xl">
           <label>*Mostrar Correo en el perfil</label>
-          <Switch  onChange={onChange} />
+          <Switch
+  className="
+    /* OFF state (unchecked) */
+    [&:not(.ant-switch-checked)]:!bg-gray-400
+    
+    /* Hover state for OFF */
+    [&:not(.ant-switch-checked):hover]:!bg-gray-500
+    
+    /* ON state (checked) - BLACK */
+    [&.ant-switch-checked]:!bg-black
+    
+    /* Disabled state */
+    [&.ant-switch-disabled]:!opacity-50
+  "
+  onChange={onChange}
+/>
         </div>
 
         <input
@@ -124,7 +154,7 @@ const BusinessProfileForm = () => {
           </button>
         </div>
 
-        <div className="flex flex-col items-center gap-2  font-bold text-2xl">
+        <div className="flex flex-col items-center gap-6 font-bold text-2xl">
           <input className="size-7" type="checkbox" {...register("terms", { required: true })} />
           <span>Términos y Condiciones</span>
         </div>

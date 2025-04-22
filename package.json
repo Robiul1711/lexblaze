@@ -10,13 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.0.1",
+    "@internationalized/date": "^3.8.0",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.2.0",
     "antd": "^5.24.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
     "lucide-react": "^0.465.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
@@ -26,8 +25,7 @@
     "react-router-dom": "^7.0.2",
     "swiper": "^11.2.6",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.3"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
