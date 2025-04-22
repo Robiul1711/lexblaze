@@ -38,10 +38,10 @@ const SearchModal = () => {
       {/* Search Icon Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        className="p-2 rounded-full hover:bg-gray-100/20  transition-colors"
         aria-label="Open search"
       >
-        <Search className="size-12" />
+        <Search className="size-6 md:size-8 lg:size-10" />
       </button>
 
       {/* Search Modal */}
