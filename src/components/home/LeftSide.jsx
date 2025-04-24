@@ -3,7 +3,7 @@ import leftImg from "@/assets/images/leftSideImg.png"
 const LeftSide = () => {
   return (
     <div>
-        <img src={leftImg} alt="" />
+        <img src={leftImg} alt="" className='rounded-md'/>
     </div>
   )
 }

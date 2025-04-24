@@ -60,7 +60,7 @@ const MenuDropdown = () => (
   >
    
       <Space>
-        <Menu className="size-8 md:size-10 lg:size-12" />
+        <Menu className="size-8 md:size-10 lg:size-12 cursor-pointer" />
       </Space>
  
   </Dropdown>

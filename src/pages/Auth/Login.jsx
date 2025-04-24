@@ -14,13 +14,13 @@ const Login = () => {
   };
 
   return (
-    <div className="mt-[112px] pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className="lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
       {/* Title */}
       <Title48 title2="Iniciar Sesión de Negocios" />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[585px] mt-20"
+        className="w-full max-w-[585px] mt-12 lg:mt-20"
         noValidate
       >
         {/* Email input */}
@@ -30,21 +30,21 @@ const Login = () => {
           {...register("email", {
             required: "Correo electrónico es requerido",
           })}
-          className="w-full  border-[2px] border-[#000] p-6  rounded-sm outline-none placeholder:text-gray-500"
+          className="w-full  border-[2px] border-[#000] p-4 lg:p-6  rounded-sm outline-none placeholder:text-gray-500"
         />
         {errors.email && (
           <p className="text-red-500 text-sm ">{errors.email.message}</p>
         )}
 
         {/* Password inpput */}
-        <div className="py-14">
+        <div className="py-9 lg:py-14">
         <input
           type="password"
           placeholder="Contraseña"
           {...register("password", {
             required: "Contraseña es requerida",
           })}
-          className="w-full border-[2px] border-[#000] p-6  rounded-sm outline-none placeholder:text-gray-500"
+          className="w-full border-[2px] border-[#000] p-4 lg:p-6  rounded-sm outline-none placeholder:text-gray-500"
         />
         {errors.password && (
           <p className="text-red-500 text-sm ">{errors.password.message}</p>
@@ -63,11 +63,11 @@ const Login = () => {
         </div>
 
         {/* Links */}
-        <div className="text-center mt-10 space-y-8">
-          <p className="text-black font-bold text-[32px] cursor-pointer">
+        <div className="text-center mt-6 lg:mt-10 space-y-5 lg:space-y-8">
+          <p className="text-black font-bold text-2xl  lg:text-[32px] cursor-pointer">
             Olvidaste Correo Electrónico
           </p>
-          <p className="text-black font-bold text-[32px] cursor-pointer">
+          <p className="text-black font-bold text-2xl  lg:text-[32px] cursor-pointer">
             Olvidaste Contraseña
           </p>
         </div>
