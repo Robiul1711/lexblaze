@@ -50,13 +50,13 @@ const TutorialMiddle = () => {
       <div className="h-screen overflow-y-auto scrollbar-hide">
 
       {card.map((item) => (
-        <div key={item.id} className="relative rounded overflow-hidden shadow-lg mb-10 ">
+        <div key={item.id} className="relative rounded overflow-hidden shadow-lg mb-7 lg:mb-10 ">
           <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
           <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 flex flex-col justify-center items-center">
        
 
             <div className="space-y-8">
-              <p className="text-[32px] rounded-2xl text-white p-3 bg-black/60 font-semibold">{item.title}</p>
+              <p className="xlg:text-[32px] sm:text-xl md:text-2xl rounded-md xlg:rounded-2xl text-white p-2 xlg:p-3 bg-black/60 font-semibold">{item.title}</p>
           
               <div className="flex items-center justify-center ">
                 <button>  {item.play}</button>
@@ -67,7 +67,7 @@ const TutorialMiddle = () => {
         </div>
       ))}
       </div>
-      <div className="flex justify-between items-center pb-10">
+      <div className="flex justify-between items-center lg:pb-10">
         <div className="flex flex-col items-center gap-2 ">
         <button className="p-1 rounded-full border-[2px] border-black "><ChevronLeft /></button>
         <p className="font-bold text-lg">Atrás</p>

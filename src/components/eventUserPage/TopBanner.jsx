@@ -2,6 +2,7 @@ import React from "react";
 import img3 from "@/assets/images/img3.png";
 import { MapPin } from "lucide-react";
 import Title24 from "../common/Title24";
+import { Link } from "react-router-dom";
 const card = [
 
   {
@@ -39,10 +40,10 @@ const TopBanner = () => {
             <h2 className="text-[24px] md:text-[32px] text-white font-extrabold">
               {item.subtitle}
             </h2>
-            <div className="flex items-center gap-4 text-primary font-semibold">
+            <Link to={"/venue-user-view"} className="flex items-center gap-4 text-primary font-semibold">
               <p>{item.locationIcon}</p>
               <p className="text-lg">{item.location}</p>
-            </div>
+            </Link>
             <div className="flex flex-col items-start  gap-4 font-semibold text-white">
               <p>{item.date}</p>
               <p>{item.time}</p>

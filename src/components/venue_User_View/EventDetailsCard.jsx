@@ -17,7 +17,7 @@ const EventDetailsCard = () => {
     <div className="mb-10">
       <SwiperImg />
      
-      <div className="flex flex-col gap-9 mt-8">
+      <div className="flex flex-col gap-4 lg:gap-9 mt-8">
         <div className="flex justify-between items-center gap-4">
           <div className="flex items-center gap-4">
           <RedLocationIcon />

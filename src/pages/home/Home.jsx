@@ -3,6 +3,8 @@ import LeftSide from "@/components/home/LeftSide";
 import MiddleContent from "@/components/home/MiddleContent";
 import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
+import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdown";
+import SwiperImg from "@/components/venue_User_View/SwiperImg";
 const Home = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -12,27 +14,32 @@ const Home = () => {
   });
 
   return (
-    <div className="section-padding-x mb-[120px]">
+    <div className="section-padding-x  lg:mb-[120px]">
       {/* Title  */}
-      <div className="text-center mt-14">
+      <div className="lg:hidden my-3 lg:my-0 ">
+      <SwiperImg />
+
+      </div>
+      <div className="text-center  lg:mt-14 space-y-2 lg:space-y-0 w-full">
+      <TodoEventDropdownMobile />
         <Title48 title1="Ver Eventos para el" title2={formattedDate} />
       </div>
-      <div className="flex justify-between gap-12  mt-10">
+      <div className="flex justify-between gap-12 mt-5 lg:mt-10">
         {/* Leftside  */}
-        <div className=""> 
+        <div className="hidden lg:block "> 
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className="">
+        <div className="w-full xlg:w-auto">
           <MiddleContent />
         </div>
         {/* Rightside  */}
-        <div>
+        <div className="hidden lg:block">
           <RightSide />
         </div>
       </div>
       {/* Footer  */}
-      <div className="flex justify-center mt-10 pb-[120px]">
+      <div className="flex justify-center mt-5 sm:mt-10  pb-[120px]">
        <img src={bottomImg} alt="" />
       </div>
     </div>

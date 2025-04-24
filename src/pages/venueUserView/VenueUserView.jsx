@@ -12,17 +12,17 @@ const VenueUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
    
-      <div className="flex justify-between gap-12  ">
+      <div className="flex flex-col lg:flex-row w-full justify-between lg:gap-12  ">
         {/* Leftside  */}
-        <div className="mt-40"> 
+        <div className="mt-40 w-auto hidden lg:block"> 
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className=" bg-[#FFFBE0] px-10">
-        <div className="text-center mt-14">
+        <div className=" lg:bg-[#FFFBE0] lg:px-10 w-full lg:w-auto">
+        <div className="text-center mt-5 lg:mt-14">
         <Title48 title2="Whiskey Bones Apparel Bar" />
       </div>
-      <div className="mt-10 h-screen overflow-y-auto scrollbar-hide">
+      <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
 
         <EventDetailsCard />
         <EventCard />
