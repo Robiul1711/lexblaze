@@ -15,7 +15,7 @@ const Tutorials = () => {
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className=" lg:bg-[#FFFBE0] px-10">
+        <div className=" lg:bg-[#FFFBE0] lg:px-10">
         <div className="text-center mt-5 lg:mt-14">
         <Title48 title2="Tutorials" />
       </div>
