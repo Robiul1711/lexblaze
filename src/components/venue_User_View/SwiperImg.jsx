@@ -19,7 +19,7 @@ const SwiperImg = () => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         loop={true}
-        className='w-full lg:max-w-[622px] max-h-[424px]'
+        className='w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px]'
       >
         <SwiperSlide >
           <img src={eventDetails} className='w-full' alt="Slide 1" />

@@ -73,3 +73,10 @@ body {
   font-size: 24px !important; /* Adjust icon size */
 }
 
+/* Global CSS */
+.custom-select .ant-select-selector {
+  padding: 1rem !important;
+  border: 2px solid black !important;
+  border-radius: 0.375rem !important;
+}
+

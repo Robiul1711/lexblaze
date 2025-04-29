@@ -1,16 +1,22 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Title48 from "@/components/common/Title48";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(); // Added parentheses to call the hook
+  } = useForm();
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-    // Handle login logic here
+    // Perform your login logic here (e.g., API call)
+
+    // If successful, redirect:
+    navigate("/profile");
   };
 
   return (
@@ -30,29 +36,28 @@ const Login = () => {
           {...register("email", {
             required: "Correo electrónico es requerido",
           })}
-          className="w-full  border-[2px] border-[#000] p-4 lg:p-6  rounded-sm outline-none placeholder:text-gray-500"
+          className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500"
         />
         {errors.email && (
-          <p className="text-red-500 text-sm ">{errors.email.message}</p>
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
         )}
 
-        {/* Password inpput */}
+        {/* Password input */}
         <div className="py-9 lg:py-14">
-        <input
-          type="password"
-          placeholder="Contraseña"
-          {...register("password", {
-            required: "Contraseña es requerida",
-          })}
-          className="w-full border-[2px] border-[#000] p-4 lg:p-6  rounded-sm outline-none placeholder:text-gray-500"
-        />
-        {errors.password && (
-          <p className="text-red-500 text-sm ">{errors.password.message}</p>
-        )}
-
+          <input
+            type="password"
+            placeholder="Contraseña"
+            {...register("password", {
+              required: "Contraseña es requerida",
+            })}
+            className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500"
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
-        {/* Login button */}
+        {/* Submit button */}
         <div className="flex flex-col items-center justify-center">
           <button
             type="submit"
@@ -64,10 +69,7 @@ const Login = () => {
 
         {/* Links */}
         <div className="text-center mt-6 lg:mt-10 space-y-5 lg:space-y-8">
-          <p className="text-black font-bold text-2xl  lg:text-[32px] cursor-pointer">
-            Olvidaste Correo Electrónico
-          </p>
-          <p className="text-black font-bold text-2xl  lg:text-[32px] cursor-pointer">
+          <p className="text-black font-bold text-2xl lg:text-[32px] cursor-pointer">
             Olvidaste Contraseña
           </p>
         </div>
