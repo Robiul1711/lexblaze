@@ -12,13 +12,13 @@ const VenueUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
    
-      <div className="flex flex-col lg:flex-row w-full justify-between lg:gap-12  ">
+      <div className="flex flex-col lg:flex-row justify-between w-full gap-6 xlg:gap-12  ">
         {/* Leftside  */}
-        <div className="mt-40 w-auto hidden lg:block"> 
+        <div className="mt-40  hidden lg:block"> 
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className=" lg:bg-[#FFFBE0] lg:px-10 w-full lg:w-auto">
+        <div className=" lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
         <div className="text-center mt-5 lg:mt-14">
         <Title48 title2="Whiskey Bones Apparel Bar" />
       </div>
@@ -29,22 +29,22 @@ const VenueUserView = () => {
     </div>
         <div className="flex justify-between items-center py-10 ">
       <div className="flex flex-col items-center gap-2 ">
-      <button className="p-1 rounded-full border-[2px] border-black "><ChevronLeft /></button>
+      <button className="p-1 rounded-full border-[2px] border-black "><ChevronLeft className="size-5 sm:size-6 md:size-7 lg:size-auto" /></button>
       <p className="font-bold text-lg">Atrás</p>
 
       </div>
       <div className="flex flex-col items-center gap-2 ">
-      <button className="p-1 rounded-full border-[2px] border-black "><ChevronRight /></button>
+      <button className="p-1 rounded-full border-[2px] border-black "><ChevronRight className="size-5 sm:size-6 md:size-7 lg:size-auto" /></button>
       <p className="font-bold text-lg">Siguiente</p>
 
       </div>
       </div>
-          <div className="flex justify-center mb-[220px] ">
+          <div className="flex justify-center mb-5 lg:mb-[220px] ">
        <img src={bottomImg} alt="" />
       </div>
         </div>
         {/* Rightside  */}
-        <div className="mt-40">
+        <div className="lg:mt-40 mb-32">
           <RightSide />
         </div>
       </div>

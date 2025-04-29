@@ -10,7 +10,7 @@ const card = [
     img: img3,
     title: "Whiskey Bones Apparel Presents",
     subtitle: "Fuck Me Righteous Tour",
-    locationIcon:<MapPin className="size-7" />,
+    locationIcon:<MapPin className="size-5 sm:size-6 xlg:size-7" />,
     location: "Whiskey Bones Apparel Presents",
     date: "Jue Jul 09 - Dom Jul 12",
     time: "De 20:00 a 05:00 ",
@@ -35,16 +35,16 @@ const TopBanner = () => {
             </div>
           )}
 
-          <div className="space-y-2 lg:space-y-4">
-            <p className="lg:text-lg text-white font-semibold flex items-start">{item.title}</p>
-            <h2 className="text-[24px] md:text-[32px] text-white font-extrabold">
+          <div className="space-y-1 sm:space-y-3 xlg:space-y-4">
+            <p className="xlg:text-lg sm:text-xl md:text-lg text-white font-semibold flex items-start">{item.title}</p>
+            <h2 className="text-[24px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white flex items-start font-extrabold">
               {item.subtitle}
             </h2>
-            <Link to={"/venue-user-view"} className="flex items-center gap-4 text-primary font-semibold">
+            <Link to={"/venue-user-view"} className="flex items-center gap-2 lg:gap-4 text-primary font-semibold">
               <p>{item.locationIcon}</p>
-              <p className="text-lg">{item.location}</p>
+              <p className="lg:text-lg">{item.location}</p>
             </Link>
-            <div className="flex flex-col items-start  gap-4 font-semibold text-white">
+            <div className="flex flex-col items-start gap-1 sm:gap-2 lg:gap-1 xlg:gap-4 font-semibold text-white">
               <p>{item.date}</p>
               <p>{item.time}</p>
             </div>
@@ -59,7 +59,7 @@ const TopBanner = () => {
       <Title24>$10.000 - 50.000</Title24>
       <Title24>Límite de Edad: 21+</Title24>
     </div>
-    <div className="pt-10 pb-10 lg:pb-20 max-w-[620px] space-y-5 lg:space-y-10 lg:text-center lg:mx-auto">
+    <div className="pt-10 pb-10 lg:pb-20 max-w-[620px] space-y-5 lg:space-y-10 lg:text-center mx-auto">
       <Title24>Join us for a spicy, dulce de leche, tetas grandisimas, wet-wet party to have your panties stained for months to cum. We the big liveola told ya momma to come ova soldiers. Honey dips that strip, big booties and botox lips! </Title24>
       <Title24>Don&apos;t fomo on this dreamworld manifest into real world snow powdered mania adrenaline. JesuCristo fuck me running and call it a menagie trois</Title24>
     </div>

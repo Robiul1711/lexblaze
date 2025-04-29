@@ -10,18 +10,18 @@ const EventPageUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
    
-      <div className="flex flex-col lg:flex-row justify-between lg:gap-12  ">
+      <div className="flex flex-col lg:flex-row justify-between gap-6 xlg:gap-12  ">
         {/* Leftside  */}
         <div className="hidden mt-40 lg:block"> 
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className=" lg:bg-[#FFFBE0] lg:px-10">
+        <div className=" lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
 
       <div className="text-center mt-5 lg:mt-10 ">
 
         <TopBanner />
-        <img src={eventUserView} alt="" />
+        <img src={eventUserView} alt="" className="w-full"/>
 
     </div>
 
