@@ -1,80 +1,15 @@
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
-import img1 from "@/assets/images/img1.png";
-import img2 from "@/assets/images/img2.png";
-import img3 from "@/assets/images/img3.png";
-import img4 from "@/assets/images/img4.png";
-import img5 from "@/assets/images/img5.png";
-import React from "react";
-import { DeleteIcon, EditIcon2 } from "@/lib/Icons";
 import { useLocation } from "react-router-dom";
-const card = [
-  {
-    id: 1,
-    img: img1,
-    month: "Jul 09",
-    title: "Whiskey Bones Apparel Presents",
-    subtitle: "Fuck Me Righteous Tour",
-    locationIcon: <MapPin className="size-7" />,
-    location: "Whiskey Bones Apparel Presents",
-    date: "Gratis",
-    time: "11:11",
-    deleteIcon: <DeleteIcon />,
-    editIcon: <EditIcon2 />,
-  },
-  {
-    id: 2,
-    img: img2,
-    month: "Jul 12",
-    title: "Whiskey Bones Apparel Presents",
-    subtitle: "Fuck Me Righteous Tour",
-    locationIcon: <MapPin className="size-7" />,
-    location: "Whiskey Bones Apparel Presents",
-    date: "Gratis",
-    time: "11:11",
-    deleteIcon: <DeleteIcon />,
-    editIcon: <EditIcon2 />,
-  },
-  {
-    id: 3,
-    img: img3,
-    month: "Jul 10",
-    title: "Whiskey Bones Apparel Presents",
-    subtitle: "Fuck Me Righteous Tour",
-    locationIcon: <MapPin className="size-7" />,
-    location: "Whiskey Bones Apparel Presents",
-    date: "Gratis",
-    time: "11:11",
-    deleteIcon: <DeleteIcon />,
-    editIcon: <EditIcon2 />,
-  },
-
-  {
-    id: 4,
-    img: img5,
-    month: "Jul 19",
-    title: "Whiskey Bones Apparel Presents",
-    subtitle: "Fuck Me Righteous Tour",
-    locationIcon: <MapPin className="size-7" />,
-    location: "Whiskey Bones Apparel Presents",
-    date: "Gratis",
-    time: "11:11",
-    deleteIcon: <DeleteIcon />,
-    editIcon: <EditIcon2 />,
-    // button: "Todos Los Domingos",
-  },
-];
-
-const EventCard = () => {
+const EventCard = ({visibleCards}) => {
   const { pathname } = useLocation();
   return (
     <div className="flex flex-col ">
 
-        {card.map((item) => (
+        {visibleCards.map((item) => (
           <div key={item.id}>
-            <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-bold text-center mb-3 sm:mb-4 xlg:mb-5 font-belanosima">
+            <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {item.month}
             </h1>
-            <div className="relative rounded overflow-hidden shadow-lg mb-5 sm:mb-7 xlg:mb-10">
+            <div className="relative rounded overflow-hidden shadow-lg mb-5 sm:mb-7 xlg:mb-10 ">
               <img
                 src={item.img}
                 alt={item.title}
@@ -111,9 +46,8 @@ const EventCard = () => {
                         <p>{item.deleteIcon}</p>
                       )}
                     </div>
+                    
                     <div className="flex items-center justify-between gap-4 font-semibold text-white">
-                     
-
                       <p>{item.time}</p>
                     </div>
                   </div>
