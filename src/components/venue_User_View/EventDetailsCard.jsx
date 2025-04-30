@@ -11,7 +11,9 @@ import {
 import Title24 from "../common/Title24";
 import { Link, useLocation } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
+import { useAuth } from "@/hooks/useAuth";
 const EventDetailsCard = () => {
+   const {user} = useAuth();
   const {pathname}=useLocation();
   return (
     <div className="mb-10">

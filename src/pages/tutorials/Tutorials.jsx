@@ -23,7 +23,7 @@ const Tutorials = () => {
           <TutorialMiddle />
 
       </div>
-          <div className="lg:flex justify-center hidden lg:mb-[220px] ">
+          <div className="lg:flex justify-center hidden mt-10 lg:mb-[220px] ">
        <img src={bottomImg} alt="" />
       </div>
         </div>

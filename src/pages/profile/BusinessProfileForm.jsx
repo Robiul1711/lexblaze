@@ -6,18 +6,46 @@ import { UploadIcons } from "@/lib/Icons";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import EventCategoryDropdown from "@/components/common/EventCategoryDropdown";
+import { useMutation } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import toast from "react-hot-toast";
 
 const BusinessProfileForm = () => {
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+  const password = watch("password");
+
+  const RegistrationMutation=useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosPublic.post("/register", data);
+      console.log(response);
+      return response.data;
+      
+    },
+    onSuccess:(response)=>{
+      toast.success(response?.message);
+      console.log(response);
+      navigate("/venue-profile-edit");
+    },
+    onError:(error)=>{
+      console.log(error);
+      const errorMessage =
+        error.response?.data?.error ||
+        "Something went wrong, try again later!!";
+      toast.error(errorMessage);
+  
+    }
+  })
 
   const onSubmit = (data) => {
     console.log("Submitted data:", data);
-    navigate("/venue-profile-edit");
+    RegistrationMutation.mutate(data);
   };
 
   const onChange = (checked) => {
@@ -36,20 +64,20 @@ const BusinessProfileForm = () => {
           <input
             type="text"
             placeholder="Nombre del Negocio"
-            {...register("nombre", { required: "Este campo es requerido" })}
+            {...register("business_name", { required: "Este campo es requerido" })}
             className="w-full border-[2px] border-black p-4 lg:p-6 "
           />
-          {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
+          {errors.business_name && <p className="text-red-500 text-sm">{errors.business_name.message}</p>}
         </div>
 
         {/* Descripción */}
         <div>
           <textarea
             placeholder="Descripción del Negocio"
-            {...register("descripcion", { required: "Este campo es requerido" })}
+            {...register("business_details", { required: "Este campo es requerido" })}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
-          {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion.message}</p>}
+          {errors.business_details && <p className="text-red-500 text-sm">{errors.business_details.message}</p>}
         </div>
 
         {/* Dirección */}
@@ -57,10 +85,10 @@ const BusinessProfileForm = () => {
           <input
             type="text"
             placeholder="Dirección del Negocio"
-            {...register("direccion", { required: "Este campo es requerido" })}
+            {...register("business_address", { required: "Este campo es requerido" })}
             className="w-full border-[2px] border-black p-4 lg:p-6 "
           />
-          {errors.direccion && <p className="text-red-500 text-sm">{errors.direccion.message}</p>}
+          {errors.business_address && <p className="text-red-500 text-sm">{errors.business_address.message}</p>}
         </div>
 
         {/* Horario */}
@@ -68,17 +96,17 @@ const BusinessProfileForm = () => {
           <input
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
-            {...register("horario", { required: "Este campo es requerido" })}
+            {...register("business_time", { required: "Este campo es requerido" })}
             className="w-full border-[2px] border-black p-4 lg:p-6 "
           />
-          {errors.horario && <p className="text-red-500 text-sm">{errors.horario.message}</p>}
+          {errors.business_time && <p className="text-red-500 text-sm">{errors.business_time.message}</p>}
         </div>
 
         {/* Website */}
         <input
           type="text"
           placeholder="Website link"
-          {...register("website")}
+          {...register("business_website_link")}
           className="w-full border-[2px] border-black p-4 lg:p-6 "
         />
 
@@ -94,7 +122,7 @@ const BusinessProfileForm = () => {
         <input
           type="text"
           placeholder="La Carta (Menú)"
-          {...register("menu")}
+          {...register("business_food_menu")}
           className="w-full border-[2px] border-black p-4 lg:p-6 "
         />
 
@@ -102,7 +130,7 @@ const BusinessProfileForm = () => {
         <input
           type="text"
           placeholder="Teléfono"
-          {...register("telefono")}
+          {...register("phone")}
           className="w-full border-[2px] border-black p-4 lg:p-6 "
         />
 
@@ -147,6 +175,22 @@ const BusinessProfileForm = () => {
           />
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
+        {/* confirm password  */}
+        <div>
+  <input
+    type="password"
+    placeholder="Confirmar Contraseña"
+    {...register("password_confirmation", {
+      required: "Confirmación de contraseña es requerida",
+      validate: (value) =>
+        value === password || "Las contraseñas no coinciden",
+    })}
+    className="w-full border-[2px] border-black p-4 lg:p-6 "
+  />
+  {errors.password_confirmation && (
+    <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>
+  )}
+</div>
 
         {/* Image Upload */}
         <div className="flex flex-col items-center gap-2 mt-6">
