@@ -5,6 +5,7 @@ import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdown";
 import SwiperImg from "@/components/venue_User_View/SwiperImg";
+import { useAuth } from "@/hooks/useAuth";
 const Home = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -13,28 +14,30 @@ const Home = () => {
     year: "2-digit",
   });
 
+  const {user} = useAuth();
+  console.log(user);
   return (
     <div className="section-padding-x  lg:mb-[120px]">
       {/* Title  */}
       <div className="lg:hidden my-3 lg:my-0 ">
-      <SwiperImg />
+      <SwiperImg data={user} />
 
       </div>
       <div className="text-center  lg:mt-14 space-y-2 lg:space-y-0 w-full">
       <TodoEventDropdownMobile />
         <Title48 title1="Ver Eventos para el" title2={formattedDate} />
       </div>
-      <div className="flex justify-between gap-12 mt-5 lg:mt-10">
+      <div className="flex justify-between w-full gap-12 mt-5 lg:mt-10">
         {/* Leftside  */}
-        <div className="hidden lg:block "> 
+        <div className="hidden lg:block lg:w-[40%]"> 
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className="w-full xlg:w-auto">
+        <div className="w-full  lg:w-[60%]">
           <MiddleContent />
         </div>
         {/* Rightside  */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block lg:w-[40%]">
           <RightSide />
         </div>
       </div>

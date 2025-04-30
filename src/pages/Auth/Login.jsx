@@ -1,22 +1,42 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Title48 from "@/components/common/Title48";
+import toast from "react-hot-toast";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
-
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const LogInMutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosPublic.post("/login", data);
+      return response?.data;
+    },
+    onSuccess: (response) => {
+      toast.success(response?.message || "Login successful");
+      setUser(response);
+        navigate("/profile");
+    },
+    onError: (error) => {
+      console.log(error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong, try again later!!";
+      toast.error(errorMessage);
+    },
+  });
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-    // Perform your login logic here (e.g., API call)
-
-    // If successful, redirect:
-    navigate("/profile");
+    LogInMutation.mutate(data);
+    
   };
 
   return (
