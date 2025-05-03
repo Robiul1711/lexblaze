@@ -55,14 +55,14 @@ const MiddleContent = () => {
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleCards.length > 0 ? (
           visibleCards.map((item) => (
-            <div
+            <div onClick={() => navigate(`/event-user-view`)}
               key={item.id}
               className="relative z-30 rounded overflow-hidden shadow-lg mb-10"
             >
               <img
                 src={item.event_thumb_image || "/default-event-image.jpg"}
                 alt={item.event_title || "Event image"}
-                className="w-full h-[300px] sm:h-[400px] object-cover"
+                className="w-full h-[300px] md:h-[350px] lg:h-[300px] xl:h-[350px] object-cover"
               />
               <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
                 {item.event_start_end_time && (
@@ -86,7 +86,7 @@ const MiddleContent = () => {
                   )}
                   {item.business_address && (
                     <Link
-                      to={`/venue-user-view/${item.id}`}
+                    
                       className="flex items-center gap-2 sm:gap-4 text-primary font-semibold z-50 hover:underline"
                     >
                       <MapPin className="size-5 md:size-6 xlg:size-7" />

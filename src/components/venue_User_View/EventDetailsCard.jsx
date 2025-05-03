@@ -12,11 +12,15 @@ import Title24 from "../common/Title24";
 import { Link, useLocation } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
 import { useAuth } from "@/hooks/useAuth";
+import Title48 from "../common/Title48";
 const EventDetailsCard = () => {
    const {user} = useAuth();
   const {pathname}=useLocation();
   return (
     <div className="mb-10">
+        <div className="text-center  my-5">
+        <Title48 title2="Whiskey Bones Apparel Bar" />
+      </div>
       <SwiperImg />
      
       <div className="flex flex-col gap-4 lg:gap-9 mt-8">
@@ -25,7 +29,7 @@ const EventDetailsCard = () => {
           <RedLocationIcon />
           <Title24>Avenida Cachonda 6969</Title24>
           </div>
-          {pathname==="/venue-profile-edit" && <Link to={'/create-event'}> <EditIcon /></Link>  }
+          {pathname==="/venue-profile-edit" && <Link to={'/profile'}> <EditIcon /></Link>  }
        
         </div>
         <div className="flex  items-center gap-2 xlg:gap-4">

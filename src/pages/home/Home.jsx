@@ -15,7 +15,6 @@ const Home = () => {
   });
 
   const {user} = useAuth();
-  console.log(user);
   return (
     <div className="section-padding-x  lg:mb-[120px]">
       {/* Title  */}

@@ -62,7 +62,7 @@ const CreateEvents = () => {
   const onChangeEnd = (time) => setEndValue(time);
 
   return (
-    <div className="max-w-[590px] mx-auto lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] px-4">
+    <div className="max-w-[590px] mx-auto  mt-10 pb-[120px] lg:pb-[220px] px-4">
       <div className="mb-6 lg:mb-16 text-center">
         <Title48 title2="Crear un Evento" />
       </div>
