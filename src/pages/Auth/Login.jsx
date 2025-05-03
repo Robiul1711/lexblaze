@@ -23,7 +23,7 @@ const Login = () => {
     onSuccess: (response) => {
       toast.success(response?.message || "Login successful");
       setUser(response);
-        navigate("/profile");
+        navigate("/venue-profile-edit");
     },
     onError: (error) => {
       console.log(error);

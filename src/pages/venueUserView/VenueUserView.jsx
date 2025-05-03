@@ -13,6 +13,7 @@ import img4 from "@/assets/images/img4.png";
 import img5 from "@/assets/images/img5.png";
 
 import { DeleteIcon, EditIcon2 } from "@/lib/Icons";
+import { useAuth } from "@/hooks/useAuth";
 const card = [
   {
     id: 1,
@@ -71,6 +72,7 @@ const card = [
 ];
 
 const VenueUserView = () => {
+
   const [currentPage, setCurrentPage] =useState(0);
   const cardsPerPage=3;
   const totalPages = Math.ceil(card.length / cardsPerPage);

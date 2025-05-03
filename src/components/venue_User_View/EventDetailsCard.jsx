@@ -12,11 +12,30 @@ import Title24 from "../common/Title24";
 import { Link, useLocation } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
 import { useAuth } from "@/hooks/useAuth";
+import Title48 from "../common/Title48";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import LoadingSpinner from "../common/LoadingSpinner";
+import ErrorMessage from "../common/ErrorMessage";
 const EventDetailsCard = () => {
-   const {user} = useAuth();
+   const {user,setUser} = useAuth();
+  const axiosPublic = useAxiosPublic();
   const {pathname}=useLocation();
+  
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["profileData"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/business_profile_data");
+
+      return response.data;
+    },
+  });
+console.log(data)
+  // if (isLoading) return <LoadingSpinner />;
+  // if (error) return <ErrorMessage message={error.message} />;
   return (
-    <div className="mb-10">
+    <div className="mb-10 lg:max-w-[620px] w-full">
+   
       <SwiperImg />
      
       <div className="flex flex-col gap-4 lg:gap-9 mt-8">
@@ -25,7 +44,7 @@ const EventDetailsCard = () => {
           <RedLocationIcon />
           <Title24>Avenida Cachonda 6969</Title24>
           </div>
-          {pathname==="/venue-profile-edit" && <Link to={'/create-event'}> <EditIcon /></Link>  }
+          {pathname==="/venue-profile-edit" && <Link to={'/profile'}> <EditIcon /></Link>  }
        
         </div>
         <div className="flex  items-center gap-2 xlg:gap-4">
@@ -50,7 +69,7 @@ const EventDetailsCard = () => {
           <Title24>Website</Title24>
           <Title24>Edad: 21+</Title24>
         </div>
-        <div className="max-w-[620px] mx-auto w-full text-center">
+        <div className="mx-auto w-full text-center">
           <Title24>
             Whiskey Bones HeadQurters Bar has been around since God knows when.
             Home of rocking out with your cock out and raging to the tits. We

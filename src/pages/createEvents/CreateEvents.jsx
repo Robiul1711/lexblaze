@@ -62,7 +62,7 @@ const CreateEvents = () => {
   const onChangeEnd = (time) => setEndValue(time);
 
   return (
-    <div className="max-w-[590px] mx-auto lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] px-4">
+    <div className="max-w-[590px] mx-auto  mt-10 pb-[120px] lg:pb-[220px] px-4">
       <div className="mb-6 lg:mb-16 text-center">
         <Title48 title2="Crear un Evento" />
       </div>
@@ -92,6 +92,7 @@ const CreateEvents = () => {
             maxDate={dayjs("2020-10-31", dateFormat)}
             size="large"
             suffixIcon={null}
+            placeholder="Selección de Fecha(s)"
             className="w-full py-6 border-black border-[2px] rounded-md focus:outline-none focus:ring-0 focus:border-black"
           />
           <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">

@@ -73,10 +73,16 @@ body {
   font-size: 24px !important; /* Adjust icon size */
 }
 
-/* Global CSS */
+/* ant  upload  */
 .custom-select .ant-select-selector {
   padding: 1rem !important;
   border: 2px solid black !important;
   border-radius: 0.375rem !important;
+}
+
+/* In your CSS file */
+.ant-upload.ant-upload-select {
+  border-radius: 50% !important;
+  overflow: hidden !important;
 }
 
