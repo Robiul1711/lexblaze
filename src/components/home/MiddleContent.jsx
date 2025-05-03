@@ -52,7 +52,7 @@ const MiddleContent = () => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-12">
-      <div className="h-screen overflow-y-auto scrollbar-hide">
+      <div className="h-screen overflow-y-auto  scrollbar-hide">
         {visibleCards.length > 0 ? (
           visibleCards.map((item) => (
             <div onClick={() => navigate(`/event-user-view`)}
@@ -73,7 +73,7 @@ const MiddleContent = () => {
                   </div>
                 )}
 
-                <div className="space-y-2 sm:space-y-4 max-w-[355px] absolute top-1/2 transform -translate-y-1/2">
+                <div className="space-y-2 sm:space-y-4 max-w-[355px] w-full absolute top-1/2 transform -translate-y-1/2">
                   {item.event_title && (
                     <p className="sm:text-lg text-white font-semibold">
                       {item.event_title}
@@ -95,7 +95,7 @@ const MiddleContent = () => {
                   )}
                   <div className="flex items-center justify-between text-sm sm:text-base font-semibold text-white">
                     {item.price_limite && <p>Price: {item.price_limite}</p>}
-                    {item.time && <p>Time: {item.time}</p>}
+                    {item.event_start_time && <p>Time: {item.event_start_time}</p>}
                   </div>
                 </div>
               </div>

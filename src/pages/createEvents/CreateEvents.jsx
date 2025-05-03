@@ -92,6 +92,7 @@ const CreateEvents = () => {
             maxDate={dayjs("2020-10-31", dateFormat)}
             size="large"
             suffixIcon={null}
+            placeholder="Selección de Fecha(s)"
             className="w-full py-6 border-black border-[2px] rounded-md focus:outline-none focus:ring-0 focus:border-black"
           />
           <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">

@@ -104,7 +104,9 @@ const VenueUserView = () => {
         </div>
         {/* Middle  */}
         <div className=" lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
-      
+        <div className="text-center mt-5 lg:mt-14">
+        <Title48 title2="Whiskey Bones Apparel Bar" />
+      </div>
       <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
 
         <EventDetailsCard />

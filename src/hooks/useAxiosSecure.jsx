@@ -3,6 +3,7 @@ import { useAuth } from "./useAuth";
 
 const useAxiosSecure = () => {
   const auth = useAuth();
+  console.log(auth?.user?.token);
   // Ensure that auth and user are defined before destructuring
   const access_token = auth?.user?.token;
 
