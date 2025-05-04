@@ -17,7 +17,7 @@ const MiddleContent = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["events"],
     queryFn: async () => {
-      const response = await axiosPublic.get("/event/show");
+      const response = await axiosPublic.post("/event/show");
       setUser(response?.data?.events);
       return response.data;
     },
@@ -56,19 +56,19 @@ const MiddleContent = () => {
         {visibleCards.length > 0 ? (
           visibleCards.map((item) => (
             <div onClick={() => navigate(`/event-user-view`)}
-              key={item.id}
-              className="relative z-30 rounded overflow-hidden shadow-lg mb-10"
+              key={item.id} 
+              className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer"
             >
               <img
                 src={item.event_thumb_image || "/default-event-image.jpg"}
                 alt={item.event_title || "Event image"}
-                className="w-full h-[300px] md:h-[350px] lg:h-[300px] xl:h-[350px] object-cover"
+                className="w-full h-[300px] md:h-[350px] lg:h-[300px] xl:h-[350px] object-fill"
               />
               <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
-                {item.event_start_end_time && (
+                {item.event_end_date && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-3 font-bold">
-                      {item.event_start_end_time}
+                Hasta : {item.event_end_date}
                     </button>
                   </div>
                 )}
