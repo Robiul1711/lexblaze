@@ -9,11 +9,11 @@ import toast from "react-hot-toast";
 import ImgCrop from "antd-img-crop";
 import { UploadIcons } from "@/lib/Icons";
 import { useAuth } from "@/hooks/useAuth";
-import { use } from "react";
 
 const BusinessProfileForm = () => {
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -27,12 +27,18 @@ const BusinessProfileForm = () => {
 
   const RegistrationMutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axiosPublic.post("/register", data);
+      const response = await axiosPublic.post("/register", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       return response.data;
     },
     onSuccess: (response) => {
       toast.success(response?.message);
-     
+      setUser(response);
+
       navigate("/venue-profile-edit");
     },
     onError: (error) => {
@@ -45,34 +51,17 @@ const BusinessProfileForm = () => {
 
   const handleImageChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    setValue("images", newFileList);
-  };
-
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+    setValue("image", newFileList);
   };
 
   const onSubmit = (formData) => {
+    console.log("Form Data:", formData);
+    const { image, ...restData } = formData;
+
     // Prepare the complete data object
     const submissionData = {
-      ...formData,
-      images: fileList.map(file => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        // Include additional file info if needed
-      })),
+      ...restData,
+      image: fileList.map((file) => file.originFileObj),
       showPhone: formData.showPhone || false,
       showEmail: formData.showEmail || false,
     };
@@ -87,17 +76,24 @@ const BusinessProfileForm = () => {
         <Title48 title2="Crear Perfil de Negocio" />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 lg:space-y-10">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 lg:space-y-10"
+      >
         {/* Business Name */}
         <div>
           <input
             type="text"
             placeholder="Nombre del Negocio"
-            {...register("business_name", { required: "Este campo es requerido" })}
+            {...register("business_name", {
+              required: "Este campo es requerido",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           {errors.business_name && (
-            <p className="text-red-500 text-sm">{errors.business_name.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_name.message}
+            </p>
           )}
         </div>
 
@@ -105,11 +101,15 @@ const BusinessProfileForm = () => {
         <div>
           <textarea
             placeholder="Descripción del Negocio"
-            {...register("business_details", { required: "Este campo es requerido" })}
+            {...register("business_details", {
+              required: "Este campo es requerido",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
           {errors.business_details && (
-            <p className="text-red-500 text-sm">{errors.business_details.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_details.message}
+            </p>
           )}
         </div>
 
@@ -118,11 +118,15 @@ const BusinessProfileForm = () => {
           <input
             type="text"
             placeholder="Dirección del Negocio"
-            {...register("business_address", { required: "Este campo es requerido" })}
+            {...register("business_address", {
+              required: "Este campo es requerido",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           {errors.business_address && (
-            <p className="text-red-500 text-sm">{errors.business_address.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_address.message}
+            </p>
           )}
         </div>
 
@@ -131,11 +135,15 @@ const BusinessProfileForm = () => {
           <input
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
-            {...register("business_time", { required: "Este campo es requerido" })}
+            {...register("business_time", {
+              required: "Este campo es requerido",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           {errors.business_time && (
-            <p className="text-red-500 text-sm">{errors.business_time.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_time.message}
+            </p>
           )}
         </div>
 
@@ -189,7 +197,9 @@ const BusinessProfileForm = () => {
           <input
             type="email"
             placeholder="Correo Electrónico"
-            {...register("email", { required: "Correo electrónico es requerido" })}
+            {...register("email", {
+              required: "Correo electrónico es requerido",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           {errors.email && (
@@ -244,21 +254,17 @@ const BusinessProfileForm = () => {
 
         {/* Image Upload */}
         <div className="flex flex-col items-center gap-2 mt-6">
-          <ImgCrop rotationSlider>
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              onChange={handleImageChange}
-              onPreview={onPreview}
-              beforeUpload={() => false} // Handle upload manually
-              accept="image/*"
-              multiple
-              maxCount={5}
-              
-            >
-                 {fileList.length < 5 && <UploadIcons />}
-            </Upload>
-          </ImgCrop>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleImageChange}
+            beforeUpload={() => false} // Handle upload manually
+            accept="image/*"
+            multiple
+            maxCount={5}
+          >
+            {fileList.length < 5 && <UploadIcons />}
+          </Upload>
         </div>
 
         {/* Terms */}

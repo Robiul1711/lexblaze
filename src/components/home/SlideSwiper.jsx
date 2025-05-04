@@ -1,17 +1,17 @@
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import eventDetails from "@/assets/images/eventDetails.png";
+
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
- const SwiperImg = ({ data = [] }) => {
-  if (!Array.isArray(data)) {
-    console.error("SwiperImg expected 'data' to be an array but got:", data);
-    return null; // Or fallback UI
-  }
 
+const SlideSwiper = ({data}) => {
+  console.log(data);
   return (
-    <div>
+    <div  >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -22,13 +22,23 @@ import 'swiper/css/pagination';
         loop={true}
         className='w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px]'
       >
-        {data.map((item, index) => (
-          <SwiperSlide key={item.id || index}>
-            <img src={item?.image} className='w-full' alt={`Slide ${index + 1}`} />
+        
+          <SwiperSlide >
+            <img src={eventDetails} className='w-full' alt="Slide 1" />
           </SwiperSlide>
-        ))}
+   
+          <SwiperSlide >
+            <img src={eventDetails} className='w-full' alt="Slide 1" />
+          </SwiperSlide>
+   
+          <SwiperSlide >
+            <img src={eventDetails} className='w-full' alt="Slide 1" />
+          </SwiperSlide>
+   
+
       </Swiper>
     </div>
   );
 };
-export default SwiperImg;
+
+export default SlideSwiper;

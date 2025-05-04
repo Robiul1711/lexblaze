@@ -17,65 +17,61 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 const EventDetailsCard = () => {
-   const {user,setUser} = useAuth();
-  const axiosPublic = useAxiosPublic();
+
+  const axiosSecure = useAxiosSecure();
   const {pathname}=useLocation();
   
   const { data, isLoading, error } = useQuery({
     queryKey: ["profileData"],
     queryFn: async () => {
-      const response = await axiosPublic.get("/business_profile_data");
-
+      const response = await axiosSecure.get("/business_profile_data");
       return response.data;
     },
   });
-console.log(data)
-  // if (isLoading) return <LoadingSpinner />;
-  // if (error) return <ErrorMessage message={error.message} />;
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error.message} />;
   return (
     <div className="mb-10 lg:max-w-[620px] w-full">
    
-      <SwiperImg />
+      <SwiperImg data={data?.user?.user_images} />
      
-      <div className="flex flex-col gap-4 lg:gap-9 mt-8">
+      <div className="flex flex-col gap-4 xlg:gap-6 xl:gap-9 mt-8">
         <div className="flex justify-between items-center gap-4">
           <div className="flex items-center gap-2 xlg:gap-4">
           <RedLocationIcon />
-          <Title24>Avenida Cachonda 6969</Title24>
+          <Title24>{data?.user?.business_address}</Title24>
           </div>
           {pathname==="/venue-profile-edit" && <Link to={'/profile'}> <EditIcon /></Link>  }
        
         </div>
         <div className="flex  items-center gap-2 xlg:gap-4">
           <WatchIcon />
-          <Title24>Lun-Jue 9a-9p, Vie 9a-2a, Sab 8p-3a, Dom 11a-6p </Title24>
+          <Title24>{data?.user?.business_time} </Title24>
         </div>
         <div className="flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-2 xlg:gap-4">
             <MessageIcon />
-            <Title24>Correo Electrónico </Title24>
+            <Title24>{data?.user?.email}</Title24>
           </div>
           <div className="flex items-center gap-2 xlg:gap-4">
             <PhoneIcon />
-            <Title24>Teléfono</Title24>
+            <Title24>{data?.user?.phone}</Title24>
           </div>
           <div className="flex items-center gap-2 xlg:gap-4">
             <MenuIcon />
-            <Title24>La Carta </Title24>
+            <Title24>{data?.user?.business_food_menu}</Title24>
           </div>
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-4">
-          <Title24>Website</Title24>
+          <Title24>Website : {data?.user?.business_website_link}</Title24>
           <Title24>Edad: 21+</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>
-            Whiskey Bones HeadQurters Bar has been around since God knows when.
-            Home of rocking out with your cock out and raging to the tits. We
-            specialize in live music and getting absolutley fucked! Two ful bars
-            and an incredible dancefloor are tucked awy inside and outside we
-            present our amazing outdoor stage
+            {data?.user?.business_details}
           </Title24>
         </div>
         <div className="w-full text-center">

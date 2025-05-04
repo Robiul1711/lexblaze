@@ -4,8 +4,8 @@ import MiddleContent from "@/components/home/MiddleContent";
 import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdown";
-import SwiperImg from "@/components/venue_User_View/SwiperImg";
 import { useAuth } from "@/hooks/useAuth";
+import SlideSwiper from "@/components/home/SlideSwiper";
 const Home = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -14,12 +14,11 @@ const Home = () => {
     year: "2-digit",
   });
 
-  const {user} = useAuth();
   return (
     <div className="section-padding-x  lg:mb-[120px]">
       {/* Title  */}
       <div className="lg:hidden my-3 lg:my-0 ">
-      <SwiperImg data={user} />
+      <SlideSwiper  />
 
       </div>
       <div className="text-center  lg:mt-14 space-y-2 lg:space-y-0 w-full">
