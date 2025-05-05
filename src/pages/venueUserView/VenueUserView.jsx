@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import AddSlider from "@/components/common/AddSlider";
 
 
 const VenueUserView = () => {
@@ -91,7 +92,7 @@ console.log(visibleCards)
             </div>
           </div>
           <div className="flex justify-center mb-5 lg:mb-[220px]">
-            <img src={bottomImg} alt="" />
+          <AddSlider />
           </div>
         </div>
         
