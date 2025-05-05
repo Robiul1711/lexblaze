@@ -21,48 +21,48 @@ const AuthProvider = ({ children }) => {
     setUserState(newUser);
   };
 
-  const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ["update-profile"],
-    queryFn: async () => {
-      if (!user?.token) return null; // Prevent fetching if no token
+  // const { data, isLoading, isError, isFetching } = useQuery({
+  //   queryKey: ["update-profile"],
+  //   queryFn: async () => {
+  //     if (!user?.token) return null; // Prevent fetching if no token
 
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/profile/show`,
-          {
-            headers: {
-              Authorization: `Bearer ${user?.token}`,
-            },
-          }
-        );
-        setUser({
-          ...user,
-          ...response?.data?.data,
-        });
-        console.log(user);
-        return response.data;
-      } catch (error) {
-        console.log(error);
-        console.error("Failed to fetch user data:", error);
-        return null;
-      }
-    },
-    enabled: !!user?.token, // Prevents execution if there's no token
-  });
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_API_URL}/profile/show`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${user?.token}`,
+  //           },
+  //         }
+  //       );
+  //       setUser({
+  //         ...user,
+  //         ...response?.data?.data,
+  //       });
+  //       console.log(user);
+  //       return response.data;
+  //     } catch (error) {
+  //       console.log(error);
+  //       console.error("Failed to fetch user data:", error);
+  //       return null;
+  //     }
+  //   },
+  //   enabled: !!user?.token, // Prevents execution if there's no token
+  // });
 
-  useEffect(() => {
-    const syncUserWithLocalStorage = () => {
-      const storedUser = localStorage.getItem("user");
-      setUserState(storedUser ? JSON.parse(storedUser) : null);
-    };
-    window.addEventListener("storage", syncUserWithLocalStorage);
-    return () => {
-      window.removeEventListener("storage", syncUserWithLocalStorage);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const syncUserWithLocalStorage = () => {
+  //     const storedUser = localStorage.getItem("user");
+  //     setUserState(storedUser ? JSON.parse(storedUser) : null);
+  //   };
+  //   window.addEventListener("storage", syncUserWithLocalStorage);
+  //   return () => {
+  //     window.removeEventListener("storage", syncUserWithLocalStorage);
+  //   };
+  // }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isFetching }}>
+    <AuthContext.Provider value={{ user, setUser}}>
       {children}
     </AuthContext.Provider>
   );

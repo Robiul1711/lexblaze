@@ -7,9 +7,15 @@ const Layout = () => {
   return (
     <>
     <ScrollRestoration />
+    <div className=" min-h-screen">
       <Navbar />
-      <Outlet />
+      <div className="min-h-screen">
+      <Outlet  />
+
+      </div>
       <Footer />
+
+    </div>
     </>
   );
 };

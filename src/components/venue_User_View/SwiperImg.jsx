@@ -1,17 +1,17 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
- const SwiperImg = ({ data = [] }) => {
+
+const SwiperImg = ({ data = [] }) => {
   if (!Array.isArray(data)) {
     console.error("SwiperImg expected 'data' to be an array but got:", data);
-    return null; // Or fallback UI
+    return null;
   }
 
   return (
-    <div>
+    <div className="w-full lg:max-w-[522px] xl:max-w-[622px] h-[424px]">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -20,15 +20,22 @@ import 'swiper/css/pagination';
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         loop={true}
-        className='w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px]'
+        className="w-full h-full"
       >
         {data.map((item, index) => (
-          <SwiperSlide key={item.id || index}>
-            <img src={item?.image} className='w-full' alt={`Slide ${index + 1}`} />
+          <SwiperSlide key={item.id || index} className="w-full h-full">
+            <div className="w-full h-full">
+              <img
+                src={item?.image}
+                className="w-full h-full object-cover"
+                alt={`Slide ${index + 1}`}
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
     </div>
   );
 };
+
 export default SwiperImg;

@@ -8,8 +8,6 @@ import ErrorMessage from "../common/ErrorMessage";
 import { useAuth } from "@/hooks/useAuth";
 
 const MiddleContent = () => {
-  const { user, setUser } = useAuth();
-  const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 4;
@@ -17,8 +15,7 @@ const MiddleContent = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["events"],
     queryFn: async () => {
-      const response = await axiosPublic.post("/event/show");
-      setUser(response?.data?.events);
+      const response = await axiosPublic.post(`/event/show`);
       return response.data;
     },
   });
@@ -55,9 +52,11 @@ const MiddleContent = () => {
       <div className="h-screen overflow-y-auto  scrollbar-hide">
         {visibleCards.length > 0 ? (
           visibleCards.map((item) => (
-            <div onClick={() => navigate(`/event-user-view`)}
+            <div key={item.id} className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer">
+
+            <Link to={`/event-user-view/${item.id}`}
               key={item.id} 
-              className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer"
+              
             >
               <img
                 src={item.event_thumb_image || "/default-event-image.jpg"}
@@ -99,6 +98,7 @@ const MiddleContent = () => {
                   </div>
                 </div>
               </div>
+            </Link>
             </div>
           ))
         ) : (

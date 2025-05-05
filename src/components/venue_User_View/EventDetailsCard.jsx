@@ -44,7 +44,7 @@ const EventDetailsCard = () => {
           <RedLocationIcon />
           <Title24>{data?.user?.business_address}</Title24>
           </div>
-          {pathname==="/venue-profile-edit" && <Link to={'/profile'}> <EditIcon /></Link>  }
+          {pathname==="/venue-profile-edit" && <Link to={'/update-profile'}> <EditIcon /></Link>  }
        
         </div>
         <div className="flex  items-center gap-2 xlg:gap-4">

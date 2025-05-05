@@ -6,6 +6,7 @@ import bottomImg from "@/assets/images/img6.png";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdown";
 import { useAuth } from "@/hooks/useAuth";
 import SlideSwiper from "@/components/home/SlideSwiper";
+import AddSlider from "@/components/common/AddSlider";
 const Home = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -41,7 +42,7 @@ const Home = () => {
       </div>
       {/* Footer  */}
       <div className="flex justify-center mt-5 sm:mt-10  pb-[120px]">
-       <img src={bottomImg} alt="" />
+       <AddSlider />
       </div>
     </div>
   );
