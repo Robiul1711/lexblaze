@@ -8,14 +8,13 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ErrorMessage from "@/components/common/ErrorMessage";
+
 
 const VenueUserView = () => {
   const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(0); // Moved before any conditional returns
   
-  const { data, isLoading, error } = useQuery({
+  const { data, } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {
       const response = await axiosSecure.get("/user/event/show");
@@ -23,8 +22,6 @@ const VenueUserView = () => {
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error.message} />;
 
   const cardsPerPage = 3;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
@@ -56,7 +53,7 @@ console.log(visibleCards)
         {/* Middle */}
         <div className="lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
           <div className="text-center mt-5 lg:mt-14">
-            <Title48 title2="Whiskey Bones Apparel Bar" />
+            <Title48 title2={visibleCards[0]?.business_name} />
           </div>
           <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
             <EventDetailsCard />

@@ -9,9 +9,10 @@ import toast from "react-hot-toast";
 import ImgCrop from "antd-img-crop";
 import { UploadIcons } from "@/lib/Icons";
 import { useAuth } from "@/hooks/useAuth";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
-const BusinessProfileForm = () => {
-  const axiosPublic = useAxiosPublic();
+const UpdateProfile = () => {
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
   const {
@@ -27,18 +28,20 @@ const BusinessProfileForm = () => {
 
   const RegistrationMutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axiosPublic.post("/register", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosSecure.post(
+        "/update/business_profile_data",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       return response.data;
     },
     onSuccess: (response) => {
       toast.success(response?.message);
-      setUser(response);
-
       navigate("/venue-profile-edit");
     },
     onError: (error) => {
@@ -69,11 +72,11 @@ const BusinessProfileForm = () => {
     console.log("All form data:", submissionData);
     RegistrationMutation.mutate(submissionData);
   };
-
+  console.log(user);
   return (
-    <div className="max-w-[590px] mx-auto lg:mt-[100px] mt-10 pb-[120px] lg:pb-[220px] px-4">
+    <div className="max-w-[650px] mx-auto lg:mt-[60px] mt-10 pb-[120px] lg:pb-[220px] px-4">
       <div className="mb-10 lg:mb-16">
-        <Title48 title2="Crear Perfil de Negocio" />
+        <Title48 title2=" Actualizar Perfil de Negocio" />
       </div>
 
       <form
@@ -195,7 +198,8 @@ const BusinessProfileForm = () => {
         {/* Email */}
         <div>
           <input
-          
+            defaultValue={user?.user?.email}
+            disabled
             type="email"
             placeholder="Correo Electrónico"
             {...register("email", {
@@ -295,4 +299,4 @@ const BusinessProfileForm = () => {
   );
 };
 
-export default BusinessProfileForm;
+export default UpdateProfile;

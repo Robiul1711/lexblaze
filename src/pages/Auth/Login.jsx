@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const Login = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const axiosPublic = useAxiosPublic();
   const {
     register,
@@ -32,8 +34,12 @@ const Login = () => {
         "Something went wrong, try again later!!";
       toast.error(errorMessage);
     },
+    onSettled: () => {
+      setIsSubmitting(false);
+    },
   });
   const onSubmit = (data) => {
+    setIsSubmitting(true); // Set loading to true
     console.log("Form Data:", data);
     LogInMutation.mutate(data);
     
@@ -79,12 +85,42 @@ const Login = () => {
 
         {/* Submit button */}
         <div className="flex flex-col items-center justify-center">
-          <button
-            type="submit"
-            className="bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300"
-          >
-            Iniciar Sesión
-          </button>
+        <button
+  type="submit"
+  disabled={isSubmitting}
+  className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+    isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+  }`}
+>
+  {isSubmitting ? (
+    <>
+      <svg
+        className="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        ></path>
+      </svg>
+      Iniciando...
+    </>
+  ) : (
+    "Iniciar Sesión"
+  )}
+</button>
+
         </div>
 
         {/* Links */}
