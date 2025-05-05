@@ -32,7 +32,7 @@ const AddSlider = () => {
         loop={true}
         className="w-full h-full"
       >
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <SwiperSlide key={item.id || index} className="w-full h-full">
             <div className="w-full h-full">
               <img
