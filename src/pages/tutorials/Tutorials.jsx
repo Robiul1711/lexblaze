@@ -3,6 +3,7 @@ import LeftSide from "@/components/home/LeftSide";
 import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
 import TutorialMiddle from "@/components/tutorials/TutorialMiddle";
+import AddSlider from "@/components/common/AddSlider";
 const Tutorials = () => {
 
   return (
@@ -24,14 +25,14 @@ const Tutorials = () => {
 
       </div>
           <div className="lg:flex justify-center hidden mt-10 lg:mb-[220px] ">
-       <img src={bottomImg} alt="" />
+          <AddSlider />
       </div>
         </div>
         {/* Rightside  */}
         <div className="lg:mt-40 mb-[140px] w-full lg:w-auto">
           <RightSide />
           <div className="flex justify-center lg:hidden mt-4 lg:mt-0 lg:mb-[220px] ">
-       <img src={bottomImg} alt="" />
+      <AddSlider />
       </div>
         </div>
       </div>
