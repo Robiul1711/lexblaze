@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   EditIcon,
   MenuIcon,
@@ -9,20 +9,21 @@ import {
   WatchIcon,
 } from "@/lib/Icons";
 import Title24 from "../common/Title24";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
 import { useAuth } from "@/hooks/useAuth";
 import Title48 from "../common/Title48";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 const EventDetailsCard = () => {
-
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const {pathname}=useLocation();
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["profileData"],
     queryFn: async () => {
@@ -30,7 +31,20 @@ const EventDetailsCard = () => {
       return response.data;
     },
   });
-
+  const LogOutInMutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosSecure.post("/logout", data);
+      return response?.data;
+    },
+    onSuccess: (response) => {
+      toast.success(response?.message || "Logout successful");
+     
+        navigate("/log-in");
+    },
+    onSettled: () => {
+      setIsSubmitting(false);
+    },
+  });
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
@@ -82,7 +96,45 @@ const EventDetailsCard = () => {
         {
           pathname==="/venue-profile-edit" &&   
           
-        <div className=" flex justify-end">
+        <div className=" flex justify-between">
+        <Link
+  onClick={() => {
+    setIsSubmitting(true); // <-- Set loading before logout starts
+    LogOutInMutation.mutate();
+  }}
+  className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+    isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+  }`}
+>
+  {isSubmitting ? (
+    <>
+      <svg
+        className="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        ></path>
+      </svg>
+      Cerrando...
+    </>
+  ) : (
+    "Cerrar sesión"
+  )}
+</Link>
+
           <Link to="/create-event" className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 px-6 mb-3 rounded-xl font-bold text-xl flex items-center justify-center gap-2 xlg:gap-6 text-white">
             <PlusIcon />
           Crear Evento

@@ -90,4 +90,11 @@ body {
   color: white;
 }
 
+:global(.custom-select .ant-select-selector) {
+  padding: 10px !important;
+  border-color: #1890ff !important;
+}
 
+:where(.css-dev-only-do-not-override-1m63z2v).ant-tag {
+  font-size: 16px !important;
+}

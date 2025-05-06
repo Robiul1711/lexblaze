@@ -7,6 +7,9 @@ import EventPageUserView from "@/pages/eventPageUserVew/EventPageUserView";
 import Home from "@/pages/home/Home";
 import BusinessProfileForm from "@/pages/profile/BusinessProfileForm";
 import UpdateProfile from "@/pages/profile/UpdateProfile";
+import ForgotPassword from "@/pages/resetPassword/ForgotPassword";
+import ResetPassword from "@/pages/resetPassword/ResetPassword";
+import VerifyOtp from "@/pages/resetPassword/VerifyOtp";
 import Tutorials from "@/pages/tutorials/Tutorials";
 import VenueUserView from "@/pages/venueUserView/VenueUserView";
 import { createBrowserRouter } from "react-router-dom";
@@ -23,6 +26,18 @@ const router = createBrowserRouter([
       {
         path: "/log-in",
         element: <Login />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/VerifyOtp",
+        element: <VerifyOtp />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
       },
       {
         path: "/about-us",

@@ -347,14 +347,17 @@ const UpdateEvent = () => {
 
         {/* Category Section */}
         <section>
+       
           <Select
+            mode="multiple"
             placeholder="Categoría del Evento"
             tagRender={tagRender}
             options={categoryOptions}
             size="large"
-            className="w-full"
+            className="w-full custom-select"
             onChange={handleCategoryChange}
             disabled={isSubmitting}
+         
           />
           {errors.category_id && (
             <p className="text-red-500">Please select at least one category</p>

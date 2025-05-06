@@ -348,11 +348,12 @@ const CreateEvents = () => {
         {/* Category Section */}
         <section>
           <Select
+            mode="multiple"
             placeholder="Categoría del Evento"
             tagRender={tagRender}
             options={categoryOptions}
             size="large"
-            className="w-full"
+            className="w-full custom-select"
             onChange={handleCategoryChange}
             disabled={isSubmitting}
           />

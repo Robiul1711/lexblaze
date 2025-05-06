@@ -3,10 +3,11 @@ import LeftSide from "@/components/home/LeftSide";
 import MiddleContent from "@/components/home/MiddleContent";
 import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
-import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdown";
+
 import { useAuth } from "@/hooks/useAuth";
 import SlideSwiper from "@/components/home/SlideSwiper";
 import AddSlider from "@/components/common/AddSlider";
+import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile";
 const Home = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -22,9 +23,9 @@ const Home = () => {
       <SlideSwiper  />
 
       </div>
-      <div className="text-center  lg:mt-14 space-y-2 lg:space-y-0 w-full">
+      <div className="text-center  lg:mt-10  space-y-2 lg:space-y-0 w-full">
       <TodoEventDropdownMobile />
-        <Title48 title1="Ver Eventos para el" title2={formattedDate} />
+        <Title48 title1="Ver Eventos para el " title2={formattedDate} />
       </div>
       <div className="flex justify-between w-full gap-12 mt-5 lg:mt-10">
         {/* Leftside  */}

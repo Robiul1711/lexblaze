@@ -8,18 +8,23 @@ import ErrorMessage from "../common/ErrorMessage";
 import { useAuth } from "@/hooks/useAuth";
 
 const MiddleContent = () => {
+  const {search, date, category}=useAuth();
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 4;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", search, date, category], // <- include reactive keys
     queryFn: async () => {
-      const response = await axiosPublic.post(`/event/show`);
+      const response = await axiosPublic.post(`/event/show`, {
+        search,
+        date,
+        category_id: category,
+      });
       return response.data;
     },
   });
-
+  console.log(typeof(category));
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -67,12 +72,13 @@ const MiddleContent = () => {
                 {item.event_end_date && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-3 font-bold">
-                Hasta : {item.event_end_date}
+                Hasta  {item.event_end_date}
                     </button>
                   </div>
                 )}
 
-                <div className="space-y-2 sm:space-y-4 max-w-[355px] w-full absolute top-1/2 transform -translate-y-1/2">
+               <div className="space-y-2 sm:space-y-4 w-full sm:max-w-[355px] absolute top-1/2 left-1/2 sm:left-[30%] lg:left-1/2 xl:left-[40%] transform -translate-x-1/2 -translate-y-1/2 px-4 sm:px-0">
+
                   {item.event_title && (
                     <p className="sm:text-lg text-white font-semibold">
                       {item.event_title}
@@ -93,8 +99,8 @@ const MiddleContent = () => {
                     </Link>
                   )}
                   <div className="flex items-center justify-between text-sm sm:text-base font-semibold text-white">
-                    {item.price_limite && <p>Price: {item.price_limite}</p>}
-                    {item.event_start_time && <p>Time: {item.event_start_time}</p>}
+                    {item.price_limite && <p> {item.price_limite}</p>}
+                    {item.event_start_time && <p> {item.event_start_time}</p>}
                   </div>
                 </div>
               </div>
