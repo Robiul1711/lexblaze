@@ -13,16 +13,16 @@ const TopBanner = ({ data }) => {
           alt={data?.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 flex flex-col justify-center items-center">
+        <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
           {data?.event_end_date && (
             <div className="absolute top-0 right-0">
-              <button className="bg-primary text-[#F12617] p-3 font-bold">
+              <button className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
                Hasta : {data.event_end_date}
               </button>
             </div>
           )}
 
-          <div className="space-y-1 sm:space-y-3 xlg:space-y-4">
+          <div className="space-y-1 sm:space-y-3 xlg:space-y-4 absolute top-1/2  transform  -translate-y-1/2">
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white font-semibold flex items-start">
               {data?.business_name}
             </p>
@@ -31,7 +31,7 @@ const TopBanner = ({ data }) => {
             </h2>
             <Link
               to="/venue-user-view"
-              className="flex items-center gap-2 lg:gap-4 text-primary font-semibold"
+              className="flex items-center gap-2 hover:underline text-primary font-semibold"
             >
               <MapPin className="size-5 sm:size-6 xlg:size-7" />
               <p className="lg:text-lg">{data?.business_address}</p>

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Title48 from "@/components/common/Title48";
 import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
@@ -125,9 +125,9 @@ const Login = () => {
 
         {/* Links */}
         <div className="text-center mt-6 lg:mt-10 space-y-5 lg:space-y-8">
-          <p className="text-black font-bold text-2xl lg:text-[32px] cursor-pointer">
+          <Link to="/forgot-password" className="text-black font-bold text-2xl lg:text-[32px] cursor-pointer">
             Olvidaste Contraseña
-          </p>
+          </Link>
         </div>
       </form>
     </div>

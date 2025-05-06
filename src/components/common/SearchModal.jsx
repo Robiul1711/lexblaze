@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 
-const SearchModal = () => {
+const SearchModal = ({ search, setSearch}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const modalRef = useRef(null);
@@ -57,8 +57,8 @@ const SearchModal = () => {
                 <input
                   ref={inputRef}
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search..."
                   className="w-full outline-none text-gray-800 placeholder-gray-400"
                   autoFocus

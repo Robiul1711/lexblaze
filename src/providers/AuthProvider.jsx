@@ -5,6 +5,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const AuthProvider = ({ children }) => {
+  const [search, setSearch] = useState("");
+  const [date, setDate] = useState();
+  const [category, setCategory] = useState();
+
   const axiosSecure = useAxiosSecure();
   const [user, setUserState] = useState(() => {
     const storedUser = localStorage.getItem("user");
@@ -62,7 +66,7 @@ const AuthProvider = ({ children }) => {
   // }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser}}>
+    <AuthContext.Provider value={{ user, setUser, search, setSearch, date, setDate, category, setCategory}}>
       {children}
     </AuthContext.Provider>
   );

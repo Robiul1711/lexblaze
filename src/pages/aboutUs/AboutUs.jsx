@@ -3,6 +3,7 @@ import React from "react";
 import bottomImg from "@/assets/images/img6.png";
 import aboutus from "@/assets/images/aboutus.png";
 import Title48 from "@/components/common/Title48";
+import AddSlider from "@/components/common/AddSlider";
 
 const AboutUs = () => {
   return (
@@ -44,11 +45,7 @@ const AboutUs = () => {
       <div className="flex flex-col items-center gap-4 w-full mb-[80px] md:mb-[100px] lg:mb-0 lg:w-[30%] mt-6 lg:mt-0">
         <RightSide />
         <div className="pb-4 lg:pb-6 w-full">
-          <img 
-            src={bottomImg} 
-            alt="Sidebar visual" 
-            className="w-full h-auto object-contain"
-          />
+       <AddSlider />  
         </div>
       </div>
     </div>
