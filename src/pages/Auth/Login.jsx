@@ -6,8 +6,12 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react"; // or use any icon you like
+
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,19 +73,29 @@ const Login = () => {
         )}
 
         {/* Password input */}
-        <div className="py-9 lg:py-14">
-          <input
-            type="password"
-            placeholder="Contraseña"
-            {...register("password", {
-              required: "Contraseña es requerida",
-            })}
-            className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
-        </div>
+        <div className="py-9 lg:py-14 relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Contraseña"
+    {...register("password", {
+      required: "Contraseña es requerida",
+    })}
+    className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
+  />
+  {/* Toggle Button */}
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+  >
+    {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+  </button>
+
+  {errors.password && (
+    <p className="text-red-500 text-sm">{errors.password.message}</p>
+  )}
+</div>
+
 
         {/* Submit button */}
         <div className="flex flex-col items-center justify-center">

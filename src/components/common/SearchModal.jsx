@@ -1,13 +1,22 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import { Search } from "lucide-react";
 
-const SearchModal = ({ search, setSearch}) => {
+const SearchModal = ({ search, setSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const modalRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Close modal when clicking outside
+  // Debounce: Delay updating search by 1 second
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setSearch(searchQuery);
+    }, 800);
+
+    return () => clearTimeout(delayDebounce); // Clear timeout if user types again
+  }, [searchQuery, setSearch]);
+
+  // Close modal on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -16,20 +25,18 @@ const SearchModal = ({ search, setSearch}) => {
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      // Focus input when modal opens
+      document.addEventListener("mousedown", handleClickOutside);
       inputRef.current?.focus();
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    // Add your search logic here
+    console.log("Searching for:", searchQuery);
     setIsOpen(false);
   };
 
@@ -38,7 +45,7 @@ const SearchModal = ({ search, setSearch}) => {
       {/* Search Icon Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="p-2 rounded-full hover:bg-gray-100/20  transition-colors"
+        className="p-2 rounded-full hover:bg-gray-100/20 transition-colors"
         aria-label="Open search"
       >
         <Search className="size-6 md:size-8 lg:size-10" />
@@ -57,8 +64,8 @@ const SearchModal = ({ search, setSearch}) => {
                 <input
                   ref={inputRef}
                   type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
                   className="w-full outline-none text-gray-800 placeholder-gray-400"
                   autoFocus
@@ -81,10 +88,6 @@ const SearchModal = ({ search, setSearch}) => {
                     />
                   </svg>
                 </button>
-              </div>
-              <div className="mt-4">
-                {/* Search results would go here */}
-                {/* <SearchResults query={searchQuery} /> */}
               </div>
             </form>
           </div>

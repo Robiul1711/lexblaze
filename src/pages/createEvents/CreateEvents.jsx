@@ -105,7 +105,8 @@ const CreateEvents = () => {
     };
 
     createEventMutation.mutate(updatedData);
-  };
+ 
+  }; 
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -348,7 +349,7 @@ const CreateEvents = () => {
         {/* Category Section */}
         <section>
           <Select
-            mode="multiple"
+            // mode="multiple"
             placeholder="Categoría del Evento"
             tagRender={tagRender}
             options={categoryOptions}
