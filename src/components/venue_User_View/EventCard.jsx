@@ -64,7 +64,7 @@ const EventCard = ({ visibleCards }) => {
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         onConfirm={confirmDelete}
-        isLoading={deleteEventMutation.isLoading}
+        isLoading={deleteEventMutation.isLoading} // Pass loading state here
       />
 
       {/* Events List */}

@@ -41,10 +41,10 @@ const Footer = () => {
 
           {/* Social Icons - Centered on mobile, normal on desktop */}
           <div className="flex gap-8 md:gap-14">
-            <a href="#" aria-label="TikTok" className="hover:opacity-80 transition-opacity">
+            <a href="https://www.tiktok.com/" target="_blank" aria-label="TikTok" className="hover:opacity-80 transition-opacity">
               <TiktokIcons className="w-10 h-10 md:w-auto md:h-auto" />
             </a>
-            <a href="#" aria-label="YouTube" className="hover:opacity-80 transition-opacity">
+            <a href="https://www.youtube.com/" target="_blank" aria-label="YouTube" className="hover:opacity-80 transition-opacity">
               <YoutubeIcons className="w-10 h-10 md:w-auto md:h-auto" />
             </a>
           </div>

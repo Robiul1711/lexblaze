@@ -96,7 +96,7 @@ const TutorialMiddle = () => {
               <img 
                 src={tutorial.image || "/default-tutorial-image.jpg"} 
                 alt={tutorial.title} 
-                className="w-full h-[300px] object-cover"
+                className="w-full h-[200px] xxs:h-[300px] lg:h-[200px] xlg:h-[300px] object-cover"
            
               />
               <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 flex flex-col justify-center items-center">

@@ -77,7 +77,7 @@ const MiddleContent = () => {
                   </div>
                 )}
 
-               <div className="space-y-2 sm:space-y-4 w-full sm:max-w-[355px] absolute top-1/2 left-1/2 sm:left-[30%] lg:left-1/2 xl:left-[40%] transform -translate-x-1/2 -translate-y-1/2 px-4 sm:px-0">
+               <div className="space-y-2 sm:space-y-4 w-full sm:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
 
                   {item.event_title && (
                     <p className="sm:text-lg text-white font-semibold">

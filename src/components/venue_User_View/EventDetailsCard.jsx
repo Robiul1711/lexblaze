@@ -97,11 +97,12 @@ const EventDetailsCard = () => {
           pathname==="/venue-profile-edit" &&   
           
         <div className=" flex justify-between">
-        <Link
+<button
   onClick={() => {
-    setIsSubmitting(true); // <-- Set loading before logout starts
+    setIsSubmitting(true);
     LogOutInMutation.mutate();
   }}
+  disabled={isSubmitting}
   className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
     isSubmitting ? "opacity-70 cursor-not-allowed" : ""
   }`}
@@ -133,7 +134,8 @@ const EventDetailsCard = () => {
   ) : (
     "Cerrar sesión"
   )}
-</Link>
+</button>
+
 
           <Link to="/create-event" className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 px-6 mb-3 rounded-xl font-bold text-xl flex items-center justify-center gap-2 xlg:gap-6 text-white">
             <PlusIcon />

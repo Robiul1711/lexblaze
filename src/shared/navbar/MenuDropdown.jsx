@@ -36,14 +36,7 @@ const items = [
     ),
     key: '3',
   },
-  {
-    label: (
-      <Link to="/venue-profile-edit" className="text-lg sm:text-xl font-semibold pr-6 !sm:pr-16 block py-2 sm:py-3">
-       Perfil
-      </Link>
-    ),
-    key: '4',
-  },
+  
 ];
 
 const MenuDropdown = () => (

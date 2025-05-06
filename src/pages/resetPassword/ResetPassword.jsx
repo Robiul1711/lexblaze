@@ -6,11 +6,14 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react"; // Import the Lucide icons
 
 const ResetPassword = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State to toggle confirm password visibility
   const axiosPublic = useAxiosPublic();
 
   const {
@@ -57,24 +60,35 @@ const ResetPassword = () => {
         noValidate
       >
         {/* Password Field */}
-        <div>
+        <div className="relative">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Nueva Contraseña"
             {...register("password", {
               required: "Contraseña es requerida",
             })}
             className="w-full border-2 border-gray-300 p-4 rounded-md outline-none placeholder:text-gray-500"
           />
+          <button
+            type="button"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-5 w-5 text-gray-500" />
+            ) : (
+              <Eye className="h-5 w-5 text-gray-500" />
+            )}
+          </button>
           {errors.password && (
             <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>
           )}
         </div>
 
         {/* Confirm Password Field */}
-        <div>
+        <div className="relative">
           <input
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
               required: "Confirmación de contraseña es requerida",
@@ -83,6 +97,17 @@ const ResetPassword = () => {
             })}
             className="w-full border-2 border-gray-300 p-4 rounded-md outline-none placeholder:text-gray-500"
           />
+          <button
+            type="button"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? (
+              <EyeOff className="h-5 w-5 text-gray-500" />
+            ) : (
+              <Eye className="h-5 w-5 text-gray-500" />
+            )}
+          </button>
           {errors.password_confirmation && (
             <p className="text-red-500 text-sm mt-2">
               {errors.password_confirmation.message}

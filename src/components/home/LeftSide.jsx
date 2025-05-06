@@ -14,7 +14,7 @@ const LeftSide = () => {
 
   return (
     <div className=''>
-        <img src={data?.[0]?.image} alt="" className='rounded-md object-cover h-full xl:h-[450px] lg:h-[320px] xlg:h-[380px]'/>
+        <img src={data?.[0]?.image} alt="" className='rounded-md object-cover h-full xl:h-[450px] lg:h-[320px] xlg:h-[320px]'/>
     </div>
   )
 }
