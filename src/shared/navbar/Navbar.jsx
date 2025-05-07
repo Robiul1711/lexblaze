@@ -12,7 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
-  const { search, setSearch, date, setDate, category, setCategory } = useAuth();
+  const { search, setSearch, date, setDate} = useAuth();
 
   const handleDateChange = (date) => {
     if (date) {

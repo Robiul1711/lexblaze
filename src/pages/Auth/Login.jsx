@@ -8,7 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react"; // or use any icon you like
 
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -29,7 +28,7 @@ const Login = () => {
     onSuccess: (response) => {
       toast.success(response?.message || "Login successful");
       setUser(response);
-        navigate("/venue-profile-edit");
+      navigate("/venue-profile-edit");
     },
     onError: (error) => {
       console.log(error);
@@ -46,7 +45,6 @@ const Login = () => {
     setIsSubmitting(true); // Set loading to true
     console.log("Form Data:", data);
     LogInMutation.mutate(data);
-    
   };
 
   return (
@@ -74,72 +72,73 @@ const Login = () => {
 
         {/* Password input */}
         <div className="py-9 lg:py-14 relative">
-  <input
-    type={showPassword ? "text" : "password"}
-    placeholder="Contraseña"
-    {...register("password", {
-      required: "Contraseña es requerida",
-    })}
-    className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
-  />
-  {/* Toggle Button */}
-  <button
-    type="button"
-    onClick={() => setShowPassword((prev) => !prev)}
-    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
-  >
-    {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
-  </button>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            {...register("password", {
+              required: "Contraseña es requerida",
+            })}
+            className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
+          />
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+          >
+            {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+          </button>
 
-  {errors.password && (
-    <p className="text-red-500 text-sm">{errors.password.message}</p>
-  )}
-</div>
-
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
 
         {/* Submit button */}
         <div className="flex flex-col items-center justify-center">
-        <button
-  type="submit"
-  disabled={isSubmitting}
-  className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
-    isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-  }`}
->
-  {isSubmitting ? (
-    <>
-      <svg
-        className="animate-spin h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        ></circle>
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v8H4z"
-        ></path>
-      </svg>
-      Iniciando...
-    </>
-  ) : (
-    "Iniciar Sesión"
-  )}
-</button>
-
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+          >
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Iniciando...
+              </>
+            ) : (
+              "Iniciar Sesión"
+            )}
+          </button>
         </div>
 
         {/* Links */}
         <div className="text-center mt-6 lg:mt-10 space-y-5 lg:space-y-8">
-          <Link to="/forgot-password" className="text-black font-bold text-2xl lg:text-[32px] cursor-pointer">
+          <Link
+            to="/forgot-password"
+            className="text-black font-bold text-2xl lg:text-[32px] cursor-pointer"
+          >
             Olvidaste Contraseña
           </Link>
         </div>
