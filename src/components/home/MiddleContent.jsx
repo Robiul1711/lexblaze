@@ -11,7 +11,7 @@ const MiddleContent = () => {
   const {search, date, category}=useAuth();
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0);
-  const cardsPerPage = 4;
+  const cardsPerPage = 5;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["events", search, date, category], // <- include reactive keys

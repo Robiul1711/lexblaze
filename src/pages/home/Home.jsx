@@ -9,6 +9,8 @@ import SlideSwiper from "@/components/home/SlideSwiper";
 import AddSlider from "@/components/common/AddSlider";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile";
 const Home = () => {
+  const {date} = useAuth();
+  console.log(date);
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
     day: "2-digit",
@@ -25,7 +27,7 @@ const Home = () => {
       </div>
       <div className="text-center  lg:mt-10  space-y-2 lg:space-y-0 w-full">
       <TodoEventDropdownMobile />
-        <Title48 title1="Ver Eventos para el " title2={formattedDate} />
+        <Title48 title1="Ver Eventos para el " title2={date ? date : formattedDate} />
       </div>
       <div className="flex justify-between w-full gap-12 mt-5 lg:mt-10">
         {/* Leftside  */}

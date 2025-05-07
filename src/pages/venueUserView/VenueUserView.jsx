@@ -9,13 +9,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 
 const VenueUserView = () => {
   const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(0); // Moved before any conditional returns
   
-  const { data, } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {
       const response = await axiosSecure.get("/user/event/show");
@@ -45,14 +46,19 @@ const VenueUserView = () => {
 console.log(visibleCards)
   return (
     <div className="section-padding-x ">
-      <div className="flex flex-col lg:flex-row justify-between w-full gap-6 xlg:gap-12">
+      <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-6 xlg:gap-12">
         {/* Leftside */}
-        <div className="mt-40 hidden lg:block">
+        <div className="mt-40 hidden xlg:block">
           <LeftSide />
         </div>
         
         {/* Middle */}
-        <div className="lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
+        {
+          isLoading ? (
+           <div className="w-full  flex justify-center items-center"><LoadingSpinner /></div>
+          )
+          :
+          <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10`}>
           <div className="text-center mt-5 lg:mt-14">
             <Title48 title2={visibleCards[0]?.business_name} />
           </div>
@@ -95,9 +101,11 @@ console.log(visibleCards)
           <AddSlider />
           </div>
         </div>
+        }
+    
         
         {/* Rightside */}
-        <div className="lg:mt-40 mb-32">
+        <div className="lg:mt-40 mb-32 hidden xlg:block">
           <RightSide />
         </div>
       </div>
