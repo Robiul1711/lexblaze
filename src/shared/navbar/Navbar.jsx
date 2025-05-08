@@ -46,7 +46,7 @@ const Navbar = () => {
           dropdownRender={() => (
             <Calendar
               mode="single"
-              selected={date ? new Date(date) : undefined}
+              selected={date ? new Date(date) : date}
               onSelect={handleDateChange}
               className="rounded-md border bg-white"
             />

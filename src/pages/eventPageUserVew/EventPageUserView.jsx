@@ -8,11 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useParams } from "react-router-dom";
 import AddSlider from "@/components/common/AddSlider";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 const EventPageUserView = () => {
   const axiosPublic = useAxiosPublic();
   const { id } = useParams();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["singleEventsData"],
     queryFn: async () => {
       const response = await axiosPublic.get(`/event/details/${id}`);
@@ -26,26 +27,41 @@ const EventPageUserView = () => {
 
       <div className="flex flex-col lg:flex-row justify-between gap-6 xlg:gap-12  ">
         {/* Leftside  */}
-        <div className="hidden mt-40 lg:block">
+        <div className="hidden mt-20 lg:block">
           <LeftSide />
         </div>
         {/* Middle  */}
-        <div className=" lg:bg-[#FFFBE0] lg:px-6 xlg:px-10">
+        <div
+          className={` ${
+            isLoading ? "" : "lg:bg-[#FFFBE0] "
+          } lg:px-6 xlg:px-10`}
+        >
           <div className="text-center mt-5 lg:mt-10 ">
-            <TopBanner data={data?.event} />
-            <img src={eventUserView} alt="" className="w-full max-h-[400px] object-fill" />
+            {isLoading ? (
+              <div className="flex justify-center items-center h-screen">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              <TopBanner data={data?.event} />
+            )}
+
+            <img
+              src={eventUserView}
+              alt=""
+              className="w-full max-h-[400px] object-fill"
+            />
           </div>
 
-          <div className="lg:flex justify-center lg:mb-[220px] mt-20 hidden ">
+          <div className="lg:flex justify-center lg:mb-[150px] mt-20 hidden ">
             <AddSlider />
           </div>
         </div>
         {/* Rightside  */}
-        <div className="mt-10 lg:mt-40">
+        <div className="mt-10 lg:mt-20">
           <RightSide />
         </div>
         <div className="flex justify-center mb-[100px] mt-10 lg:mt-20 lg:hidden ">
-        <AddSlider />
+          <AddSlider />
         </div>
       </div>
       {/* Footer  */}

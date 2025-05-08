@@ -5,8 +5,14 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const AuthProvider = ({ children }) => {
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(formattedDate);
   const [category, setCategory] = useState();
 
   const axiosSecure = useAxiosSecure();

@@ -89,9 +89,9 @@ const EventDetailsCard = () => {
           </Title24>
         </div>
         <div className="w-full text-center">
-          <button className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 w-full mb-3 rounded-xl font-bold text-xl sm:text-xl text-white">
+          <p className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 w-full mb-3 rounded-xl font-bold text-xl sm:text-xl text-white">
             Nuestros Eventos
-          </button>
+          </p>
         </div>
         {
           pathname==="/venue-profile-edit" &&   
