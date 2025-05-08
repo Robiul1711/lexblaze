@@ -7,23 +7,13 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
 import { useAuth } from "@/hooks/useAuth";
 
-const MiddleContent = () => {
-  const {search, date, category}=useAuth();
-  const axiosPublic = useAxiosPublic();
+const MiddleContent = ({data, isLoading, error}) => {
+
+
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 5;
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["events", search, date, category], // <- include reactive keys
-    queryFn: async () => {
-      const response = await axiosPublic.post(`/event/show`, {
-        search,
-        date,
-        category_id: category,
-      });
-      return response.data;
-    },
-  });
+
   console.log(typeof(category));
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;

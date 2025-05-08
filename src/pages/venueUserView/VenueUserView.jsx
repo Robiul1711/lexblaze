@@ -48,7 +48,7 @@ console.log(visibleCards)
     <div className="section-padding-x ">
       <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-6 xlg:gap-12">
         {/* Leftside */}
-        <div className="mt-40 hidden xlg:block">
+        <div className="mt-20 hidden xlg:block">
           <LeftSide />
         </div>
         
@@ -97,7 +97,7 @@ console.log(visibleCards)
               <p className="font-bold text-lg">Siguiente</p>
             </div>
           </div>
-          <div className="flex justify-center mb-5 lg:mb-[220px]">
+          <div className="flex justify-center mb-5 lg:mb-[160px]">
           <AddSlider />
           </div>
         </div>
@@ -105,7 +105,7 @@ console.log(visibleCards)
     
         
         {/* Rightside */}
-        <div className="lg:mt-40 mb-32 hidden xlg:block">
+        <div className="lg:mt-20 mb-32 hidden xlg:block">
           <RightSide />
         </div>
       </div>

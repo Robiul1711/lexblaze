@@ -16,9 +16,9 @@ const TopBanner = ({ data }) => {
         <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
           {data?.event_end_date && (
             <div className="absolute top-0 right-0">
-              <button className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
+              <p className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
                Hasta : {data.event_end_date}
-              </button>
+              </p>
             </div>
           )}
 

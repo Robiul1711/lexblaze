@@ -8,26 +8,44 @@ import { useAuth } from "@/hooks/useAuth";
 import SlideSwiper from "@/components/home/SlideSwiper";
 import AddSlider from "@/components/common/AddSlider";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 const Home = () => {
-  const {date} = useAuth();
-  console.log(date);
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString("es-ES", {
+
+  const axiosPublic = useAxiosPublic();
+  const {search, date, category}=useAuth();
+
+  const dynamicDate = date; // dynamic value
+
+  const formattedDate = new Date(dynamicDate).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "2-digit",
   });
-
+  
+  console.log(formattedDate); // Output: 14/05/25
+  
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["events", search, date, category], // <- include reactive keys
+    queryFn: async () => {
+      const response = await axiosPublic.post(`/event/show`, {
+        search,
+        date,
+        category_id: category,
+      });
+      return response.data;
+    },
+  });
   return (
-    <div className="section-padding-x  lg:mb-[120px]">
+    <div className="section-padding-x  lg:mb-[60px]">
       {/* Title  */}
       <div className="lg:hidden my-3 lg:my-0 ">
-      <SlideSwiper  />
+      <SlideSwiper data={data} />
 
       </div>
       <div className="text-center  lg:mt-10  space-y-2 lg:space-y-0 w-full">
       <TodoEventDropdownMobile />
-        <Title48 title1="Ver Eventos para el " title2={date ? date : formattedDate} />
+        <Title48 title1="Ver Eventos para el " title2={formattedDate} />
       </div>
       <div className="flex justify-between w-full gap-12 mt-5 lg:mt-10">
         {/* Leftside  */}
@@ -36,7 +54,7 @@ const Home = () => {
         </div>
         {/* Middle  */}
         <div className="w-full  lg:w-[60%]">
-          <MiddleContent />
+          <MiddleContent data={data} isLoading={isLoading} error={error} />
         </div>
         {/* Rightside  */}
         <div className="hidden lg:block lg:w-[40%]">
