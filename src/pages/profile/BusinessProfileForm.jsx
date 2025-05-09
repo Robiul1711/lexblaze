@@ -199,7 +199,6 @@ const BusinessProfileForm = () => {
         {/* Email */}
         <div>
           <input
-          
             type="email"
             placeholder="Correo Electrónico"
             {...register("email", {
@@ -227,33 +226,32 @@ const BusinessProfileForm = () => {
 
         {/* Password */}
         <div className="relative">
-  <input
-    type={showPassword ? "text" : "password"}
-    placeholder="Contraseña"
-    {...register("password", {
-      required: "Contraseña es requerida",
-    })}
-    className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
-  />
-  {/* Toggle Button */}
-  <button
-    type="button"
-    onClick={() => setShowPassword((prev) => !prev)}
-    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
-  >
-    {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
-  </button>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            {...register("password", {
+              required: "Contraseña es requerida",
+            })}
+            className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
+          />
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+          >
+            {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+          </button>
 
-  {errors.password && (
-    <p className="text-red-500 text-sm">{errors.password.message}</p>
-  )}
-</div>
-
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
 
         {/* Confirm Password */}
         <div className=" relative">
           <input
-             type={showConfirmPassword ? "text" : "password"}
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
               required: "Confirmación de contraseña es requerida",
@@ -262,38 +260,43 @@ const BusinessProfileForm = () => {
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-            <button
-    type="button"
-    onClick={() => setShowConfirmPassword((prev) => !prev)}
-    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
-  >
-    {showConfirmPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
-  </button>
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+          >
+            {showConfirmPassword ? (
+              <EyeOffIcon size={20} />
+            ) : (
+              <EyeIcon size={20} />
+            )}
+          </button>
           {errors.password_confirmation && (
             <p className="text-red-500 text-sm">
               {errors.password_confirmation.message}
             </p>
           )}
         </div>
-{/* Image Upload */}
-<div className="flex flex-col items-center gap-2 mt-6">
-  <Upload
-    listType="picture-card"
-    fileList={fileList}
-    onChange={handleImageChange}
-    beforeUpload={() => false}
-    accept="image/*"
-    multiple
-    maxCount={5}
-  >
-    {fileList.length < 5 && <UploadIcons />}
-  </Upload>
+        {/* Image Upload */}
+        <div className="flex flex-col items-center gap-2 mt-6">
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleImageChange}
+            beforeUpload={() => false}
+            accept="image/*"
+            multiple
+            maxCount={5}
+          >
+            {fileList.length < 5 && <UploadIcons />}
+          </Upload>
 
-  {fileList.length === 0 && (
-    <p className="text-red-500 text-sm">Se requiere al menos una imagen.</p>
-  )}
-</div>
-
+          {fileList.length === 0 && (
+            <p className="text-red-500 text-sm">
+              Se requiere al menos una imagen.
+            </p>
+          )}
+        </div>
 
         {/* Terms */}
         <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
@@ -310,39 +313,40 @@ const BusinessProfileForm = () => {
 
         {/* Submit */}
         <div className="flex flex-col items-center gap-2 lg:mt-6">
-        <button
-  type="submit"
-  disabled={RegistrationMutation.isPending}
-  className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 md:px-xl lg:text-3xl rounded-xl lg:rounded-[20px] lg:mt-4 transition-all duration-200
+          <button
+            type="submit"
+            disabled={RegistrationMutation.isPending}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 md:px-xl lg:text-3xl rounded-xl lg:rounded-[20px] lg:mt-4 transition-all duration-200
     ${RegistrationMutation.isPending ? "opacity-60 cursor-not-allowed" : ""}
   `}
->
-{RegistrationMutation.isPending ? (
-  <span className="flex items-center gap-2">
-    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-        fill="none"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-      />
-    </svg>
-    Creando...
-  </span>
-) : (
-  "Crear Cuenta"
-)}
-
-</button>
-
+          >
+            {RegistrationMutation.isPending ? (
+              <span className="flex items-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
+                </svg>
+                Creando...
+              </span>
+            ) : (
+              "Crear Cuenta"
+            )}
+          </button>
         </div>
       </form>
     </div>

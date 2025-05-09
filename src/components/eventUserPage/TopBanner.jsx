@@ -11,7 +11,7 @@ const TopBanner = ({ data }) => {
         <img
           src={data?.event_thumb_image}
           alt={data?.title}
-          className="w-full h-full object-cover"
+          className="w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px] "
         />
         <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
           {data?.event_end_date && (

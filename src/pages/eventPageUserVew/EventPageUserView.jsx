@@ -20,7 +20,7 @@ const EventPageUserView = () => {
       return response.data;
     },
   });
-
+  console.log(data);
   return (
     <div className="section-padding-x ">
       {/* Title  */}
@@ -46,7 +46,7 @@ const EventPageUserView = () => {
             )}
 
             <img
-              src={eventUserView}
+              src={data?.event?.flyer}
               alt=""
               className="w-full max-h-[400px] object-fill"
             />

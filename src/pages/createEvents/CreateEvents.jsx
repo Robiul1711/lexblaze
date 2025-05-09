@@ -59,6 +59,7 @@ const CreateEvents = () => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [fileList, setFileList] = useState([]);
+  const [fileList2, setFileList2] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageError, setImageError] = useState("");
 
@@ -94,7 +95,9 @@ const CreateEvents = () => {
     } else {
       setImageError("");
     }
+
     setIsSubmitting(true);
+
     const updatedData = {
       ...data,
       event_start_date: dayjs(startDate).format(dateFormat),
@@ -102,12 +105,12 @@ const CreateEvents = () => {
       event_start_time: dayjs(startTime).format("HH:mm"),
       event_end_time: dayjs(endTime).format("HH:mm"),
       event_thumb_image: fileList[0]?.originFileObj,
+      flyer: fileList2.length > 0 ? fileList2[0]?.originFileObj : null, // Add this check
     };
 
     createEventMutation.mutate(updatedData);
- 
-  }; 
-
+    console.log("Form Data:", updatedData);
+  };
   const handleStartDateChange = (date) => {
     setStartDate(date);
     setValue("event_start_date", date);
@@ -132,6 +135,10 @@ const CreateEvents = () => {
     setFileList(newFileList);
     if (newFileList.length > 0) setImageError("");
   };
+  const handleImageChangeflayer = ({ fileList: newFileList }) => {
+    setFileList2(newFileList);
+    if (newFileList.length > 0) setImageError("");
+  };
 
   const handleCategoryChange = (selectedOptions) => {
     setValue("category_id", selectedOptions);
@@ -149,6 +156,31 @@ const CreateEvents = () => {
       >
         {/* Date Section */}
         <section>
+          <div className="flex flex-col items-center gap-2 mb-10">
+            <Upload
+              listType="picture-card"
+              fileList={fileList2}
+              onChange={handleImageChangeflayer}
+              beforeUpload={() => false}
+              accept="image/*"
+              multiple={false}
+              maxCount={1}
+              disabled={isSubmitting}
+            >
+              {fileList2.length < 1 && <UploadIcons />}
+            </Upload>
+
+            <p
+              type="button"
+              className="bg-[#000e8e] text-white sm:px-10 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
+              onClick={() =>
+                document.querySelector(".ant-upload-select").click()
+              }
+              disabled={isSubmitting}
+            >
+              Carga Imagen de Fondo
+            </p>
+          </div>
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
           <button
             type="button"
@@ -349,7 +381,7 @@ const CreateEvents = () => {
         {/* Category Section */}
         <section>
           <Select
-            // mode="multiple"
+            mode="multiple"
             placeholder="Categoría del Evento"
             tagRender={tagRender}
             options={categoryOptions}
@@ -398,7 +430,7 @@ const CreateEvents = () => {
 
             <p
               type="button"
-              className="bg-[#000e8e] text-white sm:px-20 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
+              className="bg-[#000e8e] text-white sm:px-10 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
               onClick={() =>
                 document.querySelector(".ant-upload-select").click()
               }
@@ -411,12 +443,40 @@ const CreateEvents = () => {
 
         {/* Submit Button */}
         <div className="flex justify-center mt-8">
-          <button
+            <button
             type="submit"
-            className="bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-24 text-2xl md:text-3xl rounded-xl lg:rounded-[20px] transition-colors"
             disabled={isSubmitting}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 text-2xl px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            {isSubmitting ? "Publicando..." : "Publicar"}
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+               Publicando...
+              </>
+            ) : (
+              "Publicar"
+            )}
           </button>
         </div>
       </form>

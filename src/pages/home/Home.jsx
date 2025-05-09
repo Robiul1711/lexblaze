@@ -23,10 +23,10 @@ const Home = () => {
     year: "2-digit",
   });
   
-  console.log(formattedDate); // Output: 14/05/25
+  console.log(date); // Output: 14/05/25
   
   const { data, isLoading, error } = useQuery({
-    queryKey: ["events", search, date, category], // <- include reactive keys
+    queryKey: ["events", search, date, category, ], // <- include reactive keys
     queryFn: async () => {
       const response = await axiosPublic.post(`/event/show`, {
         search,
