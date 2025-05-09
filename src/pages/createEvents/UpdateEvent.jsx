@@ -105,8 +105,8 @@ const UpdateEvent = () => {
     };
 
     createEventMutation.mutate(updatedData);
+    console.log(updatedData)
   };
-
   const handleStartDateChange = (date) => {
     setStartDate(date);
     setValue("event_start_date", date);
@@ -412,12 +412,40 @@ const UpdateEvent = () => {
 
         {/* Submit Button */}
         <div className="flex justify-center mt-8">
-          <button
+              <button
             type="submit"
-            className="bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-24 text-2xl md:text-3xl rounded-xl lg:rounded-[20px] transition-colors"
             disabled={isSubmitting}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            {isSubmitting ? "Publicando..." : "Publicar"}
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Publicando...
+              </>
+            ) : (
+              "Publicar"
+            )}
           </button>
         </div>
       </form>

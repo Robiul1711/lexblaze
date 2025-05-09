@@ -10,8 +10,12 @@ import ImgCrop from "antd-img-crop";
 import { UploadIcons } from "@/lib/Icons";
 import { useAuth } from "@/hooks/useAuth";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const UpdateProfile = () => {
+    const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
@@ -86,6 +90,7 @@ const UpdateProfile = () => {
         {/* Business Name */}
         <div>
           <input
+           defaultValue={user?.user?.business_name}
             type="text"
             placeholder="Nombre del Negocio"
             {...register("business_name", {
@@ -103,6 +108,7 @@ const UpdateProfile = () => {
         {/* Business Description */}
         <div>
           <textarea
+            defaultValue={user?.user?.business_details}
             placeholder="Descripción del Negocio"
             {...register("business_details", {
               required: "Este campo es requerido",
@@ -119,6 +125,7 @@ const UpdateProfile = () => {
         {/* Address */}
         <div>
           <input
+            defaultValue={user?.user?.business_address}
             type="text"
             placeholder="Dirección del Negocio"
             {...register("business_address", {
@@ -136,6 +143,7 @@ const UpdateProfile = () => {
         {/* Schedule */}
         <div>
           <input
+            defaultValue={user?.user?.business_time}
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
             {...register("business_time", {
@@ -152,6 +160,7 @@ const UpdateProfile = () => {
 
         {/* Website */}
         <input
+          defaultValue={user?.user?.business_website_link}
           type="text"
           placeholder="Website link"
           {...register("business_website_link")}
@@ -160,6 +169,7 @@ const UpdateProfile = () => {
 
         {/* Age Limit */}
         <input
+          defaultValue={user?.user?.edad}
           type="text"
           placeholder="Límite de Edad"
           {...register("edad")}
@@ -168,6 +178,7 @@ const UpdateProfile = () => {
 
         {/* Menu */}
         <input
+          defaultValue={user?.user?.business_food_menu}
           type="text"
           placeholder="La Carta (Menú)"
           {...register("business_food_menu")}
@@ -176,6 +187,7 @@ const UpdateProfile = () => {
 
         {/* Phone */}
         <input
+          defaultValue={user?.user?.phone}
           type="text"
           placeholder="Teléfono"
           {...register("phone")}
@@ -186,6 +198,7 @@ const UpdateProfile = () => {
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Teléfono en el perfil</label>
           <Switch
+
             {...register("showPhone")}
             className="
             [&:not(.ant-switch-checked)]:!bg-gray-400
@@ -216,6 +229,7 @@ const UpdateProfile = () => {
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
           <Switch
+      
             {...register("showEmail")}
             className="
             [&:not(.ant-switch-checked)]:!bg-gray-400
@@ -226,7 +240,7 @@ const UpdateProfile = () => {
         </div>
 
         {/* Password */}
-        <div>
+        {/* <div>
           <input
             type="password"
             placeholder="Contraseña"
@@ -236,10 +250,34 @@ const UpdateProfile = () => {
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
+        </div> */}
+        
+        {/* Password */}
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            {...register("password", {
+              required: "Contraseña es requerida",
+            })}
+            className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
+          />
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+          >
+            {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+          </button>
+
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
         {/* Confirm Password */}
-        <div>
+        {/* <div>
           <input
             type="password"
             placeholder="Confirmar Contraseña"
@@ -250,6 +288,34 @@ const UpdateProfile = () => {
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
+          {errors.password_confirmation && (
+            <p className="text-red-500 text-sm">
+              {errors.password_confirmation.message}
+            </p>
+          )}
+        </div> */}
+                <div className=" relative">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirmar Contraseña"
+            {...register("password_confirmation", {
+              required: "Confirmación de contraseña es requerida",
+              validate: (value) =>
+                value === password || "Las contraseñas no coinciden",
+            })}
+            className="w-full border-[2px] border-black p-4 lg:p-6"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+          >
+            {showConfirmPassword ? (
+              <EyeOffIcon size={20} />
+            ) : (
+              <EyeIcon size={20} />
+            )}
+          </button>
           {errors.password_confirmation && (
             <p className="text-red-500 text-sm">
               {errors.password_confirmation.message}
@@ -287,11 +353,40 @@ const UpdateProfile = () => {
 
         {/* Submit */}
         <div className="flex flex-col items-center gap-2 lg:mt-6">
-          <button
+             <button
             type="submit"
-            className="bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 md:px-xl lg:text-3xl rounded-xl lg:rounded-[20px] lg:mt-4"
+            disabled={isSubmitting}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Crear Cuenta
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                 Crear Cuenta..
+              </>
+            ) : (
+              " Crear Cuenta"
+            )}
           </button>
         </div>
       </form>

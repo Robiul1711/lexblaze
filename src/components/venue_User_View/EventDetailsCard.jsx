@@ -48,7 +48,7 @@ const EventDetailsCard = () => {
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
-    <div className="mb-10 lg:max-w-[620px] w-full">
+    <div className="mb-10 lg:max-w-[620px]  w-full">
    
       <SwiperImg data={data?.user?.user_images} />
      
