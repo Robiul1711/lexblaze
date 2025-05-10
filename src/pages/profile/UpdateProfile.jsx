@@ -93,16 +93,10 @@ const UpdateProfile = () => {
            defaultValue={user?.user?.business_name}
             type="text"
             placeholder="Nombre del Negocio"
-            {...register("business_name", {
-              required: "Este campo es requerido",
-            })}
+            {...register("business_name", )}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.business_name && (
-            <p className="text-red-500 text-sm">
-              {errors.business_name.message}
-            </p>
-          )}
+   
         </div>
 
         {/* Business Description */}
@@ -110,16 +104,10 @@ const UpdateProfile = () => {
           <textarea
             defaultValue={user?.user?.business_details}
             placeholder="Descripción del Negocio"
-            {...register("business_details", {
-              required: "Este campo es requerido",
-            })}
+            {...register("business_details",)}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
-          {errors.business_details && (
-            <p className="text-red-500 text-sm">
-              {errors.business_details.message}
-            </p>
-          )}
+      
         </div>
 
         {/* Address */}
@@ -128,16 +116,10 @@ const UpdateProfile = () => {
             defaultValue={user?.user?.business_address}
             type="text"
             placeholder="Dirección del Negocio"
-            {...register("business_address", {
-              required: "Este campo es requerido",
-            })}
+            {...register("business_address", )}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.business_address && (
-            <p className="text-red-500 text-sm">
-              {errors.business_address.message}
-            </p>
-          )}
+       
         </div>
 
         {/* Schedule */}
@@ -146,16 +128,10 @@ const UpdateProfile = () => {
             defaultValue={user?.user?.business_time}
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
-            {...register("business_time", {
-              required: "Este campo es requerido",
-            })}
+            {...register("business_time",)}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.business_time && (
-            <p className="text-red-500 text-sm">
-              {errors.business_time.message}
-            </p>
-          )}
+          
         </div>
 
         {/* Website */}
@@ -216,13 +192,11 @@ const UpdateProfile = () => {
             type="email"
             placeholder="Correo Electrónico"
             {...register("email", {
-              required: "Correo electrónico es requerido",
+             
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
+         
         </div>
 
         {/* Show Email */}
@@ -257,9 +231,7 @@ const UpdateProfile = () => {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
-            {...register("password", {
-              required: "Contraseña es requerida",
-            })}
+            {...register("password",)}
             className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
           />
           {/* Toggle Button */}
@@ -271,9 +243,7 @@ const UpdateProfile = () => {
             {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
           </button>
 
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
+         
         </div>
 
         {/* Confirm Password */}
@@ -299,8 +269,7 @@ const UpdateProfile = () => {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
-              required: "Confirmación de contraseña es requerida",
-              validate: (value) =>
+                          validate: (value) =>
                 value === password || "Las contraseñas no coinciden",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
@@ -316,11 +285,7 @@ const UpdateProfile = () => {
               <EyeIcon size={20} />
             )}
           </button>
-          {errors.password_confirmation && (
-            <p className="text-red-500 text-sm">
-              {errors.password_confirmation.message}
-            </p>
-          )}
+         
         </div>
 
         {/* Image Upload */}
@@ -343,12 +308,9 @@ const UpdateProfile = () => {
           <input
             className="size-5 md:size-6 lg:size-7"
             type="checkbox"
-            {...register("terms", { required: "Debes aceptar los términos" })}
+            {...register("terms", )}
           />
-          <span>Términos y Condiciones</span>
-          {errors.terms && (
-            <p className="text-red-500 text-sm">{errors.terms.message}</p>
-          )}
+        
         </div>
 
         {/* Submit */}
