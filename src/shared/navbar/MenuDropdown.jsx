@@ -4,26 +4,30 @@ import { Link } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 
 const MenuDropdown = () => {
-  // Check if user is logged in (you might need to adjust this based on your auth system)
-  const isLoggedIn = localStorage.getItem('user') !== null; // or your auth check logic
+  const isLoggedIn = localStorage.getItem('user') !== null;
 
   const items = [
-    {
+    // Show login option only when not logged in
+    ...(!isLoggedIn ? [{
       label: (
         <Link to="/log-in" className="text-lg sm:text-xl font-semibold pr-6 !sm:pr-16 block py-2 sm:py-3">
           Iniciar Sesión de Negocios
         </Link>
       ),
       key: '0',
-    },
-    {
+    }] : []),
+    
+    // Show create account only when not logged in
+    ...(!isLoggedIn ? [{
       label: (
         <Link to="/profile" className="text-lg sm:text-xl font-semibold pr-6 !sm:pr-16 block py-2 sm:py-3">
           Crear Cuenta de Negocios
         </Link>
       ),
       key: '1',
-    },
+    }] : []),
+    
+    // Always show these items
     {
       label: (
         <Link to="/tutorials" className="text-lg sm:text-xl font-semibold pr-6 !sm:pr-16 block py-2 sm:py-3">
@@ -40,7 +44,8 @@ const MenuDropdown = () => {
       ),
       key: '3',
     },
-    // Only show this item if user is logged in
+    
+    // Show profile only when logged in
     ...(isLoggedIn ? [{
       label: (
         <Link to="/venue-profile-edit" className="text-lg sm:text-xl font-semibold pr-6 !sm:pr-16 block py-2 sm:py-3">
