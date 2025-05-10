@@ -11,17 +11,20 @@ import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useParams } from "react-router-dom";
+import EventDetailCardPublic from "@/components/venue_User_View/EventDetailCardPublic";
+import EventCardPublic from "@/components/venue_User_View/EventCardPublic";
 
 
-const VenueUserView = () => {
+const VanueUserViewPublic = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0); // Moved before any conditional returns
-  
+  const {user_id}=useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {
-      const response = await axiosSecure.get("/user/event/show");
+      const response = await axiosPublic.get("specificUser/event/show/"+user_id);
       return response.data;
     },
   });
@@ -65,8 +68,8 @@ console.log(visibleCards)
             <Title48 title2={visibleCards[0]?.business_name} />
           </div>
           <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
-            <EventDetailsCard />
-            <EventCard visibleCards={visibleCards} />
+            <EventDetailCardPublic />
+            <EventCardPublic visibleCards={visibleCards} />
           </div>
           <div className="flex justify-between items-center py-10">
             <div className="flex flex-col items-center gap-2">
@@ -115,4 +118,4 @@ console.log(visibleCards)
   );
 };
 
-export default VenueUserView;
+export default VanueUserViewPublic;

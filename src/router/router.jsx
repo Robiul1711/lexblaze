@@ -13,6 +13,8 @@ import VerifyOtp from "@/pages/resetPassword/VerifyOtp";
 import Tutorials from "@/pages/tutorials/Tutorials";
 import VenueUserView from "@/pages/venueUserView/VenueUserView";
 import { createBrowserRouter } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import VanueUserViewPublic from "@/pages/venueUserView/VanueUserViewPublic";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +51,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
-        element: <UpdateProfile />,
+        element: (
+          <PrivateRoute>
+            <UpdateProfile />,
+          </PrivateRoute>
+        ),
       },
       {
         path: "/tutorials",
@@ -57,20 +63,32 @@ const router = createBrowserRouter([
       },
       {
         path: "/create-event",
-        element: <CreateEvents />,
+        element: (
+          <PrivateRoute>
+            <CreateEvents />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/update-event/:id",
-        element: <UpdateEvent />,
+        element: (
+          <PrivateRoute>
+            <UpdateEvent />,
+          </PrivateRoute>
+        ),
       },
 
       {
-        path: "/venue-user-view",
-        element: <VenueUserView />,
+        path: "/venue-user-view/:user_id",
+        element: <VanueUserViewPublic />,
       },
       {
         path: "/venue-profile-edit",
-        element: <VenueUserView />,
+        element: (
+          <PrivateRoute>
+            <VenueUserView />,
+          </PrivateRoute>
+        ),
       },
       {
         path: "/event-user-view/:id",

@@ -80,13 +80,13 @@ const MiddleContent = ({data, isLoading, error}) => {
                     </h2>
                   )}
                   {item.business_address && (
-                    <Link
+                    <p
                     
-                      className="flex items-center gap-2 sm:gap-4 text-primary font-semibold z-50 hover:underline"
+                      className="flex items-center gap-2 sm:gap-4 text-primary  font-semibold z-50 hover:underline"
                     >
                       <MapPin className="size-5 md:size-6 xlg:size-7" />
                       <p className="sm:text-lg">{item.business_address}</p>
-                    </Link>
+                    </p>
                   )}
                   <div className="flex items-center justify-between text-sm sm:text-base font-semibold text-white">
                     {item.price_limite && <p> {item.price_limite}</p>}

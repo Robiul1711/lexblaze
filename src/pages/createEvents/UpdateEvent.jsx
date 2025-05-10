@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { InputCalenderIcons, UploadIcons } from "@/lib/Icons";
 import { Select, Tag, TimePicker, DatePicker, Upload, message } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,6 +44,7 @@ const tagRender = (props) => {
   );
 };
 const UpdateEvent = () => {
+
   const axiosSecure = useAxiosSecure();;
   const navigate = useNavigate();
   const {
@@ -62,6 +63,14 @@ const UpdateEvent = () => {
   const [imageError, setImageError] = useState("");
 
   const {id}=useParams();
+    const { data} = useQuery({
+    queryKey: ["updateProfileEventsData"],
+    queryFn: async () => {
+      const response = await axiosSecure.get("event/edit/"+id);
+      return response.data;
+    },
+  });
+console.log(data?.events);
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
       const response = await axiosSecure.post(`/event/update/${id}`, formData, {
@@ -136,6 +145,18 @@ const UpdateEvent = () => {
     setValue("category_id", selectedOptions);
   };
 
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+// Then, add this useEffect to set the default categories when data loads
+useEffect(() => {
+  if (data?.events?.categories) {
+    const defaultCategories = data.events.categories.map(category => 
+      category.id.toString()
+    );
+    setSelectedCategories(defaultCategories);
+    setValue("category_id", defaultCategories);
+  }
+}, [data?.events?.categories, setValue]);
   return (
     <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[220px] px-4">
       <div className="mb-6 lg:mb-16 text-center">
@@ -159,11 +180,13 @@ const UpdateEvent = () => {
           <div className="space-y-4 mt-4">
             <div className="relative">
               <DatePicker
+
                 value={startDate}
                 onChange={handleStartDateChange}
                 minDate={dayjs()}
                 size="large"
                 suffixIcon={null}
+                // defaultValue={data?.events?.event_start_date}
                 placeholder="Fecha de Inicio"
                 className="w-full py-6 border-black border-2 rounded-md"
                 disabled={isSubmitting}
@@ -249,6 +272,7 @@ const UpdateEvent = () => {
           <div className="space-y-4 mt-4">
             <div>
               <input
+                defaultValue={data?.events?.event_title}
                 type="text"
                 placeholder="Compañía/Promotor"
                 {...register("business_name", {
@@ -264,6 +288,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
+                defaultValue={data?.events?.business_name}
                 type="text"
                 placeholder="Nombre del Evento"
                 {...register("event_title", {
@@ -279,6 +304,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
+                defaultValue={data?.events?.business_address}
                 type="text"
                 placeholder="Ubicación"
                 {...register("business_address", {
@@ -296,6 +322,7 @@ const UpdateEvent = () => {
 
             <div>
               <textarea
+                defaultValue={data?.events?.event_details}
                 placeholder="Descripción del Evento"
                 {...register("event_details", {
                   required: "Description is required",
@@ -310,6 +337,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
+                defaultValue={data?.events?.price_limite}
                 type="text"
                 placeholder="Precio para Entrar o Gratis"
                 {...register("price_limite", {
@@ -325,6 +353,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
+                defaultValue={data?.events?.age_limite}
                 type="number"
                 placeholder="Límite de Edad"
                 {...register("age_limite")}
@@ -335,6 +364,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
+                defaultValue={data?.events?.business_website_link}
                 type="url"
                 placeholder="Link de Entradas"
                 {...register("business_website_link")}
@@ -348,17 +378,20 @@ const UpdateEvent = () => {
         {/* Category Section */}
         <section>
        
-          <Select
-            mode="multiple"
-            placeholder="Categoría del Evento"
-            tagRender={tagRender}
-            options={categoryOptions}
-            size="large"
-            className="w-full custom-select"
-            onChange={handleCategoryChange}
-            disabled={isSubmitting}
-         
-          />
+<Select
+  value={selectedCategories} // Use value instead of defaultValue for controlled component
+  mode="multiple"
+  placeholder="Categoría del Evento"
+  tagRender={tagRender}
+  options={categoryOptions}
+  size="large"
+  className="w-full custom-select"
+  onChange={(value) => {
+    handleCategoryChange(value);
+    setSelectedCategories(value); // Update local state when selection changes
+  }}
+  disabled={isSubmitting}
+/>
           {errors.category_id && (
             <p className="text-red-500">Please select at least one category</p>
           )}
