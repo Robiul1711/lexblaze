@@ -77,7 +77,7 @@ const EventCardPublic = ({ visibleCards }) => {
                 />
               </div>
 
-              <div className="absolute bg-black/40 top-0 left-0 w-full h-full">
+              <div className="absolute bg-black/60 top-0 left-0 w-full h-full">
                 <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
                   {item.button && (
                     <div className="absolute top-0 right-0">

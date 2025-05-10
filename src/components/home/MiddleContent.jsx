@@ -58,7 +58,7 @@ const MiddleContent = ({data, isLoading, error}) => {
                 alt={item.event_title || "Event image"}
                 className="w-full h-[300px] md:h-[350px] lg:h-[300px] xl:h-[350px] object-fill"
               />
-              <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
+              <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
                 {item.event_end_date && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-3 font-bold">
@@ -67,7 +67,7 @@ const MiddleContent = ({data, isLoading, error}) => {
                   </div>
                 )}
 
-               <div className="space-y-2 sm:space-y-4 w-full sm:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
+               <div className="space-y-2 sm:space-y-4 w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
 
                   {item.event_title && (
                     <p className="sm:text-lg text-white font-semibold">

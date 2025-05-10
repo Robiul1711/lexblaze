@@ -74,7 +74,7 @@ const EventCard = ({ visibleCards }) => {
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {formatDate(item.event_start_date)}
             </h1>
-            <div className="relative rounded overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 xlg:mb-10">
+            <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 xlg:mb-10">
               <div className="h-[300px] sm:h-[350px] md:h-[420px]">
                 <img
                   src={item.event_thumb_image}
@@ -83,7 +83,7 @@ const EventCard = ({ visibleCards }) => {
                 />
               </div>
 
-              <div className="absolute bg-black/40 top-0 left-0 w-full h-full">
+              <div className="absolute bg-black/60 top-0 left-0 w-full h-full">
                 <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
                   {item.button && (
                     <div className="absolute top-0 right-0">

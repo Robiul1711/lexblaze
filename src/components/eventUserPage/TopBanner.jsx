@@ -18,7 +18,7 @@ const TopBanner = ({ data }) => {
           alt={data?.title}
           className="w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px] "
         />
-        <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
+        <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
           {data?.event_end_date && (
             <div className="absolute top-0 right-0">
               <p className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
@@ -70,9 +70,9 @@ const TopBanner = ({ data }) => {
       <button className="bg-[#0E1060] py-2 px-4 w-full  lg:text-2xl font-semibold text-white">
         Más Detalles del Evento
       </button>
-      <button className="bg-[#000] py-3 lg:py-5 rounded-xl my-5 lg:my-10 px-4 w-full text-2xl font-semibold text-white">
+      <p className="bg-[#000] py-3 xlg:py-3 rounded-xl my-4 xlg:my-6 px-4 w-full text-2xl font-semibold text-white">
         ENTRADAS
-      </button>
+      </p>
       <div className="flex justify-between items-center">
         <Title24>${data?.price_limite}</Title24>
         <Title24>Límite de Edad: {data?.age_limite}</Title24>
