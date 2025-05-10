@@ -39,7 +39,7 @@ const EventDetailsCard = () => {
     },
     onSuccess: (response) => {
       toast.success(response?.message || "Logout successful");
-
+      window.location.reload();
       navigate("/log-in");
     },
     onSettled: () => {

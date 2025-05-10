@@ -1,6 +1,7 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button"; // Assuming the Button component is used consistently
+import Loading from "./common/Loading";
 
 const DeleteModal = ({ open, onOpenChange, onConfirm, isLoading }) => {
   return (
@@ -12,44 +13,18 @@ const DeleteModal = ({ open, onOpenChange, onConfirm, isLoading }) => {
             <p>Esta acción eliminará el evento permanentemente.</p>
             <div className="flex justify-center gap-4 mt-6">
               {/* Cancel Button */}
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button variant="outline"  onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
 
               {/* Delete Button with Loading State */}
-              <Button
-                variant="destructive" // Use a destructive variant if using Button component for styling
+              <button
+               
                 onClick={onConfirm}
                 disabled={isLoading} // Disable button while loading
               >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8H4z"
-                      ></path>
-                    </svg>
-                    Eliminando...
-                  </>
-                ) : (
-                  "Eliminar"
-                )}
-              </Button>
+               <Loading />
+              </button>
             </div>
           </Dialog.Content>
         </div>

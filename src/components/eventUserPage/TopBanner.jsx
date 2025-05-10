@@ -34,13 +34,25 @@ const TopBanner = ({ data }) => {
             <h2 className="text-[24px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white flex items-start font-extrabold">
               {data?.event_title}
             </h2>
-            <Link
-              to={`/venue-user-view/${data?.user_id}`}
-              className="flex items-center gap-2 hover:underline text-primary font-semibold"
-            >
-              <MapPin className="size-5 sm:size-6 xlg:size-7" />
-              <p className="lg:text-lg">{data?.business_address}</p>
-            </Link>
+     {
+              user ? (
+                <Link
+                  to={`/venue-profile-edit`}
+                  className="flex items-center gap-2 hover:underline text-primary font-semibold"
+                >
+                  <MapPin className="size-5 sm:size-6 xlg:size-7" />
+                  <p className="lg:text-lg">{data?.business_address}</p>
+                </Link>
+              ) : (
+                <Link
+                  to={`/venue-user-view/${data?.user_id}`}
+                  className="flex items-center gap-2 hover:underline text-primary font-semibold"
+                >
+                  <MapPin className="size-5 sm:size-6 xlg:size-7" />
+                  <p className="lg:text-lg">{data?.business_address}</p>
+                </Link>
+              )
+            }
             <div className="flex  items-start gap-2 font-semibold text-white">
               <p>{data?.event_start_date}</p>
               <span>to</span>
