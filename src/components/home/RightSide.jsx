@@ -29,13 +29,19 @@ const RightSide = () => {
           <p className="bg-[#D40000] xlg:py-3 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-bold xl:text-xl text-white">
             EVENTOS DESTACADOS
           </p>
-          {data?.[1]?.image && (
-            <img
-              src={data[1].image}
-              alt="Ad"
-              className="rounded-md object-cover xl:h-[400px] lg:h-[300px] xlg:h-[300px]"
-            />
-          )}
+         {data?.length === 1 ? (
+  <img
+    src={data[0].image}
+    alt="Ad"
+    className="rounded-md object-cover xl:h-[400px] lg:h-[300px] xlg:h-[300px]"
+  />
+) : data?.length === 2 ? (
+  <img
+    src={data[1].image}
+    alt="Ad"
+    className="rounded-md object-cover xl:h-[400px] lg:h-[300px] xlg:h-[300px]"
+  />
+) : null}
         </>
       )}
     </div>

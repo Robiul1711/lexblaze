@@ -9,7 +9,7 @@ import {
   WatchIcon,
 } from "@/lib/Icons";
 import Title24 from "../common/Title24";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
 import { useAuth } from "@/hooks/useAuth";
 import Title48 from "../common/Title48";
@@ -19,15 +19,16 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
-const EventDetailsCard = () => {
+const EventDetailCardPublic = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {user_id}=useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ["profileData"],
     queryFn: async () => {
-      const response = await axiosSecure.get("/business_profile_data");
+      const response = await axiosSecure.get("/single/business_profile_data/"+user_id);
       return response.data;
     },
   });
@@ -150,4 +151,4 @@ const EventDetailsCard = () => {
   );
 };
 
-export default EventDetailsCard;
+export default EventDetailCardPublic;

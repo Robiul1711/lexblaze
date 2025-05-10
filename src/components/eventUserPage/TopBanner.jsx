@@ -2,9 +2,14 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import Title24 from "../common/Title24";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const TopBanner = ({ data }) => {
-  console.log(data);
+  const { user } = useAuth();
+
+  // const linkPath = user ? "/venue-profile-edit" : "/venue-user-view";
+
+  console.log(data?.user_id);
   return (
     <div className="flex flex-col max-w-[620px] mx-auto w-full">
       <div className="relative rounded overflow-hidden shadow-lg">
@@ -17,7 +22,7 @@ const TopBanner = ({ data }) => {
           {data?.event_end_date && (
             <div className="absolute top-0 right-0">
               <p className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
-               Hasta : {data.event_end_date}
+                Hasta : {data.event_end_date}
               </p>
             </div>
           )}
@@ -30,7 +35,7 @@ const TopBanner = ({ data }) => {
               {data?.event_title}
             </h2>
             <Link
-              to="/venue-user-view"
+              to={`/venue-user-view/${data?.user_id}`}
               className="flex items-center gap-2 hover:underline text-primary font-semibold"
             >
               <MapPin className="size-5 sm:size-6 xlg:size-7" />
@@ -67,5 +72,4 @@ const TopBanner = ({ data }) => {
   );
 };
 
-
-export default TopBanner
+export default TopBanner;

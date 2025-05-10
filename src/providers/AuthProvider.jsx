@@ -5,13 +5,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const AuthProvider = ({ children }) => {
-const today = new Date();
-
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-const day = String(today.getDate()).padStart(2, "0");
-
-const formattedDate = `${year}-${month}-${day}`;
+  //only for date start
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+  //only for date end
 
   const [search, setSearch] = useState("");
   const [date, setDate] = useState(formattedDate);
