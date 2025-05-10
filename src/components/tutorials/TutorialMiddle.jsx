@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { PlayIcons } from "@/lib/Icons";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
@@ -12,6 +12,7 @@ const TutorialMiddle = () => {
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 4;
+  const topRef = useRef(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["tutorials"],
@@ -35,12 +36,18 @@ const TutorialMiddle = () => {
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
+      setTimeout(() => {
+        topRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
+      setTimeout(() => {
+        topRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   };
 
@@ -62,7 +69,7 @@ const TutorialMiddle = () => {
   };
 
   return (
-    <div className="flex flex-col gap-12 relative">
+    <div className="flex flex-col gap-12 relative" ref={topRef}>
       {/* YouTube Video Modal */}
       {isVideoOpen && currentVideo && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
@@ -97,7 +104,6 @@ const TutorialMiddle = () => {
                 src={tutorial.image || "/default-tutorial-image.jpg"} 
                 alt={tutorial.title} 
                 className="w-full h-[200px] xxs:h-[300px] lg:h-[200px] xlg:h-[300px] object-cover"
-           
               />
               <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 flex flex-col justify-center items-center">
                 <div className="space-y-4 lg:space-y-8">
@@ -123,7 +129,7 @@ const TutorialMiddle = () => {
         )}
       </div>
 
-      {tutorials.length > 3 && (
+      {tutorials.length > cardsPerPage && (
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center gap-2">
             <button
