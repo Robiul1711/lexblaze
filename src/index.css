@@ -98,3 +98,28 @@ body {
 :where(.css-dev-only-do-not-override-1m63z2v).ant-tag {
   font-size: 16px !important;
 }
+
+/* delete button  */
+:root {
+  --ant-primary-color: #ff4d4f; /* Red color */
+  --ant-primary-color-hover: #ff7875; /* Lighter red on hover */
+  --ant-primary-color-active: #d9363e; /* Darker red when clicked */
+  --ant-primary-color-outline: rgba(255, 77, 79, 0.2); /* For outline variants */
+}
+
+/* For solid primary buttons */
+.ant-btn-primary {
+  padding: 18px 20px !important;
+  background-color: var(--ant-primary-color) !important;
+  border-color: var(--ant-primary-color) !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--ant-primary-color-hover) !important;
+  border-color: var(--ant-primary-color-hover) !important;
+}
+
+.ant-btn-primary:active {
+  background-color: var(--ant-primary-color-active) !important;
+  border-color: var(--ant-primary-color-active) !important;
+}
