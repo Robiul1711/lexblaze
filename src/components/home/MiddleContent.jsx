@@ -1,34 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
-import { useAuth } from "@/hooks/useAuth";
 
-const MiddleContent = ({data, isLoading, error}) => {
-
-
+const MiddleContent = ({ data, isLoading, error }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 5;
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
-  console.log(typeof(category));
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
 
   const events = data?.events || [];
   const totalPages = Math.ceil(events.length / cardsPerPage);
 
-  // Determine which events to show based on count
   const visibleCards =
     events.length <= 5
-      ? events // Show all if 5 or fewer
-      : events.slice(
-          currentPage * cardsPerPage,
-          (currentPage + 1) * cardsPerPage
-        );
+      ? events
+      : events.slice(currentPage * cardsPerPage, (currentPage + 1) * cardsPerPage);
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
@@ -44,12 +38,10 @@ const MiddleContent = ({data, isLoading, error}) => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-12">
-      <div className="h-screen overflow-y-auto  scrollbar-hide">
-        {visibleCards.length > 0 ? (
-          visibleCards.map((item) => (
-            <div key={item.id} className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer">
-
-            <Link to={`/event-user-view/${item.id}`}
+      <div className="h-screen overflow-y-auto scrollbar-hide">
+        {visibleCards.map((item) => (
+          <div key={item.id} className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer">
+               <Link to={`/event-user-view/${item.id}`}
               key={item.id} 
               
             >
@@ -95,46 +87,26 @@ const MiddleContent = ({data, isLoading, error}) => {
                 </div>
               </div>
             </Link>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-10">
-            <p className="text-xl">No events found</p>
           </div>
-        )}
+        ))}
       </div>
 
-      {/* Only show pagination if there are more than 5 events */}
       {events.length > 4 && (
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center gap-2">
-            <button
-              className={`p-1 rounded-full border-[2px] border-black ${
-                currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={handlePrev}
-              disabled={currentPage === 0}
-            >
-              <ChevronLeft />
+            <button className="flex flex-col items-center" onClick={handlePrev} disabled={currentPage === 0}>
+              <ChevronLeft className=" size-9 border rounded-full p-1"/>
+              <p className="font-bold text-lg">Atrás</p>
             </button>
-            <p className="font-bold text-lg">Atrás</p>
           </div>
           <div className="text-gray-600">
             Página {currentPage + 1} de {totalPages}
           </div>
           <div className="flex flex-col items-center gap-2">
-            <button
-              className={`p-1 rounded-full border-[2px] border-black ${
-                currentPage === totalPages - 1
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              }`}
-              onClick={handleNext}
-              disabled={currentPage === totalPages - 1}
-            >
-              <ChevronRight />
+            <button className="flex flex-col items-center" onClick={handleNext} disabled={currentPage === totalPages - 1}>
+              <ChevronRight className=" size-9 border rounded-full p-1"/>
+              <p className="font-bold text-lg">Siguiente</p>
             </button>
-            <p className="font-bold text-lg">Siguiente</p>
           </div>
         </div>
       )}

@@ -4,13 +4,14 @@ import RightSide from "@/components/home/RightSide";
 import bottomImg from "@/assets/images/img6.png";
 import EventCard from "@/components/venue_User_View/EventCard";
 import EventDetailsCard from "@/components/venue_User_View/EventDetailsCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { use } from "react";
 
 
 const VenueUserView = () => {
@@ -18,6 +19,9 @@ const VenueUserView = () => {
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0); // Moved before any conditional returns
   
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },[currentPage])
   const { data, isLoading } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PlayIcons } from "@/lib/Icons";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
@@ -12,8 +12,10 @@ const TutorialMiddle = () => {
   const axiosPublic = useAxiosPublic();
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 4;
-  const topRef = useRef(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
   const { data, isLoading, error } = useQuery({
     queryKey: ["tutorials"],
     queryFn: async () => {
@@ -36,18 +38,14 @@ const TutorialMiddle = () => {
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
-      setTimeout(() => {
-        topRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
-      setTimeout(() => {
-        topRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      
     }
   };
 
@@ -69,7 +67,7 @@ const TutorialMiddle = () => {
   };
 
   return (
-    <div className="flex flex-col gap-12 relative" ref={topRef}>
+    <div className="flex flex-col gap-12 relative" >
       {/* YouTube Video Modal */}
       {isVideoOpen && currentVideo && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
