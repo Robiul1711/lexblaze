@@ -18,7 +18,7 @@ const TopBanner = ({ data }) => {
           alt={data?.title}
           className="w-full lg:max-w-[522px] xl:max-w-[622px] max-h-[424px] "
         />
-        <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6 sm:p-12 flex flex-col ">
+        <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6 sm:p-12 flex  flex-col ">
           {data?.event_end_date && (
             <div className="absolute top-0 right-0">
               <p className="bg-primary text-[#F12617] p-2 sm:p-3 font-bold">
@@ -31,7 +31,7 @@ const TopBanner = ({ data }) => {
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white font-semibold flex items-start">
               {data?.business_name}
             </p>
-            <h2 className="text-[24px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white flex items-start font-extrabold">
+            <h2 className="text-[24px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
               {data?.event_title}
             </h2>
      {
