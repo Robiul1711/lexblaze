@@ -1,20 +1,30 @@
 import { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const SearchModal = ({ search, setSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const modalRef = useRef(null);
   const inputRef = useRef(null);
+  const { pathname } = useLocation();
 
-  // Debounce: Delay updating search by 1 second
+  // Reset search when route changes
   useEffect(() => {
+    setSearchQuery("");
+    setSearch("");
+  }, [pathname, setSearch]);
+
+  // Debounce: Delay updating search by 1 second (only on home page)
+  useEffect(() => {
+    if (pathname !== "/") return;
+
     const delayDebounce = setTimeout(() => {
       setSearch(searchQuery);
     }, 800);
 
-    return () => clearTimeout(delayDebounce); // Clear timeout if user types again
-  }, [searchQuery, setSearch]);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, setSearch, pathname]);
 
   // Close modal on outside click
   useEffect(() => {
@@ -36,9 +46,11 @@ const SearchModal = ({ search, setSearch }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
     setIsOpen(false);
   };
+
+  // // Don't show search button on non-home pages
+  // if (pathname !== "/") return null;
 
   return (
     <div className="relative">

@@ -36,7 +36,7 @@ const Footer = () => {
                 BogotaHoyMkt@gmail.com
               </a>
             </p>
-            <p className="underline cursor-pointer hover:text-primary">Términos y Condiciones</p>
+            <p className="underline hover:text-primary">Términos y Condiciones</p>
           </div>
 
           {/* Social Icons - Centered on mobile, normal on desktop */}
