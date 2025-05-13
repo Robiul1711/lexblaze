@@ -52,7 +52,7 @@ const EventDetailsCard = () => {
     <div className="mb-10 lg:max-w-[620px]  w-full">
       <SwiperImg data={data?.user?.user_images} />
 
-      <div className="flex flex-col gap-4 xlg:gap-6 xl:gap-9 mt-8">
+      <div className="flex flex-col gap-4 xlg:gap-6  mt-8">
         <div className="flex justify-between items-center gap-4">
           <div className="flex items-center gap-2 xlg:gap-4">
             <RedLocationIcon />
@@ -69,7 +69,7 @@ const EventDetailsCard = () => {
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
-        <div className="flex justify-between items-center flex-wrap gap-4">
+        <div className="flex justify-between items-center flex-wrap gap-6">
           <div className="flex items-center gap-2 xlg:gap-4">
             <MessageIcon />
             <Title24>{data?.user?.email}</Title24>
@@ -96,14 +96,14 @@ const EventDetailsCard = () => {
           </p>
         </div>
         {pathname === "/venue-profile-edit" && (
-          <div className=" flex justify-between">
+          <div className=" flex flex-col xxs:flex-row gap-4 justify-between">
             <button
               onClick={() => {
                 setIsSubmitting(true);
                 LogOutInMutation.mutate();
               }}
               disabled={isSubmitting}
-              className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-14  px-6 rounded-[14px] transition duration-300 ${
                 isSubmitting ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >

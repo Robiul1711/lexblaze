@@ -10,7 +10,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
 
   // Scroll to top when page changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
   if (isLoading) return <LoadingSpinner />;
@@ -22,7 +22,10 @@ const MiddleContent = ({ data, isLoading, error }) => {
   const visibleCards =
     events.length <= 5
       ? events
-      : events.slice(currentPage * cardsPerPage, (currentPage + 1) * cardsPerPage);
+      : events.slice(
+          currentPage * cardsPerPage,
+          (currentPage + 1) * cardsPerPage
+        );
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
@@ -37,30 +40,29 @@ const MiddleContent = ({ data, isLoading, error }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-12">
+    <div className="flex flex-col gap-6 sm:gap-10">
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleCards.map((item) => (
-          <div key={item.id} className="relative z-30 rounded overflow-hidden shadow-lg mb-10 cursor-pointer">
-               <Link to={`/event-user-view/${item.id}`}
-              key={item.id} 
-              
-            >
+          <div
+            key={item.id}
+            className="relative z-30 rounded overflow-hidden shadow-lg mb-5 cursor-pointer"
+          >
+            <Link to={`/event-user-view/${item.id}`} key={item.id}>
               <img
                 src={item.event_thumb_image || "/default-event-image.jpg"}
                 alt={item.event_title || "Event image"}
-                className="w-full h-[300px] md:h-[350px] lg:h-[300px] xl:h-[350px] object-fill"
+                className="w-full h-[200px] md:h-[300px] lg:h-[280px] object-fill"
               />
               <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
                 {item.event_end_date && (
                   <div className="absolute top-0 right-0">
-                    <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-3 font-bold">
-                Hasta  {item.event_end_date}
+                    <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+                      Hasta {item.event_end_date}
                     </button>
                   </div>
                 )}
 
-               <div className="space-y-2 sm:space-y-4 w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
-
+                <div className="space-y-2 sm:space-y-3 w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
                   {item.event_title && (
                     <p className="sm:text-lg text-white font-semibold">
                       {item.event_title}
@@ -72,15 +74,12 @@ const MiddleContent = ({ data, isLoading, error }) => {
                     </h2>
                   )}
                   {item.business_address && (
-                    <p
-                    
-                      className="flex items-center gap-2 sm:gap-4 text-primary  font-semibold z-50 hover:underline"
-                    >
+                    <p className="flex items-center gap-2  text-primary  font-semibold z-50 hover:underline">
                       <MapPin className="size-5 md:size-6 xlg:size-7" />
                       <p className="sm:text-lg">{item.business_address}</p>
                     </p>
                   )}
-                  <div className="flex items-center justify-between text-sm sm:text-base font-semibold text-white">
+                  <div className="flex items-center max-w-[200px] justify-between text-sm sm:text-base font-semibold text-white">
                     {item.price_limite && <p> {item.price_limite}</p>}
                     {item.event_start_time && <p> {item.event_start_time}</p>}
                   </div>
@@ -94,8 +93,12 @@ const MiddleContent = ({ data, isLoading, error }) => {
       {events.length > 4 && (
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center gap-2">
-            <button className="flex flex-col items-center" onClick={handlePrev} disabled={currentPage === 0}>
-              <ChevronLeft className=" size-9 border rounded-full p-1"/>
+            <button
+              className="flex flex-col items-center"
+              onClick={handlePrev}
+              disabled={currentPage === 0}
+            >
+              <ChevronLeft className=" size-9 border rounded-full p-1" />
               <p className="font-bold text-lg">Atrás</p>
             </button>
           </div>
@@ -103,8 +106,12 @@ const MiddleContent = ({ data, isLoading, error }) => {
             Página {currentPage + 1} de {totalPages}
           </div>
           <div className="flex flex-col items-center gap-2">
-            <button className="flex flex-col items-center" onClick={handleNext} disabled={currentPage === totalPages - 1}>
-              <ChevronRight className=" size-9 border rounded-full p-1"/>
+            <button
+              className="flex flex-col items-center"
+              onClick={handleNext}
+              disabled={currentPage === totalPages - 1}
+            >
+              <ChevronRight className=" size-9 border rounded-full p-1" />
               <p className="font-bold text-lg">Siguiente</p>
             </button>
           </div>

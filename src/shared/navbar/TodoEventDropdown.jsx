@@ -47,7 +47,7 @@ export const TodoEventDropdown = () => {
       <Space>
         <button className="lg:flex w-full items-center gap-2 lg:gap-4 lg:text-2xl font-medium hidden">
           <SettingsIcons />
-          <span>Todos Eventos</span>
+          <span>{categoryData?.data?.find((item) => item.id === category)?.category_name || "Todos Eventos"}</span>
         </button>
       </Space>
     </Dropdown>

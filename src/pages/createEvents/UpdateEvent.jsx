@@ -81,8 +81,8 @@ console.log(data?.events);
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Event created successfully!");
       navigate("/venue-profile-edit");
+      toast.success(data.message || "Event created successfully!");
     },
     onError: (error) => {
       toast.error(
@@ -444,7 +444,8 @@ useEffect(() => {
         </section>
 
         {/* Submit Button */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center gap-10 mt-8">
+          <button onClick={() => navigate(-1)} className="bg-red-500 duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[20px] text-sm lg:text-2xl font-bold ">Cancle</button>
               <button
             type="submit"
             disabled={isSubmitting}

@@ -45,8 +45,8 @@ const UpdateProfile = () => {
       return response.data;
     },
     onSuccess: (response) => {
-      toast.success(response?.message);
       navigate("/venue-profile-edit");
+      toast.success(response?.message);
     },
     onError: (error) => {
       const errorMessage =
@@ -314,7 +314,8 @@ const UpdateProfile = () => {
         </div>
 
         {/* Submit */}
-        <div className="flex flex-col items-center gap-2 lg:mt-6">
+        <div className="flex items-center justify-center gap-5 lg:mt-6">
+          <button onClick={() => navigate(-1)} className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-11 rounded-[20px]">Cancle</button>
              <button
             type="submit"
             disabled={isSubmitting}

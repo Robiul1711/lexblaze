@@ -11,7 +11,7 @@ const SwiperImg = ({ data = [] }) => {
   }
 
   return (
-    <div className="w-full mx-auto lg:max-w-[522px] xl:max-w-[622px] h-[424px]">
+    <div className="w-full mx-auto lg:max-w-[522px] xl:max-w-[622px] h-[300px]">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
