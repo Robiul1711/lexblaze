@@ -25,7 +25,7 @@ const EventPageUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
 
-      <div className="flex flex-col lg:flex-row justify-between gap-6 xlg:gap-12  ">
+      <div className="flex flex-col lg:flex-row justify-between gap-6  ">
         {/* Leftside  */}
         <div className="hidden mt-20 lg:block">
           <LeftSide />
@@ -48,7 +48,7 @@ const EventPageUserView = () => {
             <img
               src={data?.event?.flyer}
               alt=""
-              className="w-full max-h-[400px] object-fill"
+              className="w-full h-[300px] sm:max-h-[350px] max-w-[620px] mx-auto object-fill"
             />
           </div>
 

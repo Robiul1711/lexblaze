@@ -52,9 +52,9 @@ const VenueUserView = () => {
 console.log(visibleCards)
   return (
     <div className="section-padding-x ">
-      <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-6 xlg:gap-12">
+      <div className="flex flex-col lg:flex-row   justify-center xl:justify-between w-full gap-6 ">
         {/* Leftside */}
-        <div className="mt-40 hidden xlg:block">
+        <div className="mt-20 hidden xlg:block">
           <LeftSide />
         </div>
         
@@ -64,11 +64,11 @@ console.log(visibleCards)
            <div className="w-full  flex justify-center items-center"><LoadingSpinner /></div>
           )
           :
-          <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10`}>
-          <div className="text-center mt-5 lg:mt-14">
+          <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10 `}>
+          <div className="text-center mt-5">
             <Title48 title2={visibleCards[0]?.business_name} />
           </div>
-          <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
+          <div className="mt-3 h-screen overflow-y-auto scrollbar-hide">
             <EventDetailsCard />
             <EventCard visibleCards={visibleCards} />
           </div>
@@ -111,7 +111,7 @@ console.log(visibleCards)
     
         
         {/* Rightside */}
-        <div className="lg:mt-40 mb-32 hidden xlg:block">
+        <div className="lg:mt-20 mb-32 hidden xlg:block">
           <RightSide />
         </div>
       </div>

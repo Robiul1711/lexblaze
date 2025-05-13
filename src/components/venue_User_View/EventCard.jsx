@@ -74,8 +74,8 @@ const EventCard = ({ visibleCards }) => {
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {formatDate(item.event_start_date)}
             </h1>
-            <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 xlg:mb-10">
-              <div className="h-[300px] sm:h-[350px] md:h-[420px]">
+            <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 ">
+              <div className="w-full h-[200px] sm:h-[250px] ">
                 <img
                   src={item.event_thumb_image}
                   alt={item.title}
@@ -140,7 +140,7 @@ const EventCard = ({ visibleCards }) => {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 font-semibold text-white">
+                    <div className="flex items-center max-w-[200px] sm:max-w-[300px] justify-between gap-4 font-semibold text-white">
                       <p>{item.price_limite}</p>
                       <p>{item.event_start_time}</p>
                     </div>

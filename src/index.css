@@ -123,3 +123,7 @@ body {
   background-color: var(--ant-primary-color-active) !important;
   border-color: var(--ant-primary-color-active) !important;
 }
+.custom-dropdown-menu .ant-dropdown-menu-item-selected {
+  background-color: #FDE300 !important;
+  color: black !important;
+}

@@ -41,12 +41,12 @@ const Home = () => {
         <SlideSwiper data={data} />
       </div>
       
-      <div className="text-center lg:mt-10 space-y-2 lg:space-y-0 w-full">
+      <div className="text-center lg:mt-4 space-y-2 lg:space-y-0 w-full">
         <TodoEventDropdownMobile />
-        <Title48 title1="Ver Eventos para el " title2={formattedDate} />
+        <Title48 title1={formattedDate ?"Ver Eventos de Hoy ":"Ver Eventos para Mañana "} title2={formattedDate} />
       </div>
 
-      <div className="flex justify-between w-full gap-12 mt-5 lg:mt-10">
+      <div className="flex justify-between w-full gap-8 mt-6 ">
         {/* Leftside */}
         <div className="hidden lg:block lg:w-[40%]">
           <LeftSide />
@@ -65,7 +65,7 @@ const Home = () => {
 
       {/* Show AddSlider only when data is loaded and not loading */}
       {!isLoading && data && (
-        <div className="flex justify-center mt-5 sm:mt-10 pb-[120px]">
+        <div className="flex justify-center mt-5 sm:mt-10 pb-[80px]">
           <AddSlider />
         </div>
       )}

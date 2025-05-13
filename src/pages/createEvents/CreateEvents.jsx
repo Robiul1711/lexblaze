@@ -10,6 +10,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import InstuctionModal from "@/components/common/InstuctionModal";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -145,6 +146,8 @@ const CreateEvents = () => {
   };
 
   return (
+    <>
+
     <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[220px] px-4">
       <div className="mb-6 lg:mb-16 text-center">
         <Title48 title2="Crear un Evento" />
@@ -182,12 +185,9 @@ const CreateEvents = () => {
             </p>
           </div>
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
-          <button
-            type="button"
-            className="text-lg bg-[#000e8e] px-3 sm:py-2 rounded-xl mt-4 text-white font-bold"
-          >
-            Más Información
-          </button>
+        
+            <InstuctionModal />
+      
 
           <div className="space-y-4 mt-4">
             <div className="relative">
@@ -481,6 +481,7 @@ const CreateEvents = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 
