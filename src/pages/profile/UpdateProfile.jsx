@@ -78,14 +78,14 @@ const UpdateProfile = () => {
   };
   console.log(user);
   return (
-    <div className="max-w-[650px] mx-auto lg:mt-[60px] mt-10 pb-[120px] lg:pb-[220px] px-4">
-      <div className="mb-10 lg:mb-16">
+    <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
+      <div className="mb-10 lg:mb-8">
         <Title48 title2=" Actualizar Perfil de Negocio" />
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 lg:space-y-10"
+        className="space-y-5 "
       >
         {/* Business Name */}
         <div>

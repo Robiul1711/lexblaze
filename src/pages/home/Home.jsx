@@ -38,7 +38,8 @@ const Home = () => {
     <div className="section-padding-x lg:mb-[60px]">
       {/* Title */}
       <div className="lg:hidden my-3 lg:my-0">
-        <SlideSwiper data={data} />
+        {/* <SlideSwiper data={data} /> */}
+          <AddSlider />
       </div>
       
       <div className="text-center lg:mt-4 space-y-2 lg:space-y-0 w-full">

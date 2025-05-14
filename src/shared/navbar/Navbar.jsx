@@ -65,7 +65,7 @@ const Navbar = () => {
           )}
           trigger={["click"]}
         >
-          <div className="flex items-center gap-1 cursor-pointer">
+          <div className="flex items-center gap-1 ml-4 lg:ml-0 cursor-pointer">
             <CalenderIcons />
           </div>
         </Dropdown>

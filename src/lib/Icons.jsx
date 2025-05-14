@@ -2,7 +2,7 @@ import React from 'react'
 
 export const SettingsIcons = () => {
   return (
-    <svg className='size-5 md:size-6 lg:size-auto' xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+    <svg className='size-5 md:size-6 lg:size-auto ' xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
     <path d="M2 6.66667H7" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M2 23.3333H12" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M27 23.3333L32 23.3333" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -65,7 +65,7 @@ export const UploadIcons = () => {
 }
 export const PlayIcons = () => {
   return (
-<svg className='cursor-pointer size-8 sm:size-10 md:size-14 lg:size-12 xl:size-auto' xmlns="http://www.w3.org/2000/svg" width="74" height="74" viewBox="0 0 74 74" fill="none">
+<svg className='cursor-pointer size-8 sm:size-10 md:size-14 lg:size-12 ' xmlns="http://www.w3.org/2000/svg" width="74" height="74" viewBox="0 0 74 74" fill="none">
   <circle cx="37" cy="37" r="37" fill="#FF0B0B"/>
   <path d="M50.5195 33.0551C53.1862 34.5947 53.1862 38.4437 50.5195 39.9833L32.5195 50.3756C29.8529 51.9152 26.5195 49.9907 26.5195 46.9115L26.5195 26.1269C26.5195 23.0477 29.8529 21.1232 32.5195 22.6628L50.5195 33.0551Z" fill="white"/>
 </svg>

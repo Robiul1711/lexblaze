@@ -37,7 +37,7 @@ const AddSlider = () => {
             <div className="w-full h-full">
               <img
                 src={item?.image}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-md"
                 alt={`Slide ${index + 1}`}
               />
             </div>
