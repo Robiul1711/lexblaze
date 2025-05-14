@@ -101,11 +101,11 @@ const TutorialMiddle = () => {
               <img 
                 src={tutorial.image || "/default-tutorial-image.jpg"} 
                 alt={tutorial.title} 
-                className="w-full h-[200px] xxs:h-[300px] lg:h-[200px] xlg:h-[300px] object-cover"
+                className="w-full h-[170px] xxs:h-[200px] sm:h-[280px] md:h-[300px] lg:h-[200px] xlg:h-[250px] object-cover"
               />
               <div className="absolute bg-black/40 top-0 left-0 w-full h-full p-6 flex flex-col justify-center items-center">
                 <div className="space-y-4 lg:space-y-8">
-                  <p className="xlg:text-[32px] sm:text-xl md:text-2xl rounded-md xlg:rounded-2xl text-white p-2 xlg:p-3 bg-black/60 font-semibold">
+                  <p className=" sm:text-xl md:text-2xl rounded-md xlg:rounded-2xl text-white p-2 xlg:p-3 bg-black/60 font-semibold">
                     {tutorial.title}
                   </p>
                   <div className="flex items-center justify-center">

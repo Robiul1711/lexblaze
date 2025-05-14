@@ -1,37 +1,49 @@
-// TodoEventDropdown.jsx
 import React, { useEffect } from "react";
 import { Dropdown, Space } from "antd";
 import { SettingsIcons } from "@/lib/Icons";
 import useCategoryList from "@/hooks/useCategoryList";
 import { useAuth } from "@/hooks/useAuth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // <-- Add useNavigate
 
 export const TodoEventDropdown = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate(); // <-- Init navigate
   const { category, setCategory } = useAuth();
   const { data: categoryData } = useCategoryList();
 
   // Reset category when leaving home page
   useEffect(() => {
     if (pathname !== "/") {
-      setCategory(null); // or setCategory(0) depending on your default state
+      setCategory(null);
     }
   }, [pathname, setCategory]);
 
-  const items =
+  const categoryItems =
     categoryData?.data?.map((item) => ({
       label: item.category_name,
       key: String(item.id),
     })) || [];
 
+  // Add default "Todos Eventos" at the beginning
+  const items = [
+    {
+      label: <strong className="text-xl">Todos Eventos</strong>,
+      key: "0",
+    },
+    ...categoryItems,
+  ];
+
   const handleClick = ({ key }) => {
     setCategory(Number(key));
+    if (pathname !== "/") {
+      navigate("/"); // <-- Redirect to home
+    }
   };
 
-  // Only show dropdown on home page
-  // if (pathname !== "/") {
-  //   // return null;
-  // }
+  const selectedLabel =
+    category === 0 || category === null
+      ? "Todos Eventos"
+      : categoryData?.data?.find((item) => item.id === category)?.category_name || "Todos Eventos";
 
   return (
     <Dropdown
@@ -40,14 +52,14 @@ export const TodoEventDropdown = () => {
       menu={{
         items,
         onClick: handleClick,
-        selectedKeys: category ? [String(category)] : [],
+        selectedKeys: [String(category ?? 0)],
         className: "custom-dropdown-menu",
       }}
     >
       <Space>
-        <button className="lg:flex w-full items-center gap-2 lg:gap-4 lg:text-2xl font-medium hidden">
+        <button className="lg:flex w-full items-center gap-2 lg:gap-4 lg:text-2xl font-medium ">
           <SettingsIcons />
-          <span>{categoryData?.data?.find((item) => item.id === category)?.category_name || "Todos Eventos"}</span>
+          <span className="hidden lg:block">{selectedLabel}</span>
         </button>
       </Space>
     </Dropdown>

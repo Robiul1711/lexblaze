@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import InstuctionModal from "@/components/common/InstuctionModal";
+import InstructionModal2 from "@/components/common/InstructionModal2";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -148,18 +149,18 @@ const CreateEvents = () => {
   return (
     <>
 
-    <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[220px] px-4">
-      <div className="mb-6 lg:mb-16 text-center">
+    <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
+      <div className="mb-6 lg:mb-5 text-center">
         <Title48 title2="Crear un Evento" />
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 lg:space-y-10"
+        className="space-y-3 lg:space-y-5"
       >
         {/* Date Section */}
         <section>
-          <div className="flex flex-col items-center gap-2 mb-10">
+          <div className="flex flex-col items-center gap-2 mb-8">
             <Upload
               listType="picture-card"
               fileList={fileList2}
@@ -197,7 +198,7 @@ const CreateEvents = () => {
                 minDate={dayjs()}
                 size="large"
                 suffixIcon={null}
-                placeholder="Fecha de Inicio"
+                placeholder="FSelección de Fecha(s)"
                 className="w-full py-6 border-black border-2 rounded-md"
                 disabled={isSubmitting}
               />
@@ -209,7 +210,7 @@ const CreateEvents = () => {
               )}
             </div>
 
-            <div className="relative">
+            {/* <div className="relative">
               <DatePicker
                 value={endDate}
                 onChange={handleEndDateChange}
@@ -226,7 +227,7 @@ const CreateEvents = () => {
               {errors.event_end_date && (
                 <p className="text-red-500">End date is required</p>
               )}
-            </div>
+            </div> */}
           </div>
         </section>
 
@@ -290,9 +291,9 @@ const CreateEvents = () => {
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.business_name && (
+              {/* {errors.business_name && (
                 <p className="text-red-500">{errors.business_name.message}</p>
-              )}
+              )} */}
             </div>
 
             <div>
@@ -336,9 +337,9 @@ const CreateEvents = () => {
                 className="w-full border-2 border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px] rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.event_details && (
+              {/* {errors.event_details && (
                 <p className="text-red-500">{errors.event_details.message}</p>
-              )}
+              )} */}
             </div>
 
             <div>
@@ -394,13 +395,7 @@ const CreateEvents = () => {
             <p className="text-red-500">Please select at least one category</p>
           )}
 
-          <button
-            type="button"
-            className="bg-[#000e8e] text-white sm:px-6 px-3 py-2 rounded-md text-sm lg:text-2xl font-bold mt-4"
-            disabled={isSubmitting}
-          >
-            Más información sobre Categoría
-          </button>
+       <InstructionModal2 />
         </section>
 
         {/* Image Upload Section */}
@@ -427,10 +422,9 @@ const CreateEvents = () => {
             </Upload>
 
             {imageError && <p className="text-red-500">{imageError}</p>}
-
             <p
               type="button"
-              className="bg-[#000e8e] text-white sm:px-10 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
+              className="bg-[#000e8e] text-white sm:px-10 px-3 py-1.5 xlg:py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
               onClick={() =>
                 document.querySelector(".ant-upload-select").click()
               }
@@ -438,6 +432,7 @@ const CreateEvents = () => {
             >
               Carga Imagenes
             </p>
+
           </div>
         </section>
 
@@ -446,7 +441,7 @@ const CreateEvents = () => {
             <button
             type="submit"
             disabled={isSubmitting}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 text-2xl px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-1 xlg:py-3 text-2xl px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
               isSubmitting ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >

@@ -10,6 +10,8 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import InstructionModal2 from "@/components/common/InstructionModal2";
+import InstuctionModal from "@/components/common/InstuctionModal";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -158,26 +160,21 @@ useEffect(() => {
   }
 }, [data?.events?.categories, setValue]);
   return (
-    <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[220px] px-4">
-      <div className="mb-6 lg:mb-16 text-center">
+    <div className="max-w-[590px] mx-auto mt-8 pb-[80px] lg:pb-[150px] px-4">
+      <div className="mb-6 lg:mb-5 text-center">
         <Title48 title2="Actualizar Evento" />
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 lg:space-y-10"
+        className="space-y-3 lg:space-y-5"
       >
         {/* Date Section */}
         <section>
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
-          <button
-            type="button"
-            className="text-lg bg-[#000e8e] px-3 sm:py-2 rounded-xl mt-4 text-white font-bold"
-          >
-            Más Información
-          </button>
+         <InstuctionModal />
 
-          <div className="space-y-4 mt-4">
+          <div className="space-y-3 mt-4">
             <div className="relative">
               <DatePicker
 
@@ -396,13 +393,7 @@ useEffect(() => {
             <p className="text-red-500">Please select at least one category</p>
           )}
 
-          <button
-            type="button"
-            className="bg-[#000e8e] text-white sm:px-6 px-3 py-2 rounded-md text-sm lg:text-2xl font-bold mt-4"
-            disabled={isSubmitting}
-          >
-            Más información sobre Categoría
-          </button>
+            <InstructionModal2 />
         </section>
 
         {/* Image Upload Section */}

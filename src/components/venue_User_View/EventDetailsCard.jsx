@@ -103,7 +103,7 @@ const EventDetailsCard = () => {
                 LogOutInMutation.mutate();
               }}
               disabled={isSubmitting}
-              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-14  px-6 rounded-[14px] transition duration-300 ${
+              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-14 gap-1 flex items-center justify-center  px-6 rounded-[14px] transition duration-300 ${
                 isSubmitting ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
