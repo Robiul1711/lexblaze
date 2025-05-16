@@ -16,10 +16,10 @@ const Tutorials = () => {
 
         {/* Tutorial Middle: 40% on large screens */}
         <div className="w-full lg:basis-[40%] min-h-screen lg:bg-[#FFFBE0] lg:px-10 lg:pb-[150px]">
-          <div className="text-center mt-5 ">
+          <div className="text-center mt-4 ">
             <Title48 title2="Tutorials" />
           </div>
-          <div className="mt-5 ">
+          <div className="mt-4 ">
             <TutorialMiddle />
           </div>
           {/* AddSlider for large screens only */}

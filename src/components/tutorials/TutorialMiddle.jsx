@@ -97,7 +97,7 @@ const TutorialMiddle = () => {
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleTutorials.length > 0 ? (
           visibleTutorials.map((tutorial) => (
-            <div key={tutorial.id} className="relative rounded overflow-hidden shadow-lg mb-7 lg:mb-10">
+            <div key={tutorial.id} className="relative rounded overflow-hidden shadow-lg mb-5">
               <img 
                 src={tutorial.image || "/default-tutorial-image.jpg"} 
                 alt={tutorial.title} 
