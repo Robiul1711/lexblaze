@@ -19,13 +19,14 @@ const TopBanner = ({ data }) => {
           className="w-full  max-h-[200px] sm:max-h-[300px] "
         />
         <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6 sm:p-12 flex  flex-col ">
-          {data?.event_end_date && (
-            <div className="absolute top-0 right-0">
-              <p className="bg-primary text-[#F12617] p-2  font-bold">
-                Hasta {data.event_end_date}
-              </p>
-            </div>
-          )}
+    {data.event_dates && data.event_dates.length > 0 && (
+  <div className="absolute top-0 right-0">
+    <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+      Hasta {data.event_dates[data.event_dates.length - 1].date}
+    </button>
+  </div>
+)}
+
 
        <div className="space-y-1 sm:space-y-3 absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
   <p className="xlg:text-lg sm:text-xl md:text-lg text-white flex items-center font-semibold">
@@ -52,13 +53,15 @@ const TopBanner = ({ data }) => {
               </Link>
             )}
             <div className="flex  items-start gap-2 font-semibold text-white">
-              <p>{data?.event_start_date}</p>
-              <span>to</span>
-              <p>{data?.event_end_date}</p>
+              <p>{data?.event_dates && data?.event_dates[0]?.date}</p>
+              {data?.event_dates && data?.event_dates.length > 1 && <span>to</span>}
+
+              <p>{data?.event_dates && data?.event_dates[data?.event_dates.length - 1]?.date}</p>
             </div>
             <div className="flex  items-start gap-2 font-semibold text-white">
               <p>{data?.event_start_time}</p>
-              <span>to</span>
+              {data?.event_start_time && data?.event_end_time && <span>to</span>}
+           
               <p>{data?.event_end_time}</p>
             </div>
           </div>

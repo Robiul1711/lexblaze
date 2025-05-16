@@ -314,21 +314,19 @@ const UpdateProfile = () => {
         </div>
 
         {/* Submit */}
-        <div className="flex items-center justify-center gap-5 lg:mt-6">
+        <div className="flex items-start justify-center gap-5 lg:mt-6">
           <button onClick={() => navigate(-1)} className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-11 rounded-[20px]">Cancle</button>
-             <button
+            <button
             type="submit"
-            disabled={isSubmitting}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
-              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            disabled={RegistrationMutation.isPending}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 md:px-xl  rounded-xl lg:rounded-[20px] transition-all duration-200
+    ${RegistrationMutation.isPending ? "opacity-60 cursor-not-allowed" : ""}
+  `}
           >
-            {isSubmitting ? (
-              <>
+            {RegistrationMutation.isPending ? (
+              <span className="flex items-center gap-2">
                 <svg
                   className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
                   viewBox="0 0 24 24"
                 >
                   <circle
@@ -338,17 +336,18 @@ const UpdateProfile = () => {
                     r="10"
                     stroke="currentColor"
                     strokeWidth="4"
-                  ></circle>
+                    fill="none"
+                  />
                   <path
                     className="opacity-75"
                     fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  ></path>
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
                 </svg>
-                 Crear Cuenta..
-              </>
+                Updating...
+              </span>
             ) : (
-              " Crear Cuenta"
+              "Update"
             )}
           </button>
         </div>
