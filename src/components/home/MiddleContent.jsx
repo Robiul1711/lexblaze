@@ -54,10 +54,10 @@ const MiddleContent = ({ data, isLoading, error }) => {
                 className="w-full h-[200px] md:h-[300px] lg:h-[280px] object-fill"
               />
               <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
-                {item.event_end_date && (
+                {item.event_dates && item.event_dates.length > 0 && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-                      Hasta {item.event_end_date}
+                      Hasta {item.event_dates[item.event_dates.length - 1].date}
                     </button>
                   </div>
                 )}

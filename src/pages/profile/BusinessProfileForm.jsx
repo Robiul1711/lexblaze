@@ -75,14 +75,14 @@ const BusinessProfileForm = () => {
   };
 
   return (
-    <div className="max-w-[590px] mx-auto lg:mt-[50px] mt-10 pb-[120px] lg:pb-[180px] px-4">
-      <div className="xlg:mb-10 mb-8 ">
+    <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[180px] px-4">
+      <div className=" mb-8 ">
         <Title48 title2="Crear Perfil de Negocio" />
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 lg:space-y-10"
+        className="space-y-5 "
       >
         {/* Business Name */}
         <div>

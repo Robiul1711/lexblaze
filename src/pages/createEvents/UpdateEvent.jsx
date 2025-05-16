@@ -1,18 +1,18 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { InputCalenderIcons, UploadIcons } from "@/lib/Icons";
-import { Select, Tag, TimePicker, DatePicker, Upload, message } from "antd";
+import { Select, Tag, TimePicker,Upload,} from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
+
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import InstuctionModal from "@/components/common/InstuctionModal";
-
+import DatePicker from "react-multi-date-picker";
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
 
@@ -53,11 +53,10 @@ const UpdateEvent = () => {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm();
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [fileList, setFileList] = useState([]);
@@ -108,8 +107,7 @@ console.log(data?.events);
     setIsSubmitting(true);
     const updatedData = {
       ...data,
-      event_start_date: dayjs(startDate).format(dateFormat),
-      event_end_date: dayjs(endDate).format(dateFormat),
+      event_date: data?.event_date?.map((date) => `${date.year}-${String(date.month.number).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`),
       event_start_time: dayjs(startTime).format("HH:mm"),
       event_end_time: dayjs(endTime).format("HH:mm"),
       event_thumb_image: fileList[0]?.originFileObj,
@@ -118,15 +116,8 @@ console.log(data?.events);
     createEventMutation.mutate(updatedData);
     console.log(updatedData)
   };
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    setValue("event_start_date", date);
-  };
 
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    setValue("event_end_date", date);
-  };
+
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -174,47 +165,28 @@ useEffect(() => {
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
          <InstuctionModal />
 
-          <div className="space-y-3 mt-4">
-            <div className="relative">
-              <DatePicker
-
-                value={startDate}
-                onChange={handleStartDateChange}
-                minDate={dayjs()}
-                size="large"
-                suffixIcon={null}
-                // defaultValue={data?.events?.event_start_date}
+     <div className="relative mt-4">
+              <Controller
+                name="event_date"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
                 placeholder="Fecha de Inicio"
-                className="w-full py-6 border-black border-2 rounded-md"
-                disabled={isSubmitting}
+                containerClassName="w-full "
+                inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+                multiple
+                value={field.value}
+                onChange={field.onChange}
               />
-              <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
-                <InputCalenderIcons />
-              </div>
-              {errors.event_start_date && (
-                <p className="text-red-500">Start date is required</p>
-              )}
-            </div>
+                )}
+              
+              />
 
-            <div className="relative">
-              <DatePicker
-                value={endDate}
-                onChange={handleEndDateChange}
-                minDate={startDate || dayjs()}
-                size="large"
-                suffixIcon={null}
-                placeholder="Fecha Final"
-                className="w-full py-6 border-black border-2 rounded-md"
-                disabled={isSubmitting}
-              />
               <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
                 <InputCalenderIcons />
               </div>
-              {errors.event_end_date && (
-                <p className="text-red-500">End date is required</p>
-              )}
+              
             </div>
-          </div>
         </section>
 
         {/* Time Section */}
@@ -234,9 +206,7 @@ useEffect(() => {
                 {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
               </p>
             </div>
-            {errors.event_start_time && (
-              <p className="text-red-500">Start time is required</p>
-            )}
+          
           </div>
 
           <div className="relative">
@@ -254,9 +224,7 @@ useEffect(() => {
                 {endTime ? dayjs(endTime).format("HH:mm") : "00:00"}
               </p>
             </div>
-            {errors.event_end_time && (
-              <p className="text-red-500">End time is required</p>
-            )}
+           
           </div>
         </section>
 
@@ -272,15 +240,11 @@ useEffect(() => {
                 defaultValue={data?.events?.event_title}
                 type="text"
                 placeholder="Compañía/Promotor"
-                {...register("business_name", {
-                  required: "Company name is required",
-                })}
+                {...register("business_name")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.business_name && (
-                <p className="text-red-500">{errors.business_name.message}</p>
-              )}
+            
             </div>
 
             <div>
@@ -288,15 +252,11 @@ useEffect(() => {
                 defaultValue={data?.events?.business_name}
                 type="text"
                 placeholder="Nombre del Evento"
-                {...register("event_title", {
-                  required: "Event title is required",
-                })}
+                {...register("event_title")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.event_title && (
-                <p className="text-red-500">{errors.event_title.message}</p>
-              )}
+             
             </div>
 
             <div>
@@ -304,32 +264,22 @@ useEffect(() => {
                 defaultValue={data?.events?.business_address}
                 type="text"
                 placeholder="Ubicación"
-                {...register("business_address", {
-                  required: "Address is required",
-                })}
+                {...register("business_address")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.business_address && (
-                <p className="text-red-500">
-                  {errors.business_address.message}
-                </p>
-              )}
+             
             </div>
 
             <div>
               <textarea
                 defaultValue={data?.events?.event_details}
                 placeholder="Descripción del Evento"
-                {...register("event_details", {
-                  required: "Description is required",
-                })}
+                {...register("event_details")}
                 className="w-full border-2 border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px] rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.event_details && (
-                <p className="text-red-500">{errors.event_details.message}</p>
-              )}
+            
             </div>
 
             <div>
@@ -337,15 +287,11 @@ useEffect(() => {
                 defaultValue={data?.events?.price_limite}
                 type="text"
                 placeholder="Precio para Entrar o Gratis"
-                {...register("price_limite", {
-                  required: "Price is required",
-                })}
+                {...register("price_limite")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
-              {errors.price_limite && (
-                <p className="text-red-500">{errors.price_limite.message}</p>
-              )}
+            
             </div>
 
             <div>
@@ -389,10 +335,7 @@ useEffect(() => {
   }}
   disabled={isSubmitting}
 />
-          {errors.category_id && (
-            <p className="text-red-500">Please select at least one category</p>
-          )}
-
+       
             <InstructionModal2 />
         </section>
 
