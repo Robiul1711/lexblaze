@@ -2,10 +2,7 @@ import Title48 from "@/components/common/Title48";
 import LeftSide from "@/components/home/LeftSide";
 import MiddleContent from "@/components/home/MiddleContent";
 import RightSide from "@/components/home/RightSide";
-import bottomImg from "@/assets/images/img6.png";
-
 import { useAuth } from "@/hooks/useAuth";
-import SlideSwiper from "@/components/home/SlideSwiper";
 import AddSlider from "@/components/common/AddSlider";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +11,6 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 const Home = () => {
   const axiosPublic = useAxiosPublic();
   const { search, date, category } = useAuth();
-
   const dynamicDate = date;
   const formattedDate = new Date(dynamicDate).toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -44,7 +40,27 @@ console.log(data)
       
       <div className="text-center lg:mt-4 space-y-2 lg:space-y-0 w-full">
         <TodoEventDropdownMobile />
-        <Title48 title1={formattedDate ?"Ver Eventos de Hoy ":"Ver Eventos para Mañana "} title2={formattedDate} />
+{
+  (() => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    const format = (date) =>
+      date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" });
+
+    const isToday = formattedDate === format(today);
+    const isTomorrow = formattedDate === format(tomorrow);
+
+    const title1 = isToday
+      ? "Ver Eventos de Hoy "
+      : isTomorrow
+      ? "Ver Eventos para Mañana "
+      : "Ver Eventos para el ";
+
+    return <Title48 title1={title1} title2={formattedDate} />;
+  })()
+}
       </div>
 
       <div className="flex justify-between w-full gap-8 mt-6 ">
@@ -55,7 +71,9 @@ console.log(data)
         
         {/* Middle */}
         <div className="w-full lg:w-[60%]">
+          
           <MiddleContent data={data} isLoading={isLoading} error={error} />
+    
         </div>
         
         {/* Rightside */}

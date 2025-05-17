@@ -47,9 +47,10 @@ const MiddleContent = ({ data, isLoading, error }) => {
             key={item.id}
             className="relative z-30 rounded overflow-hidden shadow-lg mb-5 cursor-pointer"
           >
+            {console.log(item)}
             <Link to={`/event-user-view/${item.id}`} key={item.id}>
               <img
-                src={item.event_thumb_image || "/default-event-image.jpg"}
+                src={item.flyer ? item.flyer : item.event_thumb_image}
                 alt={item.event_title || "Event image"}
                 className="w-full h-[200px] md:h-[300px] lg:h-[280px] object-fill"
               />
@@ -57,7 +58,34 @@ const MiddleContent = ({ data, isLoading, error }) => {
                 {item.event_dates && item.event_dates.length > 0 && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-                      Hasta {item.event_dates[item.event_dates.length - 1].date}
+{
+  (() => {
+    if (!item.event_dates || item.event_dates.length === 0) return null;
+
+    const dates = item.event_dates.map(d => new Date(d.date));
+    const sorted = dates.sort((a, b) => a - b);
+    const last = sorted[sorted.length - 1];
+
+    const weekdaysES = ['Domingos', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábados'];
+
+    const allSameDay = sorted.every(date => date.getDay() === sorted[0].getDay());
+
+    const formatDate = (date) =>
+      new Date(date).toLocaleDateString('es-ES', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+
+    return allSameDay
+      ? `Todos los ${weekdaysES[sorted[0].getDay()]}`
+      : `Hasta ${formatDate(last)}`;
+  })()
+}
+
+
+                  
+                    
                     </button>
                   </div>
                 )}
