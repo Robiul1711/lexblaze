@@ -362,8 +362,7 @@ useEffect(() => {
               {fileList.length < 1 && <UploadIcons />}
             </Upload>
 
-            {imageError && <p className="text-red-500">{imageError}</p>}
-
+      
             <p
               type="button"
               className="bg-[#000e8e] text-white sm:px-20 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"

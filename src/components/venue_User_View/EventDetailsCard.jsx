@@ -54,7 +54,7 @@ const EventDetailsCard = () => {
 
       <div className="flex flex-col gap-4 xlg:gap-6  mt-8">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-2 xlg:gap-4">
+          <div className="flex items-center gap-2 xlg:gap-3">
             <RedLocationIcon />
             <Title24>{data?.user?.business_address}</Title24>
           </div>
@@ -65,25 +65,25 @@ const EventDetailsCard = () => {
             </Link>
           )}
         </div>
-        <div className="flex  items-center gap-2 xlg:gap-4">
+        <div className="flex  items-center gap-2 xlg:gap-3">
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
         <div className="flex justify-between items-center flex-wrap gap-6">
-          <div className="flex items-center gap-2 xlg:gap-4">
+          <div className="flex items-center gap-2 xlg:gap-3">
             <MessageIcon />
             <Title24>{data?.user?.email}</Title24>
           </div>
-          <div className="flex items-center gap-2 xlg:gap-4">
+          <div className="flex items-center gap-2 xlg:gap-3">
             <PhoneIcon />
             <Title24>{data?.user?.phone}</Title24>
           </div>
-          <div className="flex items-center gap-2 xlg:gap-4">
+          <div className="flex items-center gap-2 xlg:gap-3">
             <MenuIcon />
             <Title24>{data?.user?.business_food_menu}</Title24>
           </div>
         </div>
-        <div className="flex justify-between items-center gap-2 xlg:gap-4">
+        <div className="flex justify-between items-center gap-2 xlg:gap-3">
           <Title24>Website : {data?.user?.business_website_link}</Title24>
           <Title24>Edad: 21+</Title24>
         </div>
