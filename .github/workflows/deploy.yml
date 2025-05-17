@@ -1,0 +1,46 @@
+name: Deploy React App To Server
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code from GitHub
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js (required for building the React app)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22" # make sure Node 22 is correct or use "lts" or "18"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Build the React app
+      - name: Build React app
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      # Transfer build files to server
+      - name: Transfer build files to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_SERVER }}
+          port: ${{ secrets.SFTP_PORT }}
+          local_path: './dist/*'       # React build output is usually in 'build/', not 'dist/'
+          remote_path: '/public_html'              # Make sure remote_path is correct for your server
+          password: ${{ secrets.SFTP_PASSWORD }}
+          sftp_only: true
