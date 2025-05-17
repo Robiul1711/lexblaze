@@ -71,14 +71,15 @@ const EventCard = ({ visibleCards }) => {
       <div className="flex flex-col mt-10">
         {[...visibleCards]?.reverse().map((item) => (
           <div key={item.id}>
+            {console.log(item)}
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
-              {formatDate(item.event_start_date)}
+              {formatDate(item.event_dates[0].date)}
             </h1>
             <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 ">
               <div className="w-full h-[200px] sm:h-[250px] ">
-         {   console.log(item)}
+       
                 <img
-                  src={item.event_thumb_image}
+                  src={item.flyer ? item.flyer : item.event_thumb_image}
                   alt={item.title}
                   className="w-full h-full object-fill"
                 />
@@ -96,11 +97,11 @@ const EventCard = ({ visibleCards }) => {
 
                   <div className="space-y-1 sm:space-y-4">
                     <p className="sm:text-lg text-white font-semibold">
-                      {item.business_name}
+                      {item.event_title}
                     </p>
                     <div className="flex items-center justify-between">
                       <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
-                        {item.event_title}
+                        {item.business_name}
                       </h2>
                       {pathname === "/venue-profile-edit" && (
                         <TooltipProvider>
@@ -118,7 +119,7 @@ const EventCard = ({ visibleCards }) => {
                       )}
                     </div>
                     <div className="flex items-center justify-between text-primary font-semibold">
-                      <div className="flex items-center gap-2 sm:gap-4 hover:underline cursor-pointer">
+                      <div className="flex items-center gap-2  hover:underline cursor-pointer">
                         <MapPin className="size-7" />
                         <p className="xlg:text-lg">{item.business_address}</p>
                       </div>
@@ -141,7 +142,7 @@ const EventCard = ({ visibleCards }) => {
                       )}
                     </div>
 
-                    <div className="flex items-center max-w-[200px] sm:max-w-[300px] justify-between gap-4 font-semibold text-white">
+                    <div className="flex items-center max-w-[200px] justify-between gap-4 font-semibold text-white">
                       <p>{item.price_limite}</p>
                       <p>{item.event_start_time}</p>
                     </div>

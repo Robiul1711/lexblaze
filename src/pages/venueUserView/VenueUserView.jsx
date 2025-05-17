@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
-import { use } from "react";
 
 
 const VenueUserView = () => {
@@ -52,22 +51,17 @@ const VenueUserView = () => {
 console.log(visibleCards)
   return (
     <div className="section-padding-x ">
-      <div className="flex flex-col lg:flex-row   justify-center xl:justify-between w-full gap-6 ">
+      <div className="flex flex-col lg:flex-row justify-center xl:justify-between w-full gap-6 ">
         {/* Leftside */}
         <div className="mt-20 hidden xlg:block">
           <LeftSide />
         </div>
         
         {/* Middle */}
-        {
-          isLoading ? (
-           <div className="w-full  flex justify-center items-center"><LoadingSpinner /></div>
-          )
-          :
-          <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10 `}>
-          <div className="text-center mt-5">
-            <Title48 title2={visibleCards[0]?.business_name} />
-          </div>
+       
+          
+          <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6 xlg:px-10 `}>
+     
           <div className="mt-3 h-screen overflow-y-auto scrollbar-hide">
             <EventDetailsCard />
             <EventCard visibleCards={visibleCards} />
@@ -107,7 +101,7 @@ console.log(visibleCards)
           <AddSlider />
           </div>
         </div>
-        }
+        
     
         
         {/* Rightside */}

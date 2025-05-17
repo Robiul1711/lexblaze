@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { InputCalenderIcons, UploadIcons } from "@/lib/Icons";
-import { Select, Tag, TimePicker, Upload, message } from "antd";
+import { Select, Tag, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useMutation } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import InstuctionModal from "@/components/common/InstuctionModal";
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import DatePicker from "react-multi-date-picker";
+
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
 
@@ -45,6 +46,7 @@ const tagRender = (props) => {
     </Tag>
   );
 };
+
 const CreateEvents = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
@@ -55,6 +57,7 @@ const CreateEvents = () => {
     setValue,
     control,
     formState: { errors },
+    trigger,
   } = useForm();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -78,8 +81,7 @@ const CreateEvents = () => {
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message ||
-          "Failed to create event. Please try again."
+        error.response?.data?.message || "Failed to create event. Please try again."
       );
     },
     onSettled: () => {
@@ -88,37 +90,41 @@ const CreateEvents = () => {
   });
 
   const onSubmit = async (data) => {
+    let hasError = false;
+
     if (fileList.length === 0) {
       setImageError("Se requiere una imagen para el evento.");
-      setIsSubmitting(false);
-      return;
+      hasError = true;
     } else {
       setImageError("");
     }
 
-    setIsSubmitting(true);
+    const valid = await trigger(["event_date", "event_start_time"]);
+    if (!valid || hasError) {
+      setIsSubmitting(false);
+      return;
+    }
 
-    // console.log({event_date: data?.event_date})
+    setIsSubmitting(true);
 
     const updatedData = {
       ...data,
-      // event_start_date: dayjs(startDate).format(dateFormat),
-      event_date: data?.event_date?.map((date) => `${date.year}-${String(date.month.number).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`),
+      event_date: data?.event_date?.map((date) =>
+        `${date.year}-${String(date.month.number).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`
+      ),
       event_start_time: dayjs(startTime).format("HH:mm"),
       event_end_time: dayjs(endTime).format("HH:mm"),
       event_thumb_image: fileList[0]?.originFileObj,
-      flyer: fileList2.length > 0 ? fileList2[0]?.originFileObj : null, // Add this check
+      flyer: fileList2.length > 0 ? fileList2[0]?.originFileObj : null,
     };
 
-
-
     createEventMutation.mutate(updatedData);
-    console.log("Form Data:", updatedData);
   };
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
     setValue("event_start_time", time);
+    trigger("event_start_time");
   };
 
   const handleEndTimeChange = (time) => {
@@ -130,89 +136,75 @@ const CreateEvents = () => {
     setFileList(newFileList);
     if (newFileList.length > 0) setImageError("");
   };
+
   const handleImageChangeflayer = ({ fileList: newFileList }) => {
     setFileList2(newFileList);
-    if (newFileList.length > 0) setImageError("");
   };
 
   const handleCategoryChange = (selectedOptions) => {
     setValue("category_id", selectedOptions);
   };
 
-
-
-
   return (
-    <>
-      <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
-        <div className="mb-6 lg:mb-5 text-center">
-          <Title48 title2="Crear un Evento" />
+    <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
+      <div className="mb-6 lg:mb-5 text-center">
+        <Title48 title2="Crear un Evento" />
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 lg:space-y-5">
+        {/* Flyer Upload */}
+        <div className="flex flex-col items-center gap-2 mb-8">
+          <Upload
+            listType="picture-card"
+            fileList={fileList2}
+            onChange={handleImageChangeflayer}
+            beforeUpload={() => false}
+            accept="image/*"
+            multiple={false}
+            maxCount={1}
+            disabled={isSubmitting}
+          >
+            {fileList2.length < 1 && <UploadIcons />}
+          </Upload>
+          <p className="bg-[#000e8e] text-white sm:px-10 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4">
+            Carga Imagen de Fondo
+          </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-3 lg:space-y-5"
-        >
-          {/* Date Section */}
-          <section>
-            <div className="flex flex-col items-center gap-2 mb-8">
-              <Upload
-                listType="picture-card"
-                fileList={fileList2}
-                onChange={handleImageChangeflayer}
-                beforeUpload={() => false}
-                accept="image/*"
-                multiple={false}
-                maxCount={1}
-                disabled={isSubmitting}
-              >
-                {fileList2.length < 1 && <UploadIcons />}
-              </Upload>
-
-              <p
-                type="button"
-                className="bg-[#000e8e] text-white sm:px-10 px-3 py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
-                onClick={() =>
-                  document.querySelector(".ant-upload-select").click()
-                }
-                disabled={isSubmitting}
-              >
-                Carga Imagen de Fondo
-              </p>
-            </div>
-            <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
-
-            <InstuctionModal />
-
-            <div className="relative mt-4">
-              <Controller 
-                name="event_date"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                placeholder="Fecha de Inicio"
-                containerClassName="w-full "
-                inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-                multiple
-                value={field.value}
-                onChange={field.onChange}
-              />
-                )}
-              
-              />
-
-              <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
-                <InputCalenderIcons />
+        {/* Date */}
+        <div className="mt-4">
+          <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
+          <InstuctionModal />
+          <Controller
+            name="event_date"
+            control={control}
+            rules={{ required: "La fecha es obligatoria." }}
+            render={({ field }) => (
+              <div className="relative mt-4">
+                <DatePicker
+                  placeholder="Fecha de Inicio"
+                  containerClassName="w-full"
+                  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+                  multiple
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+                <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
+                  <InputCalenderIcons />
+                </div>
               </div>
-              {errors.event_start_date && (
-                <p className="text-red-500">Start date is required</p>
-              )}
-            </div>
-          </section>
+            )}
+          />
+          {errors.event_date && <p className="text-red-500">{errors.event_date.message}</p>}
+        </div>
 
-          {/* Time Section */}
-          <section className="space-y-4">
-            <div className="relative">
+        {/* Start Time */}
+        <div className="relative">
+          <Controller
+            name="event_start_time"
+            control={control}
+            rules={{ required: "La hora de inicio es obligatoria." }}
+            render={() => (
               <TimePicker
                 value={startTime}
                 placeholder="Hora de Inicio"
@@ -222,37 +214,31 @@ const CreateEvents = () => {
                 className="p-6 w-full border-2 border-black rounded-md"
                 disabled={isSubmitting}
               />
-              <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
-                <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
-                  {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
-                </p>
-              </div>
-              {errors.event_start_time && (
-                <p className="text-red-500">Start time is required</p>
-              )}
-            </div>
+            )}
+          />
+          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
+            <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
+              {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
+            </p>
+          </div>
+          {errors.event_start_time && <p className="text-red-500">{errors.event_start_time.message}</p>}
+        </div>
 
-            <div className="relative">
-              <TimePicker
-                value={endTime}
-                placeholder="Hora Fin"
-                onChange={handleEndTimeChange}
-                format="HH:mm"
-                size="large"
-                className="p-6 w-full border-2 border-black rounded-md"
-                disabled={isSubmitting}
-              />
-              <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
-                <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
-                  {endTime ? dayjs(endTime).format("HH:mm") : "00:00"}
-                </p>
-              </div>
-              {errors.event_end_time && (
-                <p className="text-red-500">End time is required</p>
-              )}
-            </div>
-          </section>
+        {/* End Time */}
+        <div className="relative">
+          <TimePicker
+            value={endTime}
+            placeholder="Hora Fin"
+            onChange={handleEndTimeChange}
+            format="HH:mm"
+            size="large"
+            className="p-6 w-full border-2 border-black rounded-md"
+            disabled={isSubmitting}
+          />
+        </div>
 
+        {/* Event Details, Location, Title, Description, etc. */}
+   
           {/* Event Details Section */}
           <section>
             <h1 className="text-2xl lg:text-[32px] font-bold">
@@ -378,85 +364,73 @@ const CreateEvents = () => {
 
             <InstructionModal2 />
           </section>
-
-          {/* Image Upload Section */}
-          <section>
-            <h1 className="text-2xl lg:text-[32px] font-bold">
-              Carga Otra Imagen
-            </h1>
-            <p className="lg:text-xl font-bold">
-              (opcional) Volante, Anuncio, Cartel, etc.
-            </p>
-
-            <div className="flex flex-col items-center gap-2 mt-6">
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onChange={handleImageChange}
-                beforeUpload={() => false}
-                accept="image/*"
-                multiple={false}
-                maxCount={1}
-                disabled={isSubmitting}
-              >
-                {fileList.length < 1 && <UploadIcons />}
-              </Upload>
-
-              {imageError && <p className="text-red-500">{imageError}</p>}
-              <p
-                type="button"
-                className="bg-[#000e8e] text-white sm:px-10 px-3 py-1.5 xlg:py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
-                onClick={() =>
-                  document.querySelector(".ant-upload-select").click()
-                }
-                disabled={isSubmitting}
-              >
-                Carga Imagenes
-              </p>
-            </div>
-          </section>
-
-          {/* Submit Button */}
-          <div className="flex justify-center mt-8">
-            <button
-              type="submit"
+        <section>
+          <h1 className="text-2xl lg:text-[32px] font-bold">Carga Otra Imagen</h1>
+          <p className="lg:text-xl font-bold">(opcional) Volante, Anuncio, Cartel, etc.</p>
+          <div className="flex flex-col items-center gap-2 mt-6">
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onChange={handleImageChange}
+              beforeUpload={() => false}
+              accept="image/*"
+              multiple={false}
+              maxCount={1}
               disabled={isSubmitting}
-              className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-1 xlg:py-3 text-2xl px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
-                isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-              }`}
             >
-              {isSubmitting ? (
-                <>
-                  <svg
-                    className="animate-spin h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    ></path>
-                  </svg>
-                  Publicando...
-                </>
-              ) : (
-                "Publicar"
-              )}
-            </button>
+              {fileList.length < 1 && <UploadIcons />}
+            </Upload>
+            {imageError && <p className="text-red-500">{imageError}</p>}
+            <p
+              type="button"
+              className="bg-[#000e8e] text-white sm:px-10 px-3 py-1.5 xlg:py-2 rounded-md text-lg lg:text-2xl font-bold mt-4"
+              onClick={() => document.querySelector(".ant-upload-select").click()}
+            >
+              Carga Imagenes
+            </p>
           </div>
-        </form>
-      </div>
-    </>
+        </section>
+
+        {/* Submit Button */}
+        <div className="flex justify-center mt-8">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-1 xlg:py-3 text-2xl px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+          >
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Publicando...
+              </>
+            ) : (
+              "Publicar"
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

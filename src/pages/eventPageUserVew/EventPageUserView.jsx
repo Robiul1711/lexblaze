@@ -46,7 +46,7 @@ const EventPageUserView = () => {
             )}
 
             <img
-              src={data?.event?.flyer}
+              src={data?.event?.event_thumb_image}
               alt=""
               className="w-full h-[300px] sm:max-h-[350px] max-w-[620px] mx-auto object-fill"
             />

@@ -48,8 +48,12 @@ const EventDetailsCard = () => {
   });
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
+  console.log(data);
   return (
-    <div className="mb-10 lg:max-w-[620px]  w-full">
+    <div className="mb-10   w-full">
+           <div className="text-center mt-5 pb-1">
+            <Title48 title2={data?.user.business_name} />
+          </div>
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-6  mt-8">
