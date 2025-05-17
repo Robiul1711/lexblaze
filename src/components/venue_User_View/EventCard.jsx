@@ -76,6 +76,7 @@ const EventCard = ({ visibleCards }) => {
             </h1>
             <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 ">
               <div className="w-full h-[200px] sm:h-[250px] ">
+         {   console.log(item)}
                 <img
                   src={item.event_thumb_image}
                   alt={item.title}
