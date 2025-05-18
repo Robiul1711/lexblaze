@@ -63,7 +63,7 @@ console.log(data)
 }
       </div>
 
-      <div className="flex justify-between w-full gap-8 mt-6 ">
+      <div className="flex justify-between w-full gap-8 mt-4 ">
         {/* Leftside */}
         <div className="hidden lg:block lg:w-[40%]">
           <LeftSide />

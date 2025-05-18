@@ -145,6 +145,12 @@ const CreateEvents = () => {
     setValue("category_id", selectedOptions);
   };
 
+   const handleCancel = () => {
+    const confirmed = window.confirm("Are you sure you want to cancel?");
+    if (confirmed) {
+      navigate(-1);
+    }
+  };
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-6 lg:mb-5 text-center">
@@ -392,7 +398,8 @@ const CreateEvents = () => {
         </section>
 
         {/* Submit Button */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center gap-10 mt-8">
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -430,6 +437,8 @@ const CreateEvents = () => {
           </button>
         </div>
       </form>
+                          <div    onClick={handleCancel} className="bg-red-500 mx-auto mt-5 sm:mt-10 text-center  w-[120px] duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[20px] text-sm lg:text-2xl font-bold ">Cancle</div>
+
     </div>
   );
 };

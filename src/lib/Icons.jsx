@@ -2,7 +2,7 @@ import React from 'react'
 
 export const SettingsIcons = () => {
   return (
-    <svg className='size-5 md:size-6 lg:size-auto ' xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+    <svg className='size-6 mt-1 lg:mt-0 md:size-6 lg:size-auto ' xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
     <path d="M2 6.66667H7" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M2 23.3333H12" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M27 23.3333L32 23.3333" stroke="#FDE300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>

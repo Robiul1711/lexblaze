@@ -51,12 +51,12 @@ const EventDetailsCard = () => {
   console.log(data);
   return (
     <div className="mb-10   w-full">
-           <div className="text-center mt-5 pb-1">
+           <div className="text-center  pb-1">
             <Title48 title2={data?.user.business_name} />
           </div>
       <SwiperImg data={data?.user?.user_images} />
 
-      <div className="flex flex-col gap-4 xlg:gap-6  mt-8">
+      <div className="flex flex-col gap-4 xlg:gap-4  mt-5">
         <div className="flex justify-between items-center gap-4">
           <div className="flex items-center gap-2 xlg:gap-3">
             <RedLocationIcon />
@@ -73,7 +73,7 @@ const EventDetailsCard = () => {
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
-        <div className="flex justify-between items-center flex-wrap gap-6">
+        <div className="flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-2 xlg:gap-3">
             <MessageIcon />
             <Title24>{data?.user?.email}</Title24>
