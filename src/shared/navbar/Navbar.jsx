@@ -41,7 +41,10 @@ const Navbar = () => {
     <header className="bg-secondary w-full sticky top-0 z-40 text-primary section-padding-x py-2 flex justify-between items-center">
       <div className="flex items-center w-[25%] xlg:gap-[150px] xl:gap-[180px] gap-4 sm:gap-10">
         <MenuDropdown />
+        {pathname === "/" && (
+          
         <SearchModal search={search} setSearch={setSearch} />
+        )}
       </div>
       <Link to="/" className="w-[50%] flex items-center justify-center">
         <img
@@ -50,9 +53,10 @@ const Navbar = () => {
           className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-20"
         />
       </Link>
-      <div className="flex items-center justify-end lg:justify-between w-[25%]">
+      <div className={`flex items-center justify-end ${pathname === "/" ? "lg:justify-between" : ""}  w-[25%]`}>
         <TodoEventDropdown />
-
+{
+  pathname === "/" && (
         <Dropdown
           arrow
           dropdownRender={() => (
@@ -69,6 +73,9 @@ const Navbar = () => {
             <CalenderIcons />
           </div>
         </Dropdown>
+  )
+}
+       
       </div>
     </header>
   );

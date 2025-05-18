@@ -14,7 +14,7 @@ const TopBanner = ({ data }) => {
     <div className="flex flex-col max-w-[620px] mx-auto w-full">
       <div className="relative rounded overflow-hidden shadow-lg">
         <img
-          src={data?.flyer}
+          src={data?.flyer? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
           className="w-full  max-h-[200px] sm:max-h-[300px] "
         />

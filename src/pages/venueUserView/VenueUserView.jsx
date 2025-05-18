@@ -50,10 +50,10 @@ const VenueUserView = () => {
   };
 console.log(visibleCards)
   return (
-    <div className="section-padding-x ">
+    <div className="section-padding-x min-h-screen h-full ">
       <div className="flex flex-col lg:flex-row justify-center xl:justify-between w-full gap-6 ">
         {/* Leftside */}
-        <div className="mt-20 hidden xlg:block">
+        <div className="mt-10 hidden xlg:block">
           <LeftSide />
         </div>
         
@@ -62,7 +62,7 @@ console.log(visibleCards)
           
           <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6 xlg:px-10 `}>
      
-          <div className="mt-3 h-screen overflow-y-auto scrollbar-hide">
+          <div className=" h-screen overflow-y-auto scrollbar-hide">
             <EventDetailsCard />
             <EventCard visibleCards={visibleCards} />
           </div>
@@ -105,7 +105,7 @@ console.log(visibleCards)
     
         
         {/* Rightside */}
-        <div className="lg:mt-20 mb-32 hidden xlg:block">
+        <div className="lg:mt-10 mb-32 hidden xlg:block">
           <RightSide />
         </div>
       </div>

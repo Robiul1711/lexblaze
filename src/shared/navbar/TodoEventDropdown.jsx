@@ -58,7 +58,7 @@ export const TodoEventDropdown = () => {
     >
       <Space>
         <button className="lg:flex w-full items-center gap-2 lg:gap-4 lg:text-2xl font-medium ">
-          <SettingsIcons />
+          <SettingsIcons  />
           <span className="hidden lg:block">{selectedLabel}</span>
         </button>
       </Space>
