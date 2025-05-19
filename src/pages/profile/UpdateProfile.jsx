@@ -57,9 +57,31 @@ const UpdateProfile = () => {
   });
 
   const handleImageChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setValue("image", newFileList);
+    const updatedList = newFileList.map((file) => {
+      if (!file.url && !file.preview) {
+        file.preview = URL.createObjectURL(file.originFileObj);
+      }
+      return file;
+    });
+    setFileList(updatedList);
+    setValue("image", updatedList);
   };
+
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
 
   const onSubmit = (formData) => {
     console.log("Form Data:", formData);
@@ -294,6 +316,7 @@ const UpdateProfile = () => {
             listType="picture-card"
             fileList={fileList}
             onChange={handleImageChange}
+              onPreview={onPreview}
             beforeUpload={() => false} // Handle upload manually
             accept="image/*"
             multiple

@@ -48,17 +48,16 @@ const EventDetailsCard = () => {
   });
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
-  console.log(data);
   return (
     <div className="mb-10   w-full">
-           <div className="text-center  pb-1">
+           <div className="text-center mt-3  pb-1">
             <Title48 title2={data?.user.business_name} />
           </div>
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-5">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-2 xlg:gap-3">
+          <div className="flex items-center  gap-2 xlg:gap-3">
             <RedLocationIcon />
             <Title24>{data?.user?.business_address}</Title24>
           </div>
@@ -95,19 +94,19 @@ const EventDetailsCard = () => {
           <Title24>{data?.user?.business_details}</Title24>
         </div>
         <div className="w-full text-center">
-          <p className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 w-full mb-3 rounded-xl font-bold text-xl sm:text-xl text-white">
+          <p className="bg-[#0E1060] py-1 sm:py-2  w-full rounded-xl font-bold text-xl sm:text-xl text-white">
             Nuestros Eventos
           </p>
         </div>
         {pathname === "/venue-profile-edit" && (
-          <div className=" flex flex-col xxs:flex-row gap-4 justify-between">
+          <div className=" flex flex-col items-start xxs:flex-row gap-4 justify-between">
             <button
               onClick={() => {
                 setIsSubmitting(true);
                 LogOutInMutation.mutate();
               }}
               disabled={isSubmitting}
-              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-14 gap-1 flex items-center justify-center  px-6 rounded-[14px] transition duration-300 ${
+              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-11 gap-1 flex items-center justify-center  px-6 rounded-[12px] transition duration-300 ${
                 isSubmitting ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -142,7 +141,7 @@ const EventDetailsCard = () => {
 
             <Link
               to="/create-event"
-              className="bg-[#0E1060] py-1 sm:py-2 xlg:py-3 px-6 mb-3 rounded-xl font-bold text-xl flex items-center justify-center gap-2 xlg:gap-6 text-white"
+              className="bg-[#0E1060] py-1 sm:py-2 xlg:py-2 px-6  rounded-xl font-bold text-xl flex items-center justify-center gap-2  text-white"
             >
               <PlusIcon />
               Crear Evento

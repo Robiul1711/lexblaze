@@ -632,7 +632,7 @@ const BusinessProfileForm = () => {
 
         {/* Image Upload */}
         <div className="flex flex-col items-center gap-2 mt-6">
-          <ImgCrop rotationSlider>
+          {/* <ImgCrop rotationSlider> */}
             <Upload
               listType="picture-card"
               fileList={fileList}
@@ -645,7 +645,7 @@ const BusinessProfileForm = () => {
             >
               {fileList.length < 5 && <UploadIcons />}
             </Upload>
-          </ImgCrop>
+          {/* </ImgCrop> */}
 
           {fileList.length === 0 && (
             <p className="text-red-500 text-sm">

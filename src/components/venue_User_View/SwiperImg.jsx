@@ -12,6 +12,13 @@ const SwiperImg = ({ data = [] }) => {
 
   return (
     <div className="w-full mx-auto lg:max-w-[522px] xl:max-w-[622px] h-[300px]">
+      {
+        data.length === 0 && (
+          <div className="w-full mx-auto text-center ">
+            <p className="sm:text-2xl text-red-400 font-medium">No images uploded</p>
+          </div>
+        )
+      }
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -27,7 +34,7 @@ const SwiperImg = ({ data = [] }) => {
             <div className="w-full h-full">
               <img
                 src={item?.image}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-fill"
                 alt={`Slide ${index + 1}`}
               />
             </div>

@@ -4,10 +4,11 @@ import bottomImg from "@/assets/images/img6.png";
 import aboutus from "@/assets/images/aboutus.png";
 import Title48 from "@/components/common/Title48";
 import AddSlider from "@/components/common/AddSlider";
+import AboutRigImg from "@/components/home/AboutRigImg";
 
 const AboutUs = () => {
   return (
-    <div className="section-padding-x flex flex-col lg:flex-row w-full h-full gap-6 lg:gap-12 mt-12 lg:mt-[72px]">
+    <div className="section-padding-x flex flex-col lg:flex-row w-full h-full gap-6 lg:gap-12 mt-5">
       {/* Main Content (Left Side) */}
       <div className="lg:w-[70%] w-full flex flex-col gap-6 lg:gap-8">
         <div className="w-full h-full flex justify-center items-center   relative  min-h-[900px] xxs:min-h-[850px] sm:min-h-[700px] md:min-h-[600px]  lg:min-h-[1000px] xlg:min-h-[900px] xl:min-h-[800px]">
@@ -43,7 +44,7 @@ const AboutUs = () => {
 
       {/* Right Sidebar */}
       <div className="flex flex-col items-center gap-4 w-full mb-[80px] md:mb-[100px] lg:mb-0 lg:w-[30%] mt-6 lg:mt-0">
-        <RightSide />
+        <AboutRigImg />
         <div className="pb-4 lg:pb-6 w-full">
        <AddSlider />  
         </div>
