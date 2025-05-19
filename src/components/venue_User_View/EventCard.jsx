@@ -98,11 +98,11 @@ const EventCard = ({ visibleCards }) => {
 
                   <div className="space-y-1 sm:space-y-4">
                     <p className="sm:text-lg text-white font-semibold">
-                      {item.event_title}
+                      {item.business_name}
                     </p>
                     <div className="flex items-center justify-between">
                       <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
-                        {item.business_name}
+                        {item.event_title}
                       </h2>
                       {pathname === "/venue-profile-edit" && (
                         <TooltipProvider>

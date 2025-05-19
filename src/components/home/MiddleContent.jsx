@@ -89,7 +89,7 @@ const getEventDateLabel = (eventDates) => {
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleCards.length === 0 ? (
           <div className="flex items-center justify-center mt-40">
-            <p className="text-xl font-semibold">No events found</p>
+            <p className="text-xl font-semibold">No events found for now</p>
           </div>
         ) : (
           <>
@@ -114,16 +114,15 @@ const getEventDateLabel = (eventDates) => {
                         </button>
                       </div>
                     )}
-
                     <div className="space-y-2  w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
-                      {item.event_title && (
+                      {item.business_name && (
                         <p className="sm:text-lg text-white font-semibold">
-                          {item.event_title}
+                          {item.business_name}
                         </p>
                       )}
-                      {item.business_address && (
+                      {item.event_title && (
                         <h2 className="text-[20px] sm:text-[24px] md:text-[32px] text-white font-extrabold">
-                          {item.business_address}
+                          {item.event_title}
                         </h2>
                       )}
                       {item.business_address && (
