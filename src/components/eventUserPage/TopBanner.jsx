@@ -109,9 +109,9 @@ const getEventDateLabel = (eventDates) => {
         </div>
       </div>
 
-      <button className="bg-[#0E1060] py-2 px-4 w-full  lg:text-2xl font-semibold text-white">
-        Más Detalles del Evento
-      </button>
+      <p className="bg-[#0E1060] py-2 px-4 w-full  lg:text-2xl font-semibold text-white">
+        Más Detalles del Evento 
+      </p>
       {data?.business_website_link && (
         
       <Link
