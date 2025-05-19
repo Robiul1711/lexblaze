@@ -39,12 +39,57 @@ const MiddleContent = ({ data, isLoading, error }) => {
     }
   };
 
+
+  // Hasta and Todo Los 
+const getEventDateLabel = (eventDates) => {
+  if (!eventDates || eventDates.length === 0) return null;
+
+  const dates = eventDates
+    .map((d) => new Date(d?.date)) // safe access
+    .filter((d) => d instanceof Date && !isNaN(d)) // valid dates
+    .sort((a, b) => a - b);
+
+  if (dates.length === 0) return null; // ✅ Prevent .getDay on undefined
+
+  const formatDate = (date) =>
+    date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+  if (dates.length === 1) {
+    return `Hasta ${formatDate(dates[0])}`;
+  }
+
+  const allSameDay = dates.every(
+    (date) => date.getDay() === dates[0].getDay()
+  );
+
+  if (allSameDay) {
+    const weekdaysES = [
+      "Domingos",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábados",
+    ];
+    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+  }
+
+  const last = dates[dates.length - 1];
+  return `Hasta ${formatDate(last)}`;
+};
+
+
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleCards.length === 0 ? (
           <div className="flex items-center justify-center mt-40">
-            <p className="text-xl font-semibold">No events found</p>
+            <p className="text-xl font-semibold">No events found for now</p>
           </div>
         ) : (
           <>
@@ -64,57 +109,20 @@ const MiddleContent = ({ data, isLoading, error }) => {
                     {item.event_dates && item.event_dates.length > 0 && (
                       <div className="absolute top-0 right-0">
                         <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-                          {(() => {
-                            if (
-                              !item.event_dates ||
-                              item.event_dates.length === 0
-                            )
-                              return null;
+                           {getEventDateLabel(item.event_dates)}
 
-                            const dates = item.event_dates.map(
-                              (d) => new Date(d.date)
-                            );
-                            const sorted = dates.sort((a, b) => a - b);
-                            const last = sorted[sorted.length - 1];
-
-                            const weekdaysES = [
-                              "Domingos",
-                              "Lunes",
-                              "Martes",
-                              "Miércoles",
-                              "Jueves",
-                              "Viernes",
-                              "Sábados",
-                            ];
-
-                            const allSameDay = sorted.every(
-                              (date) => date.getDay() === sorted[0].getDay()
-                            );
-
-                            const formatDate = (date) =>
-                              new Date(date).toLocaleDateString("es-ES", {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              });
-
-                            return allSameDay
-                              ? `Todos los ${weekdaysES[sorted[0].getDay()]}`
-                              : `Hasta ${formatDate(last)}`;
-                          })()}
                         </button>
                       </div>
                     )}
-
                     <div className="space-y-2  w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
-                      {item.event_title && (
+                      {item.business_name && (
                         <p className="sm:text-lg text-white font-semibold">
-                          {item.event_title}
+                          {item.business_name}
                         </p>
                       )}
-                      {item.business_address && (
+                      {item.event_title && (
                         <h2 className="text-[20px] sm:text-[24px] md:text-[32px] text-white font-extrabold">
-                          {item.business_address}
+                          {item.event_title}
                         </h2>
                       )}
                       {item.business_address && (

@@ -5,10 +5,12 @@ import { Dropdown } from "antd";
 import { TodoEventDropdown } from "./TodoEventDropdown";
 import { Link } from "react-router-dom";
 import SearchModal from "@/components/common/SearchModal";
-import { Calendar } from "@/components/ui/calendar";
+// import { Calendar } from "@/components/ui/calendar";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -50,7 +52,7 @@ const Navbar = () => {
         <img
           src={logo}
           alt=""
-          className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-20"
+          className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
         />
       </Link>
       <div className={`flex items-center justify-end ${pathname === "/" ? "lg:justify-between" : ""}  w-[25%]`}>
@@ -60,12 +62,13 @@ const Navbar = () => {
         <Dropdown
           arrow
           dropdownRender={() => (
-            <Calendar
-              mode="single"
-              selected={date ? new Date(date) : null}
-              onSelect={handleDateChange}
-              className="rounded-md border bg-white"
-            />
+            // <Calendar
+            //   mode="single"
+            //   selected={date ? new Date(date) : null}
+            //   onSelect={handleDateChange}
+            //   className="rounded-md border bg-white"
+            // />
+            <Calendar  className="rounded-md border bg-white"   onChange={handleDateChange} value={date ? new Date(date) : null} />
           )}
           trigger={["click"]}
         >

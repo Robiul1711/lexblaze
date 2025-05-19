@@ -63,7 +63,7 @@ console.log(data)
 }
       </div>
 
-      <div className="flex justify-between w-full gap-8 mt-4 ">
+      <div className="flex justify-between w-full gap-8 mt-2 ">
         {/* Leftside */}
         <div className="hidden lg:block lg:w-[40%]">
           <LeftSide />
@@ -84,7 +84,10 @@ console.log(data)
 
       {/* Show AddSlider only when data is loaded and not loading */}
       {!isLoading && data && (
-        <div className="flex justify-center mt-5 sm:mt-10 pb-[80px]">
+        <div className="flex flex-col items-center justify-center mt-5 sm:mt-10 pb-[80px]">
+           <p className="bg-[#D40000] xlg:py-3 w-full py-2 mb-3 lg:hidden rounded-md lg:rounded-xl text-sm text-center font-bold xl:text-xl text-white">
+            EVENTOS DESTACADOS
+          </p>
           <AddSlider />
         </div>
       )}

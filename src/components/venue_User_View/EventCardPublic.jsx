@@ -66,10 +66,10 @@ const EventCardPublic = ({ visibleCards }) => {
         {[...visibleCards]?.reverse().map((item) => (
           <div key={item.id}>
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
-              {formatDate(item.event_start_date)}
+              {formatDate(item.event_dates[0].date)}
             </h1>
             <div className="relative rounded overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 xlg:mb-10">
-              <div className="h-[300px] sm:h-[350px] md:h-[420px]">
+              <div className="h-[200px] sm:h-[250px]  ">
                 <img
                   src={item.event_thumb_image}
                   alt={item.title}

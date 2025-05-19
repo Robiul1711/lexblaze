@@ -8,8 +8,49 @@ const TopBanner = ({ data }) => {
   const { user } = useAuth();
 
   // const linkPath = user ? "/venue-profile-edit" : "/venue-user-view";
+  // Hasta and Todo Los 
+const getEventDateLabel = (eventDates) => {
+  if (!eventDates || eventDates.length === 0) return null;
 
-  console.log(data);
+  const dates = eventDates
+    .map((d) => new Date(d?.date)) // safe access
+    .filter((d) => d instanceof Date && !isNaN(d)) // valid dates
+    .sort((a, b) => a - b);
+
+  if (dates.length === 0) return null; // ✅ Prevent .getDay on undefined
+
+  const formatDate = (date) =>
+    date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+  if (dates.length === 1) {
+    return `Hasta ${formatDate(dates[0])}`;
+  }
+
+  const allSameDay = dates.every(
+    (date) => date.getDay() === dates[0].getDay()
+  );
+
+  if (allSameDay) {
+    const weekdaysES = [
+      "Domingos",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábados",
+    ];
+    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+  }
+
+  const last = dates[dates.length - 1];
+  return `Hasta ${formatDate(last)}`;
+};
+
   return (
     <div className="flex flex-col max-w-[620px] mx-auto w-full">
       <div className="relative rounded overflow-hidden shadow-lg">
@@ -21,9 +62,9 @@ const TopBanner = ({ data }) => {
         <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6 sm:p-12 flex  flex-col ">
     {data.event_dates && data.event_dates.length > 0 && (
   <div className="absolute top-0 right-0">
-    <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-      Hasta {data.event_dates[data.event_dates.length - 1].date}
-    </button>
+        <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+                          {getEventDateLabel(data.event_dates)}
+                        </button>
   </div>
 )}
 

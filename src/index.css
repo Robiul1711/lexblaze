@@ -127,3 +127,21 @@ body {
   background-color: #FDE300 !important;
   color: black !important;
 }
+
+/* Weekend (Saturday and Sunday) - default black text */
+.react-calendar__month-view__days__day--weekend {
+  color: black !important;
+}
+
+/* Selected tile - all selected days */
+.react-calendar__tile--active {
+  background-color: #006edc !important;
+  color: white;
+}
+
+/* Selected weekend only - override default selection */
+.react-calendar__month-view__days__day--weekend.react-calendar__tile--active {
+
+  color: white !important;
+}
+

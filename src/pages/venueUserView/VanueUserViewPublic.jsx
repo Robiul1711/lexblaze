@@ -53,7 +53,7 @@ console.log(visibleCards)
     <div className="section-padding-x ">
       <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-6 xlg:gap-12">
         {/* Leftside */}
-        <div className="mt-40 hidden xlg:block">
+        <div className="mt-10 hidden xlg:block">
           <LeftSide />
         </div>
         
@@ -64,10 +64,10 @@ console.log(visibleCards)
           )
           :
           <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10`}>
-          <div className="text-center mt-5 lg:mt-14">
+          <div className="text-center mt-4">
             <Title48 title2={visibleCards[0]?.business_name} />
           </div>
-          <div className="mt-5 lg:mt-10 h-screen overflow-y-auto scrollbar-hide">
+          <div className="mt-2 h-screen overflow-y-auto scrollbar-hide">
             <EventDetailCardPublic />
             <EventCardPublic visibleCards={visibleCards} />
           </div>
@@ -102,7 +102,7 @@ console.log(visibleCards)
               <p className="font-bold text-lg">Siguiente</p>
             </div>
           </div>
-          <div className="flex justify-center mb-5 lg:mb-[160px]">
+          <div className="flex justify-center mb-20 sm:mb-28 lg:mb-[160px]">
           <AddSlider />
           </div>
         </div>
@@ -110,7 +110,7 @@ console.log(visibleCards)
     
         
         {/* Rightside */}
-        <div className="lg:mt-40 mb-32 hidden xlg:block">
+        <div className="lg:mt-10 mb-32 hidden xlg:block">
           <RightSide />
         </div>
       </div>

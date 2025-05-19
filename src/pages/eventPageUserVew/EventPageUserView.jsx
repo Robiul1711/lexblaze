@@ -27,7 +27,7 @@ const EventPageUserView = () => {
 
       <div className="flex flex-col lg:flex-row justify-between gap-6  ">
         {/* Leftside  */}
-        <div className="hidden mt-20 lg:block">
+        <div className="hidden mt-10 lg:block">
           <LeftSide />
         </div>
         {/* Middle  */}
@@ -57,7 +57,7 @@ const EventPageUserView = () => {
           </div>
         </div>
         {/* Rightside  */}
-        <div className="mt-10 lg:mt-20">
+        <div className="mt-10 lg:mt-10">
           <RightSide />
         </div>
         <div className="flex justify-center mb-[100px] mt-10 lg:mt-20 lg:hidden ">
