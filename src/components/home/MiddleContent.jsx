@@ -89,7 +89,7 @@ const getEventDateLabel = (eventDates) => {
       <div className="h-screen overflow-y-auto scrollbar-hide">
         {visibleCards.length === 0 ? (
           <div className="flex items-center justify-center mt-40">
-            <p className="text-xl font-semibold">No events found for now</p>
+            <p className="text-xl font-semibold">No events found</p>
           </div>
         ) : (
           <>
