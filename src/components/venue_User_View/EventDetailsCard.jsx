@@ -20,6 +20,7 @@ import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 const EventDetailsCard = () => {
+    const [showNumber, setShowNumber] = useState(false);
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
@@ -46,6 +47,16 @@ const EventDetailsCard = () => {
       setIsSubmitting(false);
     },
   });
+    // number popup
+  const phoneNumber = data?.user?.phone;
+  const handleCallButtonClick = () => {
+    if (phoneNumber) {
+      window.location.href = `tel:${phoneNumber}`;
+    } else {
+      setShowNumber(true);
+    }
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
@@ -78,8 +89,13 @@ const EventDetailsCard = () => {
             <Title24>{data?.user?.email}</Title24>
           </div>
           <div className="flex items-center gap-2 xlg:gap-3">
-            <PhoneIcon />
-            <Title24>{data?.user?.phone}</Title24>
+              <button
+                         className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                         onClick={handleCallButtonClick}
+                       >
+                         <PhoneIcon />
+                         {showNumber ? phoneNumber : "Mostrar Número"}
+                       </button>
           </div>
           <div className="flex items-center gap-2 xlg:gap-3">
             <MenuIcon />
@@ -87,7 +103,14 @@ const EventDetailsCard = () => {
           </div>
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-3">
-          <Title24>Website : {data?.user?.business_website_link}</Title24>
+        <a
+            href={data?.user?.business_website_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
+          >
+            Website
+          </a>
           <Title24>Edad: 21+</Title24>
         </div>
         <div className="mx-auto w-full text-center">

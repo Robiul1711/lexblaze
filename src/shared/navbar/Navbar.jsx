@@ -5,16 +5,16 @@ import { Dropdown } from "antd";
 import { TodoEventDropdown } from "./TodoEventDropdown";
 import { Link } from "react-router-dom";
 import SearchModal from "@/components/common/SearchModal";
-// import { Calendar } from "@/components/ui/calendar";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 const Navbar = () => {
   const { pathname } = useLocation();
   const { search, setSearch, date, setDate } = useAuth();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   // Set today's date when on home page and date is not set
   useEffect(() => {
@@ -30,13 +30,14 @@ const Navbar = () => {
     }
   }, [pathname, setDate, date]);
 
-  const handleDateChange = (date) => {
-    if (date) {
-      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  const handleDateChange = (selectedDate) => {
+    if (selectedDate) {
+      const local = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
       setDate(local.toISOString().split("T")[0]); // "YYYY-MM-DD"
     } else {
       setDate(null);
     }
+    setDropdownVisible(false); // Close the dropdown after selection
   };
 
   return (
@@ -44,8 +45,7 @@ const Navbar = () => {
       <div className="flex items-center w-[25%] xlg:gap-[150px] xl:gap-[180px] gap-4 sm:gap-10">
         <MenuDropdown />
         {pathname === "/" && (
-          
-        <SearchModal search={search} setSearch={setSearch} />
+          <SearchModal search={search} setSearch={setSearch} />
         )}
       </div>
       <Link to="/" className="w-[50%] flex items-center justify-center">
@@ -56,29 +56,28 @@ const Navbar = () => {
         />
       </Link>
       <div className={`flex items-center justify-end ${pathname === "/" ? "lg:justify-between" : ""}  w-[25%]`}>
-        <TodoEventDropdown />
-{
-  pathname === "/" && (
-        <Dropdown
-          arrow
-          dropdownRender={() => (
-            // <Calendar
-            //   mode="single"
-            //   selected={date ? new Date(date) : null}
-            //   onSelect={handleDateChange}
-            //   className="rounded-md border bg-white"
-            // />
-            <Calendar  className="rounded-md border bg-white"   onChange={handleDateChange} value={date ? new Date(date) : null} />
-          )}
-          trigger={["click"]}
-        >
-          <div className="flex items-center gap-1 ml-4 lg:ml-0 cursor-pointer">
-            <CalenderIcons />
-          </div>
-        </Dropdown>
-  )
-}
-       
+        {pathname === "/" && (
+          <TodoEventDropdown />
+        )}
+        {pathname === "/" && (
+          <Dropdown
+            arrow
+            dropdownRender={() => (
+              <Calendar 
+                className="rounded-md border bg-white" 
+                onChange={handleDateChange} 
+                value={date ? new Date(date) : null} 
+              />
+            )}
+            trigger={["click"]}
+            open={dropdownVisible}
+            onOpenChange={(visible) => setDropdownVisible(visible)}
+          >
+            <div className="flex items-center gap-1 ml-4 lg:ml-0 cursor-pointer">
+              <CalenderIcons />
+            </div>
+          </Dropdown>
+        )}
       </div>
     </header>
   );

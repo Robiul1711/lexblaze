@@ -11,7 +11,7 @@ const SwiperImg = ({ data = [] }) => {
   }
 
   return (
-    <div className="w-full mx-auto lg:max-w-[522px] xl:max-w-[622px] h-[300px]">
+    <div className="w-full mx-auto lg:max-w-[470px] xl:max-w-[600px] h-[280px]">
       {
         data.length === 0 && (
           <div className="w-full mx-auto text-center ">

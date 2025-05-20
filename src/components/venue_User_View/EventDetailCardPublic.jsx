@@ -11,8 +11,6 @@ import {
 import Title24 from "../common/Title24";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import SwiperImg from "./SwiperImg";
-import { useAuth } from "@/hooks/useAuth";
-import Title48 from "../common/Title48";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import LoadingSpinner from "../common/LoadingSpinner";
@@ -20,22 +18,26 @@ import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 const EventDetailCardPublic = () => {
+  const [showNumber, setShowNumber] = useState(false);
+
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {user_id}=useParams();
+  const { user_id } = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ["profileData"],
     queryFn: async () => {
-      const response = await axiosSecure.get("/single/business_profile_data/"+user_id);
+      const response = await axiosSecure.get(
+        "/single/business_profile_data/" + user_id
+      );
       return response.data;
     },
   });
   const LogOutInMutation = useMutation({
     mutationFn: async (data) => {
       const response = await axiosSecure.post("/logout", data);
-       localStorage.removeItem('user'); // or whatever key you used to store user data
+      localStorage.removeItem("user"); // or whatever key you used to store user data
       return response?.data;
     },
     onSuccess: (response) => {
@@ -47,10 +49,21 @@ const EventDetailCardPublic = () => {
       setIsSubmitting(false);
     },
   });
+
+  // number popup
+  const phoneNumber = data?.user?.phone;
+  const handleCallButtonClick = () => {
+    if (phoneNumber) {
+      window.location.href = `tel:${phoneNumber}`;
+    } else {
+      setShowNumber(true);
+    }
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
-    <div className="mb-10 lg:max-w-[620px]  w-full">
+    <div className="mb-10   w-full">
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-4">
@@ -66,6 +79,7 @@ const EventDetailCardPublic = () => {
             </Link>
           )}
         </div>
+
         <div className="flex  items-center gap-2 xlg:gap-3">
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
@@ -75,9 +89,14 @@ const EventDetailCardPublic = () => {
             <MessageIcon />
             <Title24>{data?.user?.email}</Title24>
           </div>
-          <div className="flex items-center gap-2 xlg:gap-3">
-            <PhoneIcon />
-            <Title24>{data?.user?.phone}</Title24>
+          <div className="flex items-center gap-2 ">
+            <button
+              className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+              onClick={handleCallButtonClick}
+            >
+              <PhoneIcon />
+              {showNumber ? phoneNumber : "Mostrar Número"}
+            </button>
           </div>
           <div className="flex items-center gap-2 xlg:gap-3">
             <MenuIcon />
@@ -85,8 +104,15 @@ const EventDetailCardPublic = () => {
           </div>
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-3">
-          <Title24>Website : {data?.user?.business_website_link}</Title24>
-          <Title24>Edad: 21+</Title24>
+          <a
+            href={data?.user?.business_website_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
+          >
+            Website
+          </a>
+          <Title24>Edad: {data?.user?.business_age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>
