@@ -47,13 +47,13 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className=" mt-10 lg:mt-16 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
       {/* Title */}
       <Title48 title2="¿Olvidó su contraseña?" />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[585px] mt-12 lg:mt-20"
+        className="w-full max-w-[585px] mt-12 "
         noValidate
       >
         {/* Email input */}

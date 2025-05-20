@@ -68,7 +68,7 @@ const EventCardPublic = ({ visibleCards }) => {
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {formatDate(item.event_dates[0].date)}
             </h1>
-            <div className="relative rounded overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7 xlg:mb-10">
+            <div className="relative rounded overflow-hidden shadow-lg mb-5 max-w-[625px] mx-auto w-full sm:mb-7 xlg:mb-10">
               <div className="h-[200px] sm:h-[250px]  ">
                 <img
                   src={item.event_thumb_image}
@@ -111,9 +111,10 @@ const EventCardPublic = ({ visibleCards }) => {
                       )}
                     </div>
                     <div className="flex items-center justify-between text-primary font-semibold">
-                      <div className="flex items-center gap-2 sm:gap-4 hover:underline cursor-pointer">
+                      <div className="flex items-center gap-2  hover:underline cursor-pointer">
                         <MapPin className="size-7" />
                         <p className="xlg:text-lg">{item.business_address}</p>
+                        {console.log(item)}
                       </div>
                       {pathname === "/venue-profile-edit" && (
                         <TooltipProvider>
@@ -134,7 +135,7 @@ const EventCardPublic = ({ visibleCards }) => {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 font-semibold text-white">
+                    <div className="flex items-center max-w-[300px] justify-between gap-2 font-semibold text-white">
                       <p>{item.price_limite}</p>
                       <p>{item.event_start_time}</p>
                     </div>

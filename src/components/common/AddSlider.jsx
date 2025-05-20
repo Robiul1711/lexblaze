@@ -21,7 +21,7 @@ const AddSlider = () => {
 
       console.log(data);
   return (
-    <div className="w-full lg:max-w-[522px] xl:max-w-[622px] h-[200px] sm:h-[250px]">
+    <div className="w-full lg:max-w-[500px] xl:max-w-[600px] h-[180px] ">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}

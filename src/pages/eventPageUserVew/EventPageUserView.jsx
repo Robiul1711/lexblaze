@@ -25,7 +25,7 @@ const EventPageUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
 
-      <div className="flex flex-col lg:flex-row justify-between gap-6  ">
+      <div className="flex w-full flex-col lg:flex-row justify-between gap-12  ">
         {/* Leftside  */}
         <div className="hidden mt-10 lg:block">
           <LeftSide />
@@ -34,9 +34,9 @@ const EventPageUserView = () => {
         <div
           className={` ${
             isLoading ? "" : "lg:bg-[#FFFBE0] "
-          } lg:px-6 xlg:px-10`}
+          } `}
         >
-          <div className="text-center mt-5 lg:mt-10 ">
+          <div className="text-center mt-5 lg:mt-10 md:px-5 ">
             {isLoading ? (
               <div className="flex justify-center items-center h-screen">
                 <LoadingSpinner />
@@ -48,7 +48,7 @@ const EventPageUserView = () => {
             <img
               src={data?.event?.event_thumb_image}
               alt=""
-              className="w-full h-[300px] sm:max-h-[350px] max-w-[620px] mx-auto object-fill"
+              className="w-full h-full rounded-md max-w-[580px] mx-auto object-fill"
             />
           </div>
 
@@ -60,7 +60,7 @@ const EventPageUserView = () => {
         <div className="mt-10 lg:mt-10">
           <RightSide />
         </div>
-        <div className="flex justify-center mb-[100px] mt-10 lg:mt-20 lg:hidden ">
+        <div className="flex px-5  justify-center mb-[100px] mt-10 lg:mt-20 lg:hidden ">
           <AddSlider />
         </div>
       </div>

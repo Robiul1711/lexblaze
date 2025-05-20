@@ -48,13 +48,13 @@ const Login = () => {
   };
 
   return (
-    <div className="lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className=" mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
       {/* Title */}
       <Title48 title2="Iniciar Sesión de Negocios" />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[585px] mt-12 lg:mt-20"
+        className="w-full max-w-[585px] mt-10 "
         noValidate
       >
         {/* Email input */}
@@ -71,7 +71,7 @@ const Login = () => {
         )}
 
         {/* Password input */}
-        <div className="py-9 lg:py-14 relative">
+        <div className="py-9 lg:py-10 relative">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
