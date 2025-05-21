@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { DeleteIcon, EditIcon2 } from "@/lib/Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,7 @@ import { useState } from "react";
 import DeleteModal from "../DeleteModal";
 
 const EventCardPublic = ({ visibleCards }) => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
@@ -113,7 +114,7 @@ const EventCardPublic = ({ visibleCards }) => {
                     <div className="flex items-center justify-between text-primary font-semibold">
                       <div className="flex items-center gap-2  hover:underline cursor-pointer">
                         <MapPin className="size-7" />
-                        <p className="xlg:text-lg">{item.business_address}</p>
+                        <Link to={`/event-user-view/${item.id}`} className="xlg:text-lg">{item.business_address}</Link>
                         {console.log(item)}
                       </div>
                       {pathname === "/venue-profile-edit" && (

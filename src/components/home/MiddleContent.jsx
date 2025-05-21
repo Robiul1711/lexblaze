@@ -40,16 +40,16 @@ const MiddleContent = ({ data, isLoading, error }) => {
   };
 
 
-  // Hasta and Todo Los 
-const getEventDateLabel = (eventDates) => {
+  // Hasta and Todo Los const 
+  const getEventDateLabel = (eventDates) => {
   if (!eventDates || eventDates.length === 0) return null;
 
   const dates = eventDates
-    .map((d) => new Date(d?.date)) // safe access
-    .filter((d) => d instanceof Date && !isNaN(d)) // valid dates
+    .map((d) => new Date(d?.date))
+    .filter((d) => d instanceof Date && !isNaN(d))
     .sort((a, b) => a - b);
 
-  if (dates.length === 0) return null; // ✅ Prevent .getDay on undefined
+  if (dates.length === 0) return null;
 
   const formatDate = (date) =>
     date.toLocaleDateString("es-ES", {
@@ -59,7 +59,7 @@ const getEventDateLabel = (eventDates) => {
     });
 
   if (dates.length === 1) {
-    return `Hasta ${formatDate(dates[0])}`;
+    return formatDate(dates[0]);
   }
 
   const allSameDay = dates.every(
@@ -79,8 +79,24 @@ const getEventDateLabel = (eventDates) => {
     return `Todos los ${weekdaysES[dates[0].getDay()]}`;
   }
 
-  const last = dates[dates.length - 1];
-  return `Hasta ${formatDate(last)}`;
+  // Check if dates form a continuous range (no missing days)
+  let isContinuous = true;
+  for (let i = 1; i < dates.length; i++) {
+    const diffInDays =
+      (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+    if (diffInDays !== 1) {
+      isContinuous = false;
+      break;
+    }
+  }
+
+  if (isContinuous) {
+    const last = dates[dates.length - 1];
+    return `Hasta ${formatDate(last)}`;
+  }
+
+  // Random non-continuous dates – just return last date without prefix
+  return formatDate(dates[dates.length - 1]);
 };
 
 
