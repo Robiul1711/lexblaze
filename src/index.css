@@ -145,3 +145,16 @@ body {
   color: white !important;
 }
 
+.ant-btn-primary {
+  padding: 15px 15px !important;
+  background-color: #1e40af !important; /* blue-800 */
+  border-color: #1e40af !important;
+  color: white !important;
+}
+
+/* Hover state */
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: #1d4ed8 !important; /* blue-700 */
+  border-color: #1d4ed8 !important;
+}

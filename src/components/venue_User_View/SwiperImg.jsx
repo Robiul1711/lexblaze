@@ -14,8 +14,8 @@ const SwiperImg = ({ data = [] }) => {
     <div className="w-full mx-auto lg:max-w-[470px] xl:max-w-[600px] h-[280px]">
       {
         data.length === 0 && (
-          <div className="w-full mx-auto text-center ">
-            <p className="sm:text-2xl text-red-400 font-medium">No images uploded</p>
+          <div className="w-full mx-auto text-center mt-5">
+            <p className="sm:text-lg text-red-400 font-medium">No se ha subido ninguna imagen.</p>
           </div>
         )
       }

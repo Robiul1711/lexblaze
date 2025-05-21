@@ -73,7 +73,7 @@ const UpdateEvent = () => {
       return response.data;
     },
   });
-
+console.log("data", data);
   useEffect(() => {
     if (data?.events) {
       // Set form values from fetched data
@@ -236,6 +236,7 @@ const UpdateEvent = () => {
               maxCount={1}
               disabled={isSubmitting}
               onRemove={() => handleRemoveImage('flyer')}
+           
             >
               {fileList2.length < 1 && <UploadIcons />}
             </Upload>
@@ -256,6 +257,7 @@ const UpdateEvent = () => {
                   multiple
                   value={field.value}
                   onChange={field.onChange}
+                  format={dateFormat}
                 />
               )}
             />
@@ -274,10 +276,11 @@ const UpdateEvent = () => {
               onChange={handleStartTimeChange}
               format="HH:mm"
               size="large"
-              className="p-6 w-full border-2 border-black rounded-md"
+              className="p-6 pr-2 w-full border-2 border-black rounded-md"
               disabled={isSubmitting}
+              showNow={false} 
             />
-            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
+            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
               <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
                 {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
               </p>
@@ -291,10 +294,11 @@ const UpdateEvent = () => {
               onChange={handleEndTimeChange}
               format="HH:mm"
               size="large"
-              className="p-6 w-full border-2 border-black rounded-md"
+              className="p-6 pr-2 w-full border-2 border-black rounded-md"
               disabled={isSubmitting}
+              showNow={false} 
             />
-            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
+            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
               <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
                 {endTime ? dayjs(endTime).format("HH:mm") : "00:00"}
               </p>

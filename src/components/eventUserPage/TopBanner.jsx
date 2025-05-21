@@ -8,48 +8,64 @@ const TopBanner = ({ data }) => {
   const { user } = useAuth();
 
   // const linkPath = user ? "/venue-profile-edit" : "/venue-user-view";
-  // Hasta and Todo Los
+  // Hasta and Todo Los const 
   const getEventDateLabel = (eventDates) => {
-    if (!eventDates || eventDates.length === 0) return null;
+  if (!eventDates || eventDates.length === 0) return null;
 
-    const dates = eventDates
-      .map((d) => new Date(d?.date)) // safe access
-      .filter((d) => d instanceof Date && !isNaN(d)) // valid dates
-      .sort((a, b) => a - b);
+  const dates = eventDates
+    .map((d) => new Date(d?.date))
+    .filter((d) => d instanceof Date && !isNaN(d))
+    .sort((a, b) => a - b);
 
-    if (dates.length === 0) return null; // ✅ Prevent .getDay on undefined
+  if (dates.length === 0) return null;
 
-    const formatDate = (date) =>
-      date.toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
+  const formatDate = (date) =>
+    date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
 
-    if (dates.length === 1) {
-      return `Hasta ${formatDate(dates[0])}`;
+  if (dates.length === 1) {
+    return formatDate(dates[0]);
+  }
+
+  const allSameDay = dates.every(
+    (date) => date.getDay() === dates[0].getDay()
+  );
+
+  if (allSameDay) {
+    const weekdaysES = [
+      "Domingos",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábados",
+    ];
+    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+  }
+
+  // Check if dates form a continuous range (no missing days)
+  let isContinuous = true;
+  for (let i = 1; i < dates.length; i++) {
+    const diffInDays =
+      (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+    if (diffInDays !== 1) {
+      isContinuous = false;
+      break;
     }
+  }
 
-    const allSameDay = dates.every(
-      (date) => date.getDay() === dates[0].getDay()
-    );
-
-    if (allSameDay) {
-      const weekdaysES = [
-        "Domingos",
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes",
-        "Sábados",
-      ];
-      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-    }
-
+  if (isContinuous) {
     const last = dates[dates.length - 1];
     return `Hasta ${formatDate(last)}`;
-  };
+  }
+
+  // Random non-continuous dates – just return last date without prefix
+  return formatDate(dates[dates.length - 1]);
+};
 
   return (
     <div className="flex flex-col  mx-auto w-full">

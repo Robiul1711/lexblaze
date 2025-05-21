@@ -13,9 +13,10 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import InstuctionModal from "@/components/common/InstuctionModal";
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import DatePicker from "react-multi-date-picker";
-import ReactCrop, { centerCrop, makeAspectCrop,} from 'react-image-crop';
+import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { canvasPreview } from './canvasPreview';
+import { CircleX } from "lucide-react";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -124,7 +125,8 @@ const CreateEvents = () => {
   const onSubmit = async (data) => {
     let hasError = false;
 
-    if (fileList.length === 0) {
+    // Only check for flyer image (fileList2) as required
+    if (fileList2.length === 0) {
       setImageError("Se requiere una imagen para el evento.");
       hasError = true;
     } else {
@@ -154,8 +156,8 @@ const CreateEvents = () => {
       ),
       event_start_time: dayjs(startTime).format("HH:mm"),
       event_end_time: dayjs(endTime).format("HH:mm"),
-      event_thumb_image: fileList[0]?.originFileObj,
-      flyer: fileList2.length > 0 ? fileList2[0]?.originFileObj : null,
+      event_thumb_image: fileList.length > 0 ? fileList[0]?.originFileObj : null,
+      flyer: fileList2[0]?.originFileObj, // This is required
     };
 
     createEventMutation.mutate(updatedData);
@@ -205,9 +207,9 @@ const CreateEvents = () => {
   const handleRemoveImage = (type) => {
     if (type === 'flyer') {
       setFileList2([]);
+      setImageError("Se requiere una imagen para el evento.");
     } else {
       setFileList([]);
-      setImageError("");
     }
   };
 
@@ -274,9 +276,9 @@ const CreateEvents = () => {
 
       if (currentImageType === 'flyer') {
         setFileList2([croppedFile]);
+        setImageError("");
       } else {
         setFileList([croppedFile]);
-        setImageError("");
       }
       setCropModalVisible(false);
     } catch (error) {
@@ -309,7 +311,7 @@ const CreateEvents = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-3 lg:space-y-5"
       >
-        {/* Flyer Upload */}
+        {/* Flyer Upload - REQUIRED */}
         <div className="flex flex-col items-center gap-2 mb-8">
           <Upload
             listType="picture-card"
@@ -324,8 +326,9 @@ const CreateEvents = () => {
           >
             {fileList2.length < 1 && <UploadIcons />}
           </Upload>
-          <p className="bg-[#000e8e] text-white sm:px-5 px-3 py-2 rounded-md text-lg  font-bold mt-4">
-            Carga Imagen de Fondo
+          {imageError && <p className="text-red-500">{imageError}</p>}
+          <p className="bg-[#000e8e] text-white sm:px-5 px-3 py-2 rounded-md text-lg font-bold mt-4">
+            Carga Imagen de Fondo (Requerido)
           </p>
         </div>
 
@@ -347,12 +350,26 @@ const CreateEvents = () => {
                   value={field.value}
                   onChange={field.onChange}
                 />
-                <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
+
+                {/* Calendar Icon */}
+                <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
                   <InputCalenderIcons />
                 </div>
+
+                {/* Reset/Clear Button */}
+                {field.value && field.value.length > 0 && (
+                  <button
+                    type="button"
+                    className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-red-500 focus:outline-none"
+                    onClick={() => field.onChange([])}
+                  >
+                    <CircleX />
+                  </button>
+                )}
               </div>
             )}
           />
+
           {errors.event_date && (
             <p className="text-red-500">{errors.event_date.message}</p>
           )}
@@ -371,12 +388,13 @@ const CreateEvents = () => {
                 onChange={handleStartTimeChange}
                 format="HH:mm"
                 size="large"
-                className="p-6 w-full border-2 border-black rounded-md"
+                className="p-6 pr-2 w-full border-2 border-black rounded-md"
                 disabled={isSubmitting}
+                showNow={false} 
               />
             )}
           />
-          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-2 items-center">
+          <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
             <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
               {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
             </p>
@@ -394,9 +412,15 @@ const CreateEvents = () => {
             onChange={handleEndTimeChange}
             format="HH:mm"
             size="large"
-            className="p-6 w-full border-2 border-black rounded-md"
+            className="p-6 pr-2 w-full border-2 border-black rounded-md"
             disabled={isSubmitting}
+            showNow={false}
           />
+          <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
+            <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
+              {endTime ? dayjs(endTime).format("HH:mm") : "00:00"}
+            </p>
+          </div>
         </div>
 
         {/* Event Details Section */}
@@ -404,7 +428,6 @@ const CreateEvents = () => {
           <h1 className="text-2xl lg:text-[32px] font-bold">
             Detalles del Evento
           </h1>
-
           <div className="space-y-4 mt-4">
             <div>
               <input
@@ -417,7 +440,6 @@ const CreateEvents = () => {
                 disabled={isSubmitting}
               />
             </div>
-
             <div>
               <input
                 type="text"
@@ -528,7 +550,7 @@ const CreateEvents = () => {
           <InstructionModal2 />
         </section>
 
-        {/* Thumbnail Image Upload */}
+        {/* Thumbnail Image Upload - OPTIONAL */}
         <section>
           <h1 className="text-2xl lg:text-[32px] font-bold">
             Carga Otra Imagen
@@ -550,15 +572,14 @@ const CreateEvents = () => {
             >
               {fileList.length < 1 && <UploadIcons />}
             </Upload>
-            {imageError && <p className="text-red-500">{imageError}</p>}
             <p
               type="button"
-              className="bg-[#000e8e] text-white sm:px-5 px-3 py-1  rounded-md text-lg  font-bold mt-4"
+              className="bg-[#000e8e] text-white sm:px-5 px-3 py-1 rounded-md text-lg font-bold mt-4"
               onClick={() =>
                 document.querySelector(".ant-upload-select").click()
               }
             >
-              Carga Imagenes
+              Carga Imagenes (Opcional)
             </p>
           </div>
         </section>
@@ -604,7 +625,7 @@ const CreateEvents = () => {
       </form>
       <div
         onClick={handleCancel}
-        className="bg-red-500 mx-auto mt-5 sm:mt-8 text-center cursor-pointer  w-[120px] duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold "
+        className="bg-red-500 mx-auto mt-5 sm:mt-8 text-center cursor-pointer w-[120px] duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
       >
         Cancle
       </div>
