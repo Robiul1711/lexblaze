@@ -246,21 +246,23 @@ console.log("data", data);
           </div>
 
           <div className="relative mt-4">
-            <Controller
-              name="event_date"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  placeholder="Fecha de Inicio"
-                  containerClassName="w-full"
-                  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-                  multiple
-                  value={field.value}
-                  onChange={field.onChange}
-                  format={dateFormat}
-                />
-              )}
-            />
+<Controller
+  name="event_date"
+  control={control}
+  render={({ field }) => (
+    <DatePicker
+      placeholder="Elija Fecha"
+      containerClassName="w-full"
+      inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+      multiple
+      value={field.value || data?.events?.event_dates?.map(dateObj => new Date(dateObj.date)) || []}
+      onChange={(dates) => {
+        field.onChange(dates);
+      }}
+      format={dateFormat}
+    />
+  )}
+/>
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
               <InputCalenderIcons />
             </div>

@@ -1,7 +1,7 @@
 export async function canvasPreview(
   image,
   canvas,
-  crop,
+  crop = null,  // Make crop optional
   scale = 1,
   rotate = 0,
   flip = false,
@@ -12,34 +12,27 @@ export async function canvasPreview(
     throw new Error('No 2d context');
   }
 
-  const scaleX = image.naturalWidth / image.width;
-  const scaleY = image.naturalHeight / image.height;
   const pixelRatio = window.devicePixelRatio;
 
-  canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
-  canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+  // If no crop is provided, use the full image dimensions
+  const cropWidth = crop ? crop.width : image.width;
+  const cropHeight = crop ? crop.height : image.height;
+  const cropX = crop ? crop.x * (image.naturalWidth / image.width) : 0;
+  const cropY = crop ? crop.y * (image.naturalHeight / image.height) : 0;
+
+  // Set canvas size (accounting for device pixel ratio)
+  canvas.width = Math.floor(cropWidth * pixelRatio);
+  canvas.height = Math.floor(cropHeight * pixelRatio);
 
   ctx.scale(pixelRatio, pixelRatio);
   ctx.imageSmoothingQuality = 'high';
 
-  const cropX = crop.x * scaleX;
-  const cropY = crop.y * scaleY;
-  const cropWidth = crop.width * scaleX;
-  const cropHeight = crop.height * scaleY;
-
-  ctx.save();
-  ctx.translate(-cropX, -cropY);
+  // Draw the image (either cropped or full)
   ctx.drawImage(
     image,
-    0,
-    0,
-    image.naturalWidth,
-    image.naturalHeight,
-    0,
-    0,
-    image.naturalWidth,
-    image.naturalHeight,
+    cropX, cropY,                     // Source X, Y
+    cropWidth, cropHeight,            // Source width & height
+    0, 0,                             // Destination X, Y
+    cropWidth, cropHeight             // Destination width & height
   );
-
-  ctx.restore();
 }
