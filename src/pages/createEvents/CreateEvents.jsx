@@ -309,7 +309,7 @@ const CreateEvents = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3 lg:space-y-5"
+        className="space-y-3 "
       >
         {/* Flyer Upload - REQUIRED */}
         <div className="flex flex-col items-center gap-2 mb-8">
@@ -399,10 +399,10 @@ const CreateEvents = () => {
               {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
             </p>
           </div>
+        </div>
           {errors.event_start_time && (
             <p className="text-red-500">{errors.event_start_time.message}</p>
           )}
-        </div>
 
         {/* End Time */}
         <div className="relative">
