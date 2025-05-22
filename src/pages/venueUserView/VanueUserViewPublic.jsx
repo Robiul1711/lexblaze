@@ -53,7 +53,7 @@ console.log(visibleCards)
     <div className="section-padding-x ">
       <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-5">
         {/* Leftside */}
-        <div className="mt-10 hidden xlg:block">
+        <div className="mt-10 w-[45%] hidden xlg:block">
           <LeftSide />
         </div>
         
@@ -65,7 +65,7 @@ console.log(visibleCards)
           :
           // <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10`}>
               <div
-          className={` ${
+          className={` max-w-[550px] xl:max-w-[680px] w-full mx-auto lg:bg-[#FFFBE0] ${
             isLoading ? "" : "lg:bg-[#FFFBE0] "
           } `}
         >
@@ -115,7 +115,7 @@ console.log(visibleCards)
     
         
         {/* Rightside */}
-        <div className="lg:mt-10 mb-32 hidden xlg:block">
+        <div className="lg:mt-10 mb-32 hidden w-[45%] xlg:block">
           <RightSide />
         </div>
       </div>

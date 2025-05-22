@@ -60,7 +60,7 @@ console.log(visibleCards)
         {/* Middle */}
        
           
-          <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6 xlg:px-10 `}>
+          <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6  `}>
      
           <div className=" h-screen overflow-y-auto scrollbar-hide">
             <EventDetailsCard />

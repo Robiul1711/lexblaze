@@ -10,7 +10,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
-  const { search, date, category } = useAuth();
+  const {  date, category } = useAuth();
   const dynamicDate = date;
   const formattedDate = new Date(dynamicDate).toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -19,10 +19,10 @@ const Home = () => {
   });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["events", search, date, category],
+    queryKey: ["events", date, category],
     queryFn: async () => {
       const response = await axiosPublic.post(`/event/show`, {
-        search,
+        // search,
         date,
         category_id: category,
       });
