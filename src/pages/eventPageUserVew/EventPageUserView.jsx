@@ -25,14 +25,14 @@ const EventPageUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
 
-      <div className="flex w-full flex-col lg:flex-row justify-between gap-12  ">
+      <div className="flex w-full flex-col lg:flex-row justify-between gap-5 xl:gap-6  ">
         {/* Leftside  */}
         <div className="hidden mt-10 lg:block">
           <LeftSide />
         </div>
         {/* Middle  */}
         <div
-          className={` ${
+          className={`max-w-[550px] xl:max-w-[680px] w-full mx-auto ${
             isLoading ? "" : "lg:bg-[#FFFBE0] "
           } `}
         >

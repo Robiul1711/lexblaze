@@ -277,7 +277,7 @@ console.log("data", data);
               format="HH:mm"
               size="large"
               className="p-6 pr-2 w-full border-2 border-black rounded-md"
-              disabled={isSubmitting}
+       
               showNow={false} 
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
@@ -295,7 +295,7 @@ console.log("data", data);
               format="HH:mm"
               size="large"
               className="p-6 pr-2 w-full border-2 border-black rounded-md"
-              disabled={isSubmitting}
+              
               showNow={false} 
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">

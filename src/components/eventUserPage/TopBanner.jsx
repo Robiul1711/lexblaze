@@ -120,12 +120,12 @@ const TopBanner = ({ data }) => {
               </p>
             </div>
             <div className="flex  items-start gap-2 font-semibold text-white">
-              <p>{data?.event_start_time}</p>
-              {data?.event_start_time && data?.event_end_time && (
+              <p>{data?.event_start_time ? data?.event_start_time : "N/A"}</p>
+              {data?.event_start_time && (
                 <span>to</span>
               )}
 
-              <p>{data?.event_end_time}</p>
+              <p>{data?.event_end_time ? data?.event_end_time : "N/A"}</p>
             </div>
           </div>
         </div>
