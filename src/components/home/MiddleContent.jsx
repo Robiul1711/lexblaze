@@ -136,7 +136,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         </p>
                       )}
                       {item.event_title && (
-                        <h2 className="text-[20px] sm:text-[24px] md:text-[32px] text-white font-extrabold">
+                        <h2 className="text-[20px] sm:text-[24px] md:text-[28px] text-white font-extrabold">
                           {item.event_title}
                         </h2>
                       )}
