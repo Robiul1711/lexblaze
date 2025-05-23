@@ -91,11 +91,11 @@ const EventDetailCardPublic = () => {
           </div>
           <div className="flex items-center gap-2 ">
             <button
-              className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+              className="rounded-full xlg:text-[20px] font-semibold flex items-center hover:text-blue-500 duration-200 justify-center gap-2"
               onClick={handleCallButtonClick}
             >
               <PhoneIcon />
-              {showNumber ? phoneNumber : "Mostrar Número"}
+              {showNumber ? phoneNumber : "Teléfono"}
             </button>
           </div>
           <div className="flex items-center gap-2 xlg:gap-3">

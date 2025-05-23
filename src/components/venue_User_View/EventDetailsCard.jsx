@@ -94,7 +94,7 @@ const EventDetailsCard = () => {
                          onClick={handleCallButtonClick}
                        >
                          <PhoneIcon />
-                         {showNumber ? phoneNumber : "Mostrar Número"}
+                         {showNumber ? phoneNumber : "Teléfono"}
                        </button>
           </div>
           <div className="flex items-center gap-2 xlg:gap-3">

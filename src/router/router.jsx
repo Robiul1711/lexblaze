@@ -15,6 +15,7 @@ import VenueUserView from "@/pages/venueUserView/VenueUserView";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import VanueUserViewPublic from "@/pages/venueUserView/VanueUserViewPublic";
+import BusinessProfilePage from "@/pages/profile/BusinessProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <BusinessProfileForm />,
+        element: <BusinessProfilePage />,
       },
       {
         path: "/update-profile",

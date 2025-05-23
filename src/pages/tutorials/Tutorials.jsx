@@ -17,7 +17,7 @@ const Tutorials = () => {
         {/* Tutorial Middle: 40% on large screens */}
         <div className="w-full lg:basis-[40%] min-h-screen lg:bg-[#FFFBE0] lg:px-10 lg:pb-[150px]">
           <div className="text-center mt-2 ">
-            <Title48 title2="Tutorials" />
+            <Title48 title2="Tutoriales" />
           </div>
           <div className="mt-2 ">
             <TutorialMiddle />

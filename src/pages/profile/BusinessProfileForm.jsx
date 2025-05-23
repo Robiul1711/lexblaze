@@ -655,7 +655,7 @@ const BusinessProfileForm = () => {
         </div>
 
         {/* Terms */}
-        <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
+        {/* <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
           <input
             className="size-5 md:size-6 lg:size-7"
             type="checkbox"
@@ -665,7 +665,7 @@ const BusinessProfileForm = () => {
           {errors.terms && (
             <p className="text-red-500 text-sm">{errors.terms.message}</p>
           )}
-        </div>
+        </div> */}
 
         {/* Submit */}
         <div className="flex flex-col items-center gap-2 lg:mt-6">
