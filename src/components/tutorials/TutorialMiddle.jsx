@@ -122,7 +122,7 @@ const TutorialMiddle = () => {
           ))
         ) : (
           <div className="text-center py-10">
-            <p className="text-xl">No tutorials found</p>
+            <p className="text-xl">No se encontraron tutoriales</p>
           </div>
         )}
       </div>

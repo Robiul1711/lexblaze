@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { InputCalenderIcons, UploadIcons } from "@/lib/Icons";
 import { Select, Tag, TimePicker, Upload, Modal } from "antd";
@@ -13,10 +13,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import InstuctionModal from "@/components/common/InstuctionModal";
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import DatePicker from "react-multi-date-picker";
-import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import { canvasPreview } from './canvasPreview';
-import { CircleX } from "lucide-react";
+import { CircleX, Eye } from "lucide-react";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -51,26 +48,6 @@ const tagRender = (props) => {
   );
 };
 
-function centerAspectCrop(
-  mediaWidth,
-  mediaHeight,
-  aspect,
-) {
-  return centerCrop(
-    makeAspectCrop(
-      {
-        unit: '%',
-        width: 90,
-      },
-      aspect,
-      mediaWidth,
-      mediaHeight,
-    ),
-    mediaWidth,
-    mediaHeight,
-  );
-}
-
 const CreateEvents = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
@@ -85,18 +62,12 @@ const CreateEvents = () => {
   } = useForm();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const [fileList, setFileList] = useState([]);
-  const [fileList2, setFileList2] = useState([]);
+  const [flyerFileList, setFlyerFileList] = useState([]);
+  const [thumbFileList, setThumbFileList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageError, setImageError] = useState("");
-  const [cropModalVisible, setCropModalVisible] = useState(false);
-  const [currentImage, setCurrentImage] = useState(null);
-  const [currentImageType, setCurrentImageType] = useState(null);
-  const [crop, setCrop] = useState();
-  const [completedCrop, setCompletedCrop] = useState();
-  const imgRef = useRef(null);
-  const previewCanvasRef = useRef(null);
-  const [aspect, setAspect] = useState(16 / 9);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
 
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
@@ -122,11 +93,27 @@ const CreateEvents = () => {
     },
   });
 
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+  };
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const onSubmit = async (data) => {
     let hasError = false;
 
-    // Only check for flyer image (fileList2) as required
-    if (fileList2.length === 0) {
+    if (flyerFileList.length === 0) {
       setImageError("Se requiere una imagen para el evento.");
       hasError = true;
     } else {
@@ -156,8 +143,8 @@ const CreateEvents = () => {
       ),
       event_start_time: dayjs(startTime).format("HH:mm"),
       event_end_time: dayjs(endTime).format("HH:mm"),
-      event_thumb_image: fileList.length > 0 ? fileList[0]?.originFileObj : null,
-      flyer: fileList2[0]?.originFileObj, // This is required
+      flyer: flyerFileList[0]?.originFileObj,
+      event_thumb_image: thumbFileList[0]?.originFileObj || null,
     };
 
     createEventMutation.mutate(updatedData);
@@ -174,43 +161,24 @@ const CreateEvents = () => {
     setValue("event_end_time", time);
   };
 
-  const handleImageChange = ({ fileList: newFileList }, type) => {
-    if (newFileList.length > 0 && newFileList.length > (type === 'flyer' ? fileList2.length : fileList.length)) {
-      const file = newFileList[newFileList.length - 1];
-      if (file.originFileObj) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setCurrentImage(reader.result);
-          setCurrentImageType(type);
-          setCropModalVisible(true);
-        };
-        reader.readAsDataURL(file.originFileObj);
-      }
-    } else {
-      // Handle image removal
-      if (type === 'flyer') {
-        setFileList2(newFileList);
-      } else {
-        setFileList(newFileList);
-      }
+  const handleFlyerImageChange = ({ fileList: newFileList }) => {
+    setFlyerFileList(newFileList);
+    if (newFileList.length > 0) {
+      setImageError("");
     }
-  };
-
-  const handleImageChangeflayer = ({ fileList: newFileList }) => {
-    handleImageChange({ fileList: newFileList }, 'flyer');
   };
 
   const handleThumbImageChange = ({ fileList: newFileList }) => {
-    handleImageChange({ fileList: newFileList }, 'thumb');
+    setThumbFileList(newFileList);
   };
 
-  const handleRemoveImage = (type) => {
-    if (type === 'flyer') {
-      setFileList2([]);
-      setImageError("Se requiere una imagen para el evento.");
-    } else {
-      setFileList([]);
-    }
+  const handleRemoveFlyerImage = () => {
+    setFlyerFileList([]);
+    setImageError("Se requiere una imagen para el evento.");
+  };
+
+  const handleRemoveThumbImage = () => {
+    setThumbFileList([]);
   };
 
   const handleCategoryChange = (selectedOptions) => {
@@ -225,106 +193,28 @@ const CreateEvents = () => {
     }
   };
 
-  const onImageLoad = (e) => {
-    if (aspect) {
-      const { width, height } = e.currentTarget;
-      setCrop(centerAspectCrop(width, height, aspect));
-    }
-  };
-
-  const handleCropComplete = useCallback(async () => {
-    try {
-      if (completedCrop?.width && completedCrop?.height && imgRef.current && previewCanvasRef.current) {
-        const canvas = document.createElement('canvas');
-        await canvasPreview(
-          imgRef.current,
-          canvas,
-          completedCrop,
-          1,
-          0,
-          true
-        );
-
-        return new Promise((resolve) => {
-          canvas.toBlob((blob) => {
-            if (!blob) {
-              throw new Error('Failed to create blob');
-            }
-            const fileUrl = URL.createObjectURL(blob);
-            const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
-            resolve({ blob, fileUrl, file });
-          }, 'image/jpeg', 1);
-        });
-      }
-    } catch (error) {
-      console.error('Error cropping image:', error);
-      toast.error('Error cropping image. Please try again.');
-    }
-  }, [completedCrop]);
-
-  const handleCropConfirm = async () => {
-    try {
-      const { file } = await handleCropComplete();
-      
-      const croppedFile = {
-        uid: '-1',
-        name: 'cropped-image.jpg',
-        status: 'done',
-        url: URL.createObjectURL(file),
-        originFileObj: file,
-      };
-
-      if (currentImageType === 'flyer') {
-        setFileList2([croppedFile]);
-        setImageError("");
-      } else {
-        setFileList([croppedFile]);
-      }
-      setCropModalVisible(false);
-    } catch (error) {
-      console.error('Error confirming crop:', error);
-      toast.error('Failed to crop image. Please try again.');
-    }
-  };
-
-  useEffect(() => {
-    if (cropModalVisible && imgRef.current && completedCrop) {
-      const canvas = document.createElement('canvas');
-      canvasPreview(
-        imgRef.current,
-        previewCanvasRef.current,
-        completedCrop,
-        1,
-        0,
-        true
-      );
-    }
-  }, [cropModalVisible, completedCrop]);
-
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-6 lg:mb-5 text-center">
         <Title48 title2="Crear un Evento" />
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3 "
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         {/* Flyer Upload - REQUIRED */}
         <div className="flex flex-col items-center gap-2 mb-8">
           <Upload
             listType="picture-card"
-            fileList={fileList2}
-            onChange={handleImageChangeflayer}
+            fileList={flyerFileList}
+            onChange={handleFlyerImageChange}
             beforeUpload={() => false}
             accept="image/*"
             multiple={false}
             maxCount={1}
             disabled={isSubmitting}
-            onRemove={() => handleRemoveImage('flyer')}
+            onRemove={handleRemoveFlyerImage}
+            onPreview={handlePreview}
           >
-            {fileList2.length < 1 && <UploadIcons />}
+            {flyerFileList.length < 1 && <UploadIcons />}
           </Upload>
           {imageError && <p className="text-red-500">{imageError}</p>}
           <p className="bg-[#000e8e] text-white sm:px-5 px-3 py-2 rounded-md text-lg font-bold mt-4">
@@ -561,16 +451,17 @@ const CreateEvents = () => {
           <div className="flex flex-col items-center gap-2 mt-6">
             <Upload
               listType="picture-card"
-              fileList={fileList}
+              fileList={thumbFileList}
               onChange={handleThumbImageChange}
               beforeUpload={() => false}
               accept="image/*"
               multiple={false}
               maxCount={1}
               disabled={isSubmitting}
-              onRemove={() => handleRemoveImage('thumb')}
+              onRemove={handleRemoveThumbImage}
+              onPreview={handlePreview}
             >
-              {fileList.length < 1 && <UploadIcons />}
+              {thumbFileList.length < 1 && <UploadIcons />}
             </Upload>
             <p
               type="button"
@@ -627,49 +518,17 @@ const CreateEvents = () => {
         onClick={handleCancel}
         className="bg-red-500 mx-auto mt-5 sm:mt-8 text-center cursor-pointer w-[120px] duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
       >
-        Cancle
+        Cancel
       </div>
 
-      {/* Image Crop Modal */}
+      {/* Image Preview Modal */}
       <Modal
-        title="Crop Image"
-        open={cropModalVisible}
-        onOk={handleCropConfirm}
-        onCancel={() => setCropModalVisible(false)}
-        okText="Crop"
-        cancelText="Cancel"
-        width={800}
+        visible={previewVisible}
+        title="Image Preview"
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
       >
-        <div className="flex flex-col items-center">
-          {currentImage && (
-            <ReactCrop
-              crop={crop}
-              onChange={(c) => setCrop(c)}
-              onComplete={(c) => setCompletedCrop(c)}
-              aspect={aspect}
-            >
-              <img
-                ref={imgRef}
-                src={currentImage}
-                onLoad={onImageLoad}
-                alt="Crop preview"
-                style={{ maxWidth: '100%', maxHeight: '400px' }}
-              />
-            </ReactCrop>
-          )}
-          <div className="mt-4">
-            <h3 className="text-lg font-semibold">Preview</h3>
-            <canvas
-              ref={previewCanvasRef}
-              style={{
-                border: '1px solid black',
-                objectFit: 'contain',
-                width: '100%',
-                maxHeight: '200px',
-              }}
-            />
-          </div>
-        </div>
+        <img alt="Preview" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </div>
   );

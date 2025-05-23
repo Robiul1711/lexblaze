@@ -1,4 +1,5 @@
 import logo from "@/assets/images/footerLogo.png";
+import TearmAndConditionModal from "@/components/common/TearmAndConditionModal";
 import { TiktokIcons, YoutubeIcons } from "@/lib/Icons";
 
 const Footer = () => {
@@ -27,16 +28,16 @@ const Footer = () => {
             <p>
               Consulta General{" "}
               <a href="mailto:BogotaHoy@gmail.com" className="hover:text-primary transition-colors">
-                BogotaHoy@gmail.com
+               Soporte@bogotahoy.co
               </a>
             </p>
             <p>
               Marketing{" "}
               <a href="mailto:BogotaHoyMkt@gmail.com" className="hover:text-primary transition-colors">
-                BogotaHoyMkt@gmail.com
+               Marketing@bogotahoy.co
               </a>
             </p>
-            <p className="underline hover:text-primary">Términos y Condiciones</p>
+     <TearmAndConditionModal />
           </div>
 
           {/* Social Icons - Centered on mobile, normal on desktop */}
