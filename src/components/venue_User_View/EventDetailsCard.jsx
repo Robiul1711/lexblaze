@@ -20,7 +20,7 @@ import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 const EventDetailsCard = () => {
-    const [showNumber, setShowNumber] = useState(false);
+  const [showNumber, setShowNumber] = useState(false);
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
@@ -35,7 +35,7 @@ const EventDetailsCard = () => {
   const LogOutInMutation = useMutation({
     mutationFn: async (data) => {
       const response = await axiosSecure.post("/logout", data);
-       localStorage.removeItem('user'); // or whatever key you used to store user data
+      localStorage.removeItem("user"); // or whatever key you used to store user data
       return response?.data;
     },
     onSuccess: (response) => {
@@ -47,7 +47,7 @@ const EventDetailsCard = () => {
       setIsSubmitting(false);
     },
   });
-    // number popup
+  // number popup
   const phoneNumber = data?.user?.phone;
   const handleCallButtonClick = () => {
     if (phoneNumber) {
@@ -56,14 +56,14 @@ const EventDetailsCard = () => {
       setShowNumber(true);
     }
   };
-
+console.log(data)
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <div className="mb-10   w-full">
-           <div className="text-center mt-3  pb-1">
-            <Title48 title2={data?.user.business_name} />
-          </div>
+      <div className="text-center mt-3  pb-1">
+        <Title48 title2={data?.user.business_name} />
+      </div>
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-5">
@@ -83,27 +83,34 @@ const EventDetailsCard = () => {
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
+        {console.log(data?.user)}
         <div className="flex justify-between items-center flex-wrap gap-4">
-          <div className="flex items-center gap-2 xlg:gap-3">
-            <MessageIcon />
-            <Title24>{data?.user?.email}</Title24>
-          </div>
-          <div className="flex items-center gap-2 xlg:gap-3">
+          {data?.user?.isShowEmail==='true' ? null : (
+            <div className="flex items-center gap-2 xlg:gap-3">
+              <MessageIcon />
+              <Title24>{data?.user?.email}</Title24>
+            </div>
+          )}
+
+          {data?.user?.isShowPhone==='true' ? (
+            null
+          ) : <div className="flex items-center gap-2 xlg:gap-3">
               <button
-                         className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
-                         onClick={handleCallButtonClick}
-                       >
-                         <PhoneIcon />
-                         {showNumber ? phoneNumber : "Teléfono"}
-                       </button>
-          </div>
+                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                onClick={handleCallButtonClick}
+              >
+                <PhoneIcon />
+                {showNumber ? phoneNumber : "Teléfono"}
+              </button>
+            </div>}
+
           <div className="flex items-center gap-2 xlg:gap-3">
             <MenuIcon />
             <Title24>{data?.user?.business_food_menu}</Title24>
           </div>
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-3">
-        <a
+          <a
             href={data?.user?.business_website_link}
             target="_blank"
             rel="noopener noreferrer"
@@ -111,7 +118,8 @@ const EventDetailsCard = () => {
           >
             Website
           </a>
-          <Title24>Edad: 21+</Title24>
+          {console.log(data?.user)}
+          <Title24>Edad {data?.user?.age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>
