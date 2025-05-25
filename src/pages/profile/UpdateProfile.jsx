@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { Switch, Upload, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 import ImgCrop from "antd-img-crop";
@@ -22,6 +22,7 @@ const UpdateProfile = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     watch,
     setValue,
@@ -29,7 +30,13 @@ const UpdateProfile = () => {
   const password = watch("password");
 
   const [fileList, setFileList] = useState([]);
-
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["profileData"],
+    queryFn: async () => {
+      const response = await axiosSecure.get("/business_profile_data");
+      return response.data;
+    },
+  });
   const RegistrationMutation = useMutation({
     mutationFn: async (data) => {
       const response = await axiosSecure.post(
@@ -98,7 +105,7 @@ const UpdateProfile = () => {
     console.log("All form data:", submissionData);
     RegistrationMutation.mutate(submissionData);
   };
-  console.log(user);
+  console.log(data?.user);
   return (
     <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-10 lg:mb-8">
@@ -112,7 +119,7 @@ const UpdateProfile = () => {
         {/* Business Name */}
         <div>
           <input
-           defaultValue={user?.user?.business_name}
+           defaultValue={data?.user?.business_name}
             type="text"
             placeholder="Nombre del Negocio"
             {...register("business_name", )}
@@ -124,7 +131,7 @@ const UpdateProfile = () => {
         {/* Business Description */}
         <div>
           <textarea
-            defaultValue={user?.user?.business_details}
+            defaultValue={data?.user?.business_details}
             placeholder="Descripción del Negocio"
             {...register("business_details",)}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
@@ -135,7 +142,7 @@ const UpdateProfile = () => {
         {/* Address */}
         <div>
           <input
-            defaultValue={user?.user?.business_address}
+            defaultValue={data?.user?.business_address}
             type="text"
             placeholder="Dirección del Negocio"
             {...register("business_address", )}
@@ -147,7 +154,7 @@ const UpdateProfile = () => {
         {/* Schedule */}
         <div>
           <input
-            defaultValue={user?.user?.business_time}
+            defaultValue={data?.user?.business_time}
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
             {...register("business_time",)}
@@ -158,7 +165,7 @@ const UpdateProfile = () => {
 
         {/* Website */}
         <input
-          defaultValue={user?.user?.business_website_link}
+          defaultValue={data?.user?.business_website_link}
           type="text"
           placeholder="Website link"
           {...register("business_website_link")}
@@ -167,16 +174,16 @@ const UpdateProfile = () => {
 
         {/* Age Limit */}
         <input
-          defaultValue={user?.user?.edad}
+          defaultValue={data?.user?.age}
           type="text"
           placeholder="Límite de Edad"
-          {...register("edad")}
+          {...register("age")}
           className="w-full border-[2px] border-black p-4 lg:p-6"
         />
 
         {/* Menu */}
         <input
-          defaultValue={user?.user?.business_food_menu}
+          defaultValue={data?.user?.business_food_menu}
           type="text"
           placeholder="La Carta (Menú)"
           {...register("business_food_menu")}
@@ -185,7 +192,7 @@ const UpdateProfile = () => {
 
         {/* Phone */}
         <input
-          defaultValue={user?.user?.phone}
+          defaultValue={data?.user?.phone}
           type="text"
           placeholder="Teléfono"
           {...register("phone")}
@@ -195,15 +202,17 @@ const UpdateProfile = () => {
         {/* Show Phone */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Teléfono en el perfil</label>
-          <Switch
-
-            {...register("showPhone")}
-            className="
-            [&:not(.ant-switch-checked)]:!bg-gray-400
-            [&:not(.ant-switch-checked):hover]:!bg-gray-500
-            [&.ant-switch-checked]:!bg-black
-            [&.ant-switch-disabled]:!opacity-50"
-          />
+          <Controller
+    name="isShowPhone"
+    control={control}
+    defaultValue={data?.user?.isShowPhone} // default = visible (false on switch)
+    render={({ field: { value, onChange } }) => (
+      <Switch
+        checked={value === "0"} // ON when value is "0"
+        onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+      />
+    )}
+  />
         </div>
 
         {/* Email */}
@@ -220,19 +229,20 @@ const UpdateProfile = () => {
           />
          
         </div>
-
         {/* Show Email */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
-          <Switch
-      
-            {...register("showEmail")}
-            className="
-            [&:not(.ant-switch-checked)]:!bg-gray-400
-            [&:not(.ant-switch-checked):hover]:!bg-gray-500
-            [&.ant-switch-checked]:!bg-black
-            [&.ant-switch-disabled]:!opacity-50"
-          />
+          <Controller
+    name="isShowEmail"
+    control={control}
+    defaultValue={data?.user?.isShowEmail} // default = visible (false on switch)
+    render={({ field: { value, onChange } }) => (
+      <Switch
+        checked={value === "0"} // ON when value is "0"
+        onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+      />
+    )}
+  />
         </div>
 
         {/* Password */}
@@ -327,14 +337,14 @@ const UpdateProfile = () => {
         </div>
 
         {/* Terms */}
-        <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
+        {/* <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
           <input
             className="size-5 md:size-6 lg:size-7"
             type="checkbox"
             {...register("terms", )}
           />
         
-        </div>
+        </div> */}
 
         {/* Submit */}
         <div className="flex items-start justify-center gap-5 lg:mt-6">

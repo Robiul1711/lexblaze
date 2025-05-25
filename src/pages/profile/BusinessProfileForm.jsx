@@ -354,7 +354,7 @@
 // };
 
 // export default BusinessProfileForm;
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { Switch, Upload } from "antd";
@@ -377,6 +377,7 @@ const BusinessProfileForm = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     watch,
     setValue,
@@ -443,6 +444,7 @@ const BusinessProfileForm = () => {
       showEmail: formData.showEmail || false,
     };
     RegistrationMutation.mutate(submissionData);
+    console.log("All form data:", submissionData);
   };
 
   return (
@@ -529,9 +531,9 @@ const BusinessProfileForm = () => {
 
         {/* Age Limit */}
         <input
-          type="text"
+          type="number"
           placeholder="Límite de Edad"
-          {...register("edad")}
+          {...register("age")}
           className="w-full border-[2px] border-black p-4 lg:p-6"
         />
 
@@ -554,7 +556,17 @@ const BusinessProfileForm = () => {
         {/* Show Phone */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Teléfono en el perfil</label>
-          <Switch {...register("showPhone")} />
+          <Controller
+    name="isShowPhone"
+    control={control}
+    defaultValue="1" // default = visible (false on switch)
+    render={({ field: { value, onChange } }) => (
+      <Switch
+        checked={value === "0"} // ON when value is "0"
+        onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+      />
+    )}
+  />
         </div>
 
         {/* Email */}
@@ -575,7 +587,17 @@ const BusinessProfileForm = () => {
         {/* Show Email */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
-          <Switch {...register("showEmail")} />
+          <Controller
+            name="isShowEmail"
+            control={control}
+            defaultValue="1" // default = visible (false on switch)
+            render={({ field: { value, onChange } }) => (
+              <Switch
+                checked={value === "0"} // ON when value is "0"
+                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+              />
+            )}
+          />
         </div>
 
         {/* Password */}
