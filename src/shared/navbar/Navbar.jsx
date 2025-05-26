@@ -30,15 +30,17 @@ const Navbar = () => {
     }
   }, [pathname, setDate, date]);
 
-  const handleDateChange = (selectedDate) => {
-    if (selectedDate) {
-      const local = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
-      setDate(local.toISOString().split("T")[0]); // "YYYY-MM-DD"
-    } else {
-      setDate(null);
-    }
-    setDropdownVisible(false); // Close the dropdown after selection
-  };
+const handleDateChange = (selectedDate) => {
+  if (selectedDate) {
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    setDate(`${year}-${month}-${day}`); // "YYYY-MM-DD"
+  } else {
+    setDate(null);
+  }
+  setDropdownVisible(false);
+};
 
   return (
     <header className="bg-secondary w-full sticky top-0 z-40 text-primary section-padding-x py-2 flex justify-between items-center">

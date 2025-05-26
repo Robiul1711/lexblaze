@@ -42,7 +42,6 @@ const ForgotPassword = () => {
   const onSubmit = (data) => {
     setEmail(data?.email)
     setIsSubmitting(true); // Set loading to true
-    console.log("Form Data:", data);
     ForgotMutation.mutate(data);
   };
 

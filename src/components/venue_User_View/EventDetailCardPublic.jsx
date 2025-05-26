@@ -91,7 +91,7 @@ const EventDetailCardPublic = () => {
           </div>
           <div className="flex items-center gap-2 ">
             <button
-              className="rounded-full xlg:text-[20px] font-semibold flex items-center hover:text-blue-500 duration-200 justify-center gap-2"
+              className="rounded-full xlg:text-[20px] font-semibold flex items-center hover:text-blue-500 duration-200 justify-center gap-1"
               onClick={handleCallButtonClick}
             >
               <PhoneIcon />
@@ -112,7 +112,7 @@ const EventDetailCardPublic = () => {
           >
             Website
           </a>
-          <Title24>Edad: {data?.user?.business_age}</Title24>
+          <Title24>Edad {data?.user?.age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>

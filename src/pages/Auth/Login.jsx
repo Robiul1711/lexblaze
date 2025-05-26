@@ -43,7 +43,6 @@ const Login = () => {
   });
   const onSubmit = (data) => {
     setIsSubmitting(true); // Set loading to true
-    console.log("Form Data:", data);
     LogInMutation.mutate(data);
   };
 

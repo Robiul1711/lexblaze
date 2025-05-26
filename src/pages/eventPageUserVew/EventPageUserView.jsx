@@ -20,7 +20,7 @@ const EventPageUserView = () => {
       return response.data;
     },
   });
-  console.log(data);
+
   return (
     <div className="section-padding-x ">
       {/* Title  */}

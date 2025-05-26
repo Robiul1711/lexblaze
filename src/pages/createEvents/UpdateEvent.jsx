@@ -55,7 +55,6 @@ const UpdateEvent = () => {
     handleSubmit,
     setValue,
     control,
-    formState: { errors },
   } = useForm();
 
   const [startTime, setStartTime] = useState(null);
@@ -63,7 +62,6 @@ const UpdateEvent = () => {
   const [fileList, setFileList] = useState([]);
   const [fileList2, setFileList2] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageError, setImageError] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const { data } = useQuery({
@@ -73,10 +71,9 @@ const UpdateEvent = () => {
       return response.data;
     },
   });
-console.log("data", data);
+
   useEffect(() => {
     if (data?.events) {
-      // Set form values from fetched data
       const event = data.events;
       setValue("business_name", event.business_name);
       setValue("event_title", event.event_title);
@@ -87,24 +84,23 @@ console.log("data", data);
       setValue("business_website_link", event.business_website_link);
       
       // Set dates
-      if (event.event_date) {
-        setValue("event_date", event.event_date.map(date => dayjs(date).toDate()));
+      if (event.event_dates && event.event_dates.length > 0) {
+        const dates = event.event_dates.map(dateObj => new Date(dateObj.date));
+        setValue("event_date", dates);
       }
       
       // Set times
       if (event.event_start_time) {
         const start = dayjs(event.event_start_time, "HH:mm");
         setStartTime(start);
-        setValue("event_start_time", start);
       }
       if (event.event_end_time) {
         const end = dayjs(event.event_end_time, "HH:mm");
         setEndTime(end);
-        setValue("event_end_time", end);
       }
       
       // Set categories
-      if (event.categories) {
+      if (event.categories && event.categories.length > 0) {
         const defaultCategories = event.categories.map(cat => cat.id.toString());
         setSelectedCategories(defaultCategories);
         setValue("category_id", defaultCategories);
@@ -132,7 +128,32 @@ console.log("data", data);
 
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
-      const response = await axiosSecure.post(`/event/update/${id}`, formData, {
+      const formDataToSend = new FormData();
+      
+      // Append all fields to formData
+      Object.keys(formData).forEach(key => {
+        if (key === 'event_date') {
+          formData[key].forEach(date => {
+            formDataToSend.append('event_date[]', dayjs(date).format('YYYY-MM-DD'));
+          });
+        } else if (key === 'category_id') {
+          formData[key].forEach(catId => {
+            formDataToSend.append('category_id[]', catId);
+          });
+        } else if (key !== 'event_thumb_image' && key !== 'flyer') {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+      
+      // Append files if they exist
+      if (fileList[0]?.originFileObj) {
+        formDataToSend.append('event_thumb_image', fileList[0].originFileObj);
+      }
+      if (fileList2[0]?.originFileObj) {
+        formDataToSend.append('flyer', fileList2[0].originFileObj);
+      }
+
+      const response = await axiosSecure.post(`/event/update/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -160,7 +181,6 @@ console.log("data", data);
 
   const handleThumbImageChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    if (newFileList.length > 0) setImageError("");
   };
 
   const handleRemoveImage = (type) => {
@@ -168,43 +188,27 @@ console.log("data", data);
       setFileList2([]);
     } else {
       setFileList([]);
-      setImageError("");
     }
   };
 
   const onSubmit = async (data) => {
-    if (fileList.length === 0) {
-      setImageError("Se requiere una imagen para el evento.");
-      setIsSubmitting(false);
-      return;
-    } else {
-      setImageError("");
-    }
-
     setIsSubmitting(true);
+    
     const updatedData = {
       ...data,
-      event_date: data?.event_date?.map((date) => 
-        `${date.year}-${String(date.month.number).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`
-      ),
-      event_start_time: dayjs(startTime).format("HH:mm"),
-      event_end_time: dayjs(endTime).format("HH:mm"),
-      event_thumb_image: fileList[0]?.originFileObj || (fileList[0]?.url ? null : undefined),
-      flyer: fileList2[0]?.originFileObj || (fileList2[0]?.url ? null : undefined),
+      event_start_time: startTime ? dayjs(startTime).format("HH:mm") : null,
+      event_end_time: endTime ? dayjs(endTime).format("HH:mm") : null,
     };
 
     createEventMutation.mutate(updatedData);
-    console.log("Form Data:", updatedData);
   };
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
-    setValue("event_start_time", time);
   };
 
   const handleEndTimeChange = (time) => {
     setEndTime(time);
-    setValue("event_end_time", time);
   };
 
   const handleCategoryChange = (selectedOptions) => {
@@ -236,7 +240,6 @@ console.log("data", data);
               maxCount={1}
               disabled={isSubmitting}
               onRemove={() => handleRemoveImage('flyer')}
-           
             >
               {fileList2.length < 1 && <UploadIcons />}
             </Upload>
@@ -246,23 +249,23 @@ console.log("data", data);
           </div>
 
           <div className="relative mt-4">
-<Controller
-  name="event_date"
-  control={control}
-  render={({ field }) => (
-    <DatePicker
-      placeholder="Elija Fecha"
-      containerClassName="w-full"
-      inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-      multiple
-      value={field.value || data?.events?.event_dates?.map(dateObj => new Date(dateObj.date)) || []}
-      onChange={(dates) => {
-        field.onChange(dates);
-      }}
-      format={dateFormat}
-    />
-  )}
-/>
+            <Controller
+              name="event_date"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  placeholder="Elija Fecha"
+                  containerClassName="w-full"
+                  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+                  multiple
+                  value={field.value || []}
+                  onChange={(dates) => {
+                    field.onChange(dates);
+                  }}
+                  format={dateFormat}
+                />
+              )}
+            />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
               <InputCalenderIcons />
             </div>
@@ -279,7 +282,6 @@ console.log("data", data);
               format="HH:mm"
               size="large"
               className="p-6 pr-2 w-full border-2 border-black rounded-md"
-       
               showNow={false} 
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
@@ -297,7 +299,6 @@ console.log("data", data);
               format="HH:mm"
               size="large"
               className="p-6 pr-2 w-full border-2 border-black rounded-md"
-              
               showNow={false} 
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
@@ -425,8 +426,6 @@ console.log("data", data);
             >
               {fileList.length < 1 && <UploadIcons />}
             </Upload>
-
-            {imageError && <p className="text-red-500">{imageError}</p>}
             
             <p
               type="button"

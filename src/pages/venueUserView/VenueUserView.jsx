@@ -48,7 +48,7 @@ const VenueUserView = () => {
       setCurrentPage(currentPage - 1);
     }
   };
-console.log(visibleCards)
+// console.log(visibleCards)
   return (
     <div className="section-padding-x min-h-screen h-full ">
       <div className="flex flex-col lg:flex-row justify-center xl:justify-between w-full gap-6 ">

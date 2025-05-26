@@ -141,8 +141,8 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         </h2>
                       )}
                       {item.business_address && (
-                        <p className="flex items-center gap-2  text-primary  font-semibold z-50 hover:underline">
-                          <MapPin className="size-5 md:size-6 xlg:size-7" />
+                        <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
+                          <MapPin className="size-5 md:size-6 " />
                           <p className="sm:text-lg">{item.business_address}</p>
                         </p>
                       )}
