@@ -8,64 +8,63 @@ const TopBanner = ({ data }) => {
   const { user } = useAuth();
 
   // const linkPath = user ? "/venue-profile-edit" : "/venue-user-view";
-  // Hasta and Todo Los const 
+  // Hasta and Todo Los const
   const getEventDateLabel = (eventDates) => {
-  if (!eventDates || eventDates.length === 0) return null;
+    if (!eventDates || eventDates.length === 0) return null;
 
-  const dates = eventDates
-    .map((d) => new Date(d?.date))
-    .filter((d) => d instanceof Date && !isNaN(d))
-    .sort((a, b) => a - b);
+    const dates = eventDates
+      .map((d) => new Date(d?.date))
+      .filter((d) => d instanceof Date && !isNaN(d))
+      .sort((a, b) => a - b);
 
-  if (dates.length === 0) return null;
+    if (dates.length === 0) return null;
 
-  const formatDate = (date) =>
-    date.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    const formatDate = (date) =>
+      date.toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
 
-  if (dates.length === 1) {
-    return formatDate(dates[0]);
-  }
-
-  const allSameDay = dates.every(
-    (date) => date.getDay() === dates[0].getDay()
-  );
-
-  if (allSameDay) {
-    const weekdaysES = [
-      "Domingos",
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes",
-      "Sábados",
-    ];
-    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-  }
-
-  // Check if dates form a continuous range (no missing days)
-  let isContinuous = true;
-  for (let i = 1; i < dates.length; i++) {
-    const diffInDays =
-      (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-    if (diffInDays !== 1) {
-      isContinuous = false;
-      break;
+    if (dates.length === 1) {
+      return formatDate(dates[0]);
     }
-  }
 
-  if (isContinuous) {
-    const last = dates[dates.length - 1];
-    return `Hasta ${formatDate(last)}`;
-  }
+    const allSameDay = dates.every(
+      (date) => date.getDay() === dates[0].getDay()
+    );
 
-  // Random non-continuous dates – just return last date without prefix
-  return formatDate(dates[dates.length - 1]);
-};
+    if (allSameDay) {
+      const weekdaysES = [
+        "Domingos",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábados",
+      ];
+      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+    }
+
+    // Check if dates form a continuous range (no missing days)
+    let isContinuous = true;
+    for (let i = 1; i < dates.length; i++) {
+      const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+      if (diffInDays !== 1) {
+        isContinuous = false;
+        break;
+      }
+    }
+
+    if (isContinuous) {
+      const last = dates[dates.length - 1];
+      return `Hasta ${formatDate(last)}`;
+    }
+
+    // Random non-continuous dates – just return last date without prefix
+    return formatDate(dates[dates.length - 1]);
+  };
 
   return (
     <div className="flex flex-col  mx-auto w-full">
@@ -94,38 +93,50 @@ const TopBanner = ({ data }) => {
             {user ? (
               <Link
                 to={`/venue-profile-edit`}
-                className="flex items-center gap-2 hover:underline text-primary font-semibold"
+                className="flex items-center gap-1 hover:underline text-primary font-semibold"
               >
-                <MapPin className="size-5 sm:size-6 xlg:size-7" />
+                <MapPin className="size-5 sm:size-6 " />
                 <p className="lg:text-lg">{data?.business_address}</p>
               </Link>
             ) : (
               <Link
                 to={`/venue-user-view/${data?.user_id}`}
-                className="flex items-center gap-2 hover:underline text-primary font-semibold"
+                className="flex items-center gap-1 hover:underline text-primary font-semibold"
               >
-                <MapPin className="size-5 sm:size-6 xlg:size-7" />
+                <MapPin className="size-5 sm:size-6 " />
                 <p className="lg:text-lg">{data?.business_address}</p>
               </Link>
             )}
+            <div className="flex items-start gap-2 font-semibold text-white">
+              <p>{data?.event_dates?.[0]?.date}</p>
+
+              {data?.event_dates?.length > 1 &&
+                data?.event_dates[0]?.date !==
+                  data?.event_dates[data.event_dates.length - 1]?.date && (
+                  <>
+                    <span>to</span>
+                    <p>
+                      {data?.event_dates[data.event_dates.length - 1]?.date}
+                    </p>
+                  </>
+                )}
+            </div>
+
             <div className="flex  items-start gap-2 font-semibold text-white">
-              <p>{data?.event_dates && data?.event_dates[0]?.date}</p>
-              {data?.event_dates && data?.event_dates.length > 1 && (
-                <span>to</span>
-              )}
+              <p>
+                {data?.event_start_time === "Invalid Date"
+                  ? ""
+                  : data?.event_start_time}
+              </p>
+              {data?.event_end_time === "Invalid Date"
+                ? ""
+                : data?.event_end_time && <span>to</span>}
 
               <p>
-                {data?.event_dates &&
-                  data?.event_dates[data?.event_dates.length - 1]?.date}
+                {data?.event_end_time === "Invalid Date"
+                  ? ""
+                  : data?.event_end_time}
               </p>
-            </div>
-            <div className="flex  items-start gap-2 font-semibold text-white">
-              <p>{data?.event_start_time ? data?.event_start_time : "N/A"}</p>
-              {data?.event_start_time && (
-                <span>to</span>
-              )}
-
-              <p>{data?.event_end_time ? data?.event_end_time : "N/A"}</p>
             </div>
           </div>
         </div>
@@ -139,7 +150,7 @@ const TopBanner = ({ data }) => {
           to={data?.business_website_link}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-[#000] py-2 rounded-xl my-3 px-4 w-full text-xl font-semibold text-white"
+          className="bg-[#000] hover:text-blue-500 duration-300 py-2 rounded-xl my-3 px-4 w-full text-xl font-semibold text-white"
         >
           ENTRADAS
         </Link>

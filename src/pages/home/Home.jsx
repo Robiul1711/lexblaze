@@ -29,7 +29,6 @@ const Home = () => {
       return response.data;
     },
   });
-console.log(data)
   return (
     <div className="section-padding-x lg:mb-[60px]">
       {/* Title */}

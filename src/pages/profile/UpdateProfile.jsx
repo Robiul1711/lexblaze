@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Title48 from "@/components/common/Title48";
 import { Switch, Upload, message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +91,7 @@ const UpdateProfile = () => {
 
 
   const onSubmit = (formData) => {
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
     const { image, ...restData } = formData;
 
     // Prepare the complete data object
@@ -102,10 +102,18 @@ const UpdateProfile = () => {
       showEmail: formData.showEmail || false,
     };
 
-    console.log("All form data:", submissionData);
+    // console.log("All form data:", submissionData);
     RegistrationMutation.mutate(submissionData);
   };
-  console.log(data?.user);
+
+
+  useEffect(() => {
+    if (data?.user) {
+      setValue("isShowPhone", data.user.isShowPhone === "true" ? "0" : "1");
+      setValue("isShowEmail", data.user.isShowEmail === "true" ? "0" : "1");
+    }
+  }, [data?.user]);
+
   return (
     <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-10 lg:mb-8">
@@ -205,7 +213,7 @@ const UpdateProfile = () => {
           <Controller
     name="isShowPhone"
     control={control}
-    defaultValue={data?.user?.isShowPhone} // default = visible (false on switch)
+    // defaultValue={data?.user?.isShowPhone === 'true' ? "0" : "1"} // default = visible (false on switch)
     render={({ field: { value, onChange } }) => (
       <Switch
         checked={value === "0"} // ON when value is "0"
@@ -229,13 +237,14 @@ const UpdateProfile = () => {
           />
          
         </div>
+        {console.log(data?.user)}
         {/* Show Email */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
           <Controller
     name="isShowEmail"
     control={control}
-    defaultValue={data?.user?.isShowEmail} // default = visible (false on switch)
+    // defaultValue={data?.user?.isShowEmail === "true" ? "0" : "1"} // default = visible (false on switch)
     render={({ field: { value, onChange } }) => (
       <Switch
         checked={value === "0"} // ON when value is "0"

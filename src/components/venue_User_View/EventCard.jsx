@@ -222,8 +222,8 @@ const EventCard = ({ visibleCards }) => {
                       )}
                     </div>
                     <div className="flex items-center justify-between text-primary font-semibold">
-                      <div onClick={() => navigate(`/event-user-view/${item.id}`)} className="flex items-center gap-2 hover:underline cursor-pointer">
-                        <MapPin className="size-7" />
+                      <div onClick={() => navigate(`/event-user-view/${item.id}`)} className="flex items-center gap-1 hover:underline cursor-pointer">
+                        <MapPin className="size-5 lg:size-6" />
                         <p className="xlg:text-lg">{item.business_address}</p>
                       </div>
                       {pathname === "/venue-profile-edit" && (

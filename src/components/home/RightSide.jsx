@@ -21,12 +21,12 @@ const RightSide = () => {
       {isLoading ? (
         pathname === "/about-us" && <LoadingSpinner />
       ) : error ? (
-        <p className="text-red-500 font-semibold text-center my-4">
+        <p className="text-red-500 font-semibold text-center my-3">
           Failed to load ads. Please try again later.
         </p>
       ) : (
         <>
-          <p className="bg-[#D40000] xlg:py-3 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-bold xl:text-xl text-white">
+          <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
             EVENTOS DESTACADOS
           </p>
          {data?.length === 1 ? (
