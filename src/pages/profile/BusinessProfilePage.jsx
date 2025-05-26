@@ -34,8 +34,9 @@ const BusinessProfilePage = () => {
   return (
     <div className="container mx-auto p-4">
       {/* Terms and Conditions Modal - Removed close button */}
-      <Dialog open={showTermsModal} onOpenChange={() => {}}>
-        <DialogContent className="border-4 border-[#000e8e] max-h-[90vh] overflow-hidden sm:max-w-[700px] rounded-lg">
+      <Dialog open={showTermsModal} className="">
+        <DialogContent className="border-4  border-[#000e8e] max-h-[90vh] overflow-hidden sm:max-w-[700px] rounded-lg">
+        <div className='size-9 rounded-2xl !bg-[#fff] z-50   absolute top-1 right-1'></div>
           <DialogHeader>
             <DialogTitle className="text-3xl mb-6 font-bold text-center text-[#000e8e]">
               Términos y Condiciones
