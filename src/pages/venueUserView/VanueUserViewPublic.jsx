@@ -69,10 +69,10 @@ console.log(visibleCards)
             isLoading ? "" : "lg:bg-[#FFFBE0] "
           } `}
         >
-          <div className="text-center mt-4 px-5">
+          <div className="text-center mt-2 px-5">
             <Title48 title2={visibleCards[0]?.business_name} />
           </div>
-          <div className="mt-2 h-screen overflow-y-auto scrollbar-hide lg:px-5">
+          <div className="mt-1  h-screen overflow-y-auto scrollbar-hide lg:px-5">
             <EventDetailCardPublic />
             <EventCardPublic visibleCards={visibleCards} />
           </div>

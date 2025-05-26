@@ -83,7 +83,7 @@ console.log(data)
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
-        {console.log(data?.user)}
+
         <div className="flex justify-between items-center flex-wrap gap-4">
           {data?.user?.isShowEmail==='true' ? null : (
             <div className="flex items-center gap-2 xlg:gap-3">
@@ -96,7 +96,7 @@ console.log(data)
             null
           ) : <div className="flex items-center gap-2 xlg:gap-3">
               <button
-                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-1"
                 onClick={handleCallButtonClick}
               >
                 <PhoneIcon />
@@ -104,7 +104,7 @@ console.log(data)
               </button>
             </div>}
 
-          <div className="flex items-center gap-2 xlg:gap-3">
+          <div className="flex items-center gap-1 xlg:gap-3">
             <MenuIcon />
             <Title24>{data?.user?.business_food_menu}</Title24>
           </div>
