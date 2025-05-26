@@ -68,7 +68,7 @@ const EventDetailCardPublic = () => {
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-4">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-2 xlg:gap-3">
+          <div className="flex items-center gap-2 ">
             <RedLocationIcon />
             <Title24>{data?.user?.business_address}</Title24>
           </div>
@@ -80,30 +80,36 @@ const EventDetailCardPublic = () => {
           )}
         </div>
 
-        <div className="flex  items-center gap-2 xlg:gap-3">
+        <div className="flex  items-center gap-2 ">
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
         </div>
         <div className="flex justify-between items-center flex-wrap gap-4">
-          <div className="flex items-center gap-2 xlg:gap-3">
-            <MessageIcon />
-            <Title24>{data?.user?.email}</Title24>
-          </div>
-          <div className="flex items-center gap-2 ">
-            <button
-              className="rounded-full xlg:text-[20px] font-semibold flex items-center hover:text-blue-500 duration-200 justify-center gap-1"
-              onClick={handleCallButtonClick}
-            >
-              <PhoneIcon />
-              {showNumber ? phoneNumber : "Teléfono"}
-            </button>
-          </div>
-          <div className="flex items-center gap-2 xlg:gap-3">
+          {data?.user?.isShowEmail==='true' ? null : (
+            <div className="flex items-center gap-2 ">
+              <MessageIcon />
+              <Title24>{data?.user?.email}</Title24>
+            </div>
+          )}
+
+          {data?.user?.isShowPhone==='true' ? (
+            null
+          ) : <div className="flex items-center gap-2 ">
+              <button
+                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                onClick={handleCallButtonClick}
+              >
+                <PhoneIcon />
+                {showNumber ? phoneNumber : "Teléfono"}
+              </button>
+            </div>}
+
+          <div className="flex items-center gap-1 ">
             <MenuIcon />
             <Title24>{data?.user?.business_food_menu}</Title24>
           </div>
         </div>
-        <div className="flex justify-between items-center gap-2 xlg:gap-3">
+        <div className="flex justify-between items-center gap-2 ">
           <a
             href={data?.user?.business_website_link}
             target="_blank"

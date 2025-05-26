@@ -39,7 +39,7 @@ const AboutRigImg = () => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         loop={true}
-        className='w-full max-w-[320px] xs:max-w-[480px] xxs:max-w-[480px]  lg:max-w-[322px] xl:max-w-[480px] max-h-[424px]'
+        className='w-full max-w-[320px] xs:max-w-[480px] xxs:max-w-[480px]  lg:max-w-[322px] xl:max-w-[480px] max-h-[480px]'
       >
         {
           data?.events?.slice(0, 4)?.map((event, index) => (

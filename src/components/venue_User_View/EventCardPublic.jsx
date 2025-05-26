@@ -164,11 +164,10 @@ const EventCardPublic = ({ visibleCards }) => {
               <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
                 {formattedDate}
               </h1>
-          {    console.log(item.event_dates)}
               <div className="relative rounded overflow-hidden shadow-lg mb-5 max-w-[625px] mx-auto w-full sm:mb-7 xlg:mb-10">
                 <div className="h-[200px] sm:h-[250px]">
                   <img
-                    src={item.event_thumb_image}
+                    src={item?.flyer}
                     alt={item.title}
                     className="w-full h-full object-fill"
                   />

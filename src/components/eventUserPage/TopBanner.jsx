@@ -72,7 +72,7 @@ const TopBanner = ({ data }) => {
         <img
           src={data?.flyer ? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
-          className="w-full  max-h-[200px] sm:max-h-[250px] "
+          className="w-full  max-h-[200px] sm:max-h-[230px] xl:max-h-[250px] "
         />
         <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6  flex  flex-col ">
           {data.event_dates && data.event_dates.length > 0 && (
