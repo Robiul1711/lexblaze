@@ -559,7 +559,7 @@ const BusinessProfileForm = () => {
           <Controller
     name="isShowPhone"
     control={control}
-    defaultValue="1" // default = visible (false on switch)
+    defaultValue="0" // default = visible (false on switch)
     render={({ field: { value, onChange } }) => (
       <Switch
         checked={value === "0"} // ON when value is "0"
@@ -585,20 +585,21 @@ const BusinessProfileForm = () => {
         </div>
 
         {/* Show Email */}
-        <div className="flex items-center justify-between font-bold lg:text-2xl">
-          <label>*Mostrar Correo en el perfil</label>
-          <Controller
-            name="isShowEmail"
-            control={control}
-            defaultValue="1" // default = visible (false on switch)
-            render={({ field: { value, onChange } }) => (
-              <Switch
-                checked={value === "0"} // ON when value is "0"
-                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
-              />
-            )}
-          />
-        </div>
+<div className="flex items-center justify-between font-bold lg:text-2xl">
+  <label>*Mostrar Correo en el perfil</label>
+  <Controller
+    name="isShowEmail"
+    control={control}
+    defaultValue="0" // Switch is ON (checked) by default
+    render={({ field: { value, onChange } }) => (
+      <Switch  
+        checked={value === "0"} // ON when value is "0"
+        onChange={(checked) => onChange(checked ? "0" : "1")} // true → "0", false → "1"
+      />
+    )}
+  />
+</div>
+
 
         {/* Password */}
         <div className="relative">

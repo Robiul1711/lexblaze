@@ -31,6 +31,9 @@ const AboutRigImg = () => {
 
   return (
     <div  >
+         <p className="bg-[#D40000] xlg:py-3 w-full py-2 mb-3   rounded-md lg:rounded-xl text-sm text-center font-bold xl:text-xl text-white">
+                          EVENTOS DESTACADOS
+                        </p>
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -39,11 +42,12 @@ const AboutRigImg = () => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         loop={true}
-        className='w-full max-w-[320px] xs:max-w-[480px] xxs:max-w-[480px]  lg:max-w-[322px] xl:max-w-[480px] max-h-[480px]'
+        className='w-full max-w-[320px] xs:max-w-[480px] xxs:max-w-[480px]  lg:max-w-[322px] xl:max-w-[480px] max-h-[520px]'
       >
         {
           data?.events?.slice(0, 4)?.map((event, index) => (
             <SwiperSlide key={event.id || index} className='w-full h-full'>
+              
               <div className='w-full h-full'>
                 <img
                   src={event?.event_thumb_image}

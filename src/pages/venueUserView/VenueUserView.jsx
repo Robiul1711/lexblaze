@@ -97,7 +97,10 @@ const VenueUserView = () => {
               <p className="font-bold text-lg">Siguiente</p>
             </div>
           </div>
-          <div className="flex justify-center mb-5 lg:mb-[160px]">
+             <div className="lg:mt-10 mb-5  xlg:hidden">
+          <RightSide />
+        </div>
+          <div className="flex justify-center mb-5 sm:mb-[60px] lg:mb-[160px]">
           <AddSlider />
           </div>
         </div>

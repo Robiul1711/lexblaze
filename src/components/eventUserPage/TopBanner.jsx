@@ -65,16 +65,16 @@ const TopBanner = ({ data }) => {
     // Random non-continuous dates – just return last date without prefix
     return formatDate(dates[dates.length - 1]);
   };
-
+console.log(data);
   return (
     <div className="flex flex-col  mx-auto w-full">
-      <div className="relative rounded overflow-hidden shadow-lg">
+      <Link to={`/venue-user-view/${data?.user_id}`} className="relative rounded overflow-hidden shadow-lg">
         <img
           src={data?.flyer ? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
-          className="w-full  max-h-[200px] sm:max-h-[230px] xl:max-h-[250px] "
+          className="w-full  max-h-[200px] sm:max-h-[230px] xl:max-h-[250px] object-cover "
         />
-        <div className="absolute bg-black/60 top-0 left-0 w-full h-full p-6  flex  flex-col ">
+        <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-3  flex  flex-col ">
           {data.event_dates && data.event_dates.length > 0 && (
             <div className="absolute top-0 right-0">
               <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
@@ -91,21 +91,21 @@ const TopBanner = ({ data }) => {
               {data?.event_title}
             </h2>
             {user ? (
-              <Link
-                to={`/venue-profile-edit`}
+              <p
+                // to={`/venue-profile-edit`}
                 className="flex items-center gap-1 hover:underline text-primary font-semibold"
               >
                 <MapPin className="size-5 sm:size-6 " />
-                <p className="lg:text-lg">{data?.business_address}</p>
-              </Link>
+                <p className="lg:text-lg">{data?.user?.business_name}</p>
+              </p>
             ) : (
-              <Link
-                to={`/venue-user-view/${data?.user_id}`}
-                className="flex items-center gap-1 hover:underline text-primary font-semibold"
+              <p
+                
+                className="flex items-center gap-1  text-primary font-semibold"
               >
                 <MapPin className="size-5 sm:size-6 " />
-                <p className="lg:text-lg">{data?.business_address}</p>
-              </Link>
+                <p className="lg:text-lg">{data?.user?.business_name}</p>
+              </p>
             )}
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>{data?.event_dates?.[0]?.date}</p>
@@ -135,12 +135,12 @@ const TopBanner = ({ data }) => {
               <p>
                 {data?.event_end_time === "Invalid Date"
                   ? ""
-                  : data?.event_end_time}
+                  :data?.event_end_time}
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
 
       <p className="bg-[#0E1060] py-2 px-4 w-full  lg:text-xl font-semibold text-white">
         Más Detalles del Evento

@@ -15,20 +15,19 @@ import { useParams } from "react-router-dom";
 import EventDetailCardPublic from "@/components/venue_User_View/EventDetailCardPublic";
 import EventCardPublic from "@/components/venue_User_View/EventCardPublic";
 
-
 const VanueUserViewPublic = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
-  const [currentPage, setCurrentPage] = useState(0); // Moved before any conditional returns
-  const {user_id}=useParams();
+  const [currentPage, setCurrentPage] = useState(0);
+  const { user_id } = useParams();
+
   const { data, isLoading } = useQuery({
-    queryKey: ["profileEventsData"],
+    queryKey: ["profileEventsData", user_id],
     queryFn: async () => {
-      const response = await axiosPublic.get("specificUser/event/show/"+user_id);
+      const response = await axiosPublic.get("specificUser/event/show/" + user_id);
       return response.data;
     },
   });
-
 
   const cardsPerPage = 3;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
@@ -48,75 +47,81 @@ const VanueUserViewPublic = () => {
       setCurrentPage(currentPage - 1);
     }
   };
-console.log(visibleCards)
+
   return (
-    <div className="section-padding-x ">
+    <div className="section-padding-x">
       <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-5">
-        {/* Leftside */}
-        <div className="mt-10 w-[45%] hidden xlg:block">
-          <LeftSide />
-        </div>
         
-        {/* Middle */}
-        {
-          isLoading ? (
-           <div className="w-full  flex justify-center items-center"><LoadingSpinner /></div>
-          )
-          :
-          // <div className={`lg:bg-[#FFFBE0] lg:px-6 xlg:px-10`}>
-              <div
-          className={` max-w-[550px] xl:max-w-[680px] w-full mx-auto lg:bg-[#FFFBE0] ${
-            isLoading ? "" : "lg:bg-[#FFFBE0] "
-          } `}
-        >
-          <div className="text-center mt-2 px-5">
-            <Title48 title2={visibleCards[0]?.business_name} />
-          </div>
-          <div className="mt-1  h-screen overflow-y-auto scrollbar-hide lg:px-5">
-            <EventDetailCardPublic />
-            <EventCardPublic visibleCards={visibleCards} />
-          </div>
-          <div className="flex justify-between items-center py-10 px-5">
-            <div className="flex flex-col items-center gap-2">
-              <button
-                className={`p-1 rounded-full border-[2px] border-black ${
-                  currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={handlePrev}
-                disabled={currentPage === 0}
-              >
-                <ChevronLeft />
-              </button>
-              <p className="font-bold text-lg">Atrás</p>
-            </div>
-            <div className="text-gray-600">
-              Página {currentPage + 1} de {totalPages}
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <button
-                className={`p-1 rounded-full border-[2px] border-black ${
-                  currentPage === totalPages - 1
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                onClick={handleNext}
-                disabled={currentPage === totalPages - 1}
-              >
-                <ChevronRight />
-              </button>
-              <p className="font-bold text-lg">Siguiente</p>
-            </div>
-          </div>
-          <div className="flex justify-center mb-20 sm:mb-28 lg:mb-[160px]">
-          <AddSlider />
+        {/* Left Side */}
+        <div className="hidden max-w-[30%] xlg:block  ">
+          <div className="mt-10  top-10">
+            <LeftSide />
           </div>
         </div>
-        }
-    
-        
-        {/* Rightside */}
-        <div className="lg:mt-10 mb-32 hidden w-[45%] xlg:block">
-          <RightSide />
+
+        {/* Middle Content */}
+        <div className={` max-w-[550px] xl:max-w-[680px] w-full  mx-auto ${isLoading ? "" : "lg:bg-[#FFFBE0]"} sm:px-6`}>
+          {isLoading ? (
+            <div className="w-full min-h-[50vh] flex justify-center items-center">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            <>
+              {/* Top debug/info section */}
+              <div className="text-center mt-2">
+                {console.log(visibleCards[0])}
+              </div>
+
+              {/* Scroll content removed - now naturally scrolls */}
+              <div className="mt-4 space-y-6">
+                <EventDetailCardPublic />
+                <EventCardPublic visibleCards={visibleCards} />
+              </div>
+
+              {/* Pagination */}
+              <div className="flex justify-between items-center py-10">
+                <div className="flex flex-col items-center gap-2">
+                  <button
+                    className={`p-1 rounded-full border-[2px] border-black ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={handlePrev}
+                    disabled={currentPage === 0}
+                  >
+                    <ChevronLeft />
+                  </button>
+                  <p className="font-bold text-lg">Atrás</p>
+                </div>
+                <div className="text-gray-600 font-semibold">
+                  Página {currentPage + 1} de {totalPages}
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <button
+                    className={`p-1 rounded-full border-[2px] border-black ${currentPage === totalPages - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={handleNext}
+                    disabled={currentPage === totalPages - 1}
+                  >
+                    <ChevronRight />
+                  </button>
+                  <p className="font-bold text-lg">Siguiente</p>
+                </div>
+              </div>
+
+              {/* Advertisement */}
+              <div className="flex justify-center flex-col gap-3 mb-12 sm:mb-28 lg:mb-[120px]">
+                <div className="xlg:hidden">
+
+                <RightSide />
+                </div>
+                <AddSlider />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Right Side */}
+        <div className="hidden max-w-[30%] xlg:block ">
+          <div className="mt-10  top-10">
+            <RightSide />
+          </div>
         </div>
       </div>
     </div>

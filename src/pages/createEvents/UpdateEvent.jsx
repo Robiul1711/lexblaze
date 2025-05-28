@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import InstuctionModal from "@/components/common/InstuctionModal";
 import DatePicker from "react-multi-date-picker";
+import { CircleX } from "lucide-react";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
@@ -247,29 +248,44 @@ const UpdateEvent = () => {
               Carga Imagen de Fondo
             </p>
           </div>
+<div className="relative mt-4">
+  <Controller
+    name="event_date"
+    control={control}
+    render={({ field }) => (
+      <>
+        <DatePicker
+          placeholder="Elija Fecha"
+          containerClassName="w-full"
+          inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+          multiple
+          value={field.value || []}
+          onChange={(dates) => {
+            field.onChange(dates);
+          }}
+          format={dateFormat}
+        />
 
-          <div className="relative mt-4">
-            <Controller
-              name="event_date"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  placeholder="Elija Fecha"
-                  containerClassName="w-full"
-                  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-                  multiple
-                  value={field.value || []}
-                  onChange={(dates) => {
-                    field.onChange(dates);
-                  }}
-                  format={dateFormat}
-                />
-              )}
-            />
-            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 pointer-events-none">
-              <InputCalenderIcons />
-            </div>
-          </div>
+        {/* Calendar Icon */}
+        <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
+          <InputCalenderIcons />
+        </div>
+
+        {/* Reset/Clear Button */}
+        {field.value && field.value.length > 0 && (
+          <button
+            type="button"
+            className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-red-500 focus:outline-none"
+            onClick={() => field.onChange([])}
+          >
+            <CircleX />
+          </button>
+        )}
+      </>
+    )}
+  />
+</div>
+
         </section>
 
         {/* Time Section */}
@@ -291,22 +307,23 @@ const UpdateEvent = () => {
             </div>
           </div>
 
-          <div className="relative">
-            <TimePicker
-              value={endTime}
-              placeholder="Hora Fin"
-              onChange={handleEndTimeChange}
-              format="HH:mm"
-              size="large"
-              className="p-6 pr-2 w-full border-2 border-black rounded-md"
-              showNow={false} 
-            />
-            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
-              <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
-                {endTime ? dayjs(endTime).format("HH:mm") : "00:00"}
-              </p>
-            </div>
-          </div>
+ <div className="relative">
+  <TimePicker
+    value={dayjs(endTime).isValid() ? dayjs(endTime) : dayjs("00:00", "HH:mm")}
+    placeholder="Hora Fin"
+    onChange={handleEndTimeChange}
+    format="HH:mm"
+    size="large"
+    className="p-6 pr-2 w-full border-2 border-black rounded-md"
+    showNow={false}
+  />
+  <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
+    <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
+      {dayjs(endTime).isValid() ? dayjs(endTime).format("HH:mm") : "00:00"}
+    </p>
+  </div>
+</div>
+
         </section>
 
         {/* Event Details Section */}
@@ -444,14 +461,14 @@ const UpdateEvent = () => {
         <div className="flex justify-center gap-10 mt-8">
           <button 
             onClick={() => navigate(-1)} 
-            className="bg-red-500 duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[20px] text-sm lg:text-2xl font-bold"
+            className="bg-red-500 duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[20px] transition duration-300 flex items-center justify-center gap-2 ${
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[12px] transition duration-300 flex items-center justify-center gap-2 ${
               isSubmitting ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >

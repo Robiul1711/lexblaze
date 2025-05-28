@@ -13,9 +13,9 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const UpdateProfile = () => {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
@@ -89,7 +89,6 @@ const UpdateProfile = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-
   const onSubmit = (formData) => {
     // console.log("Form Data:", formData);
     const { image, ...restData } = formData;
@@ -106,34 +105,29 @@ const UpdateProfile = () => {
     RegistrationMutation.mutate(submissionData);
   };
 
-
   useEffect(() => {
     if (data?.user) {
       setValue("isShowPhone", data.user.isShowPhone === "true" ? "0" : "1");
       setValue("isShowEmail", data.user.isShowEmail === "true" ? "0" : "1");
     }
   }, [data?.user]);
-
+console.log(errors)
   return (
     <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-10 lg:mb-8">
         <Title48 title2=" Actualizar Perfil de Negocio" />
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 "
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 ">
         {/* Business Name */}
         <div>
           <input
-           defaultValue={data?.user?.business_name}
+            defaultValue={data?.user?.business_name}
             type="text"
             placeholder="Nombre del Negocio"
-            {...register("business_name", )}
+            {...register("business_name")}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-   
         </div>
 
         {/* Business Description */}
@@ -141,10 +135,9 @@ const UpdateProfile = () => {
           <textarea
             defaultValue={data?.user?.business_details}
             placeholder="Descripción del Negocio"
-            {...register("business_details",)}
+            {...register("business_details")}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
-      
         </div>
 
         {/* Address */}
@@ -153,10 +146,9 @@ const UpdateProfile = () => {
             defaultValue={data?.user?.business_address}
             type="text"
             placeholder="Dirección del Negocio"
-            {...register("business_address", )}
+            {...register("business_address")}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-       
         </div>
 
         {/* Schedule */}
@@ -165,10 +157,9 @@ const UpdateProfile = () => {
             defaultValue={data?.user?.business_time}
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
-            {...register("business_time",)}
+            {...register("business_time")}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          
         </div>
 
         {/* Website */}
@@ -211,16 +202,16 @@ const UpdateProfile = () => {
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Teléfono en el perfil</label>
           <Controller
-    name="isShowPhone"
-    control={control}
-    // defaultValue={data?.user?.isShowPhone === 'true' ? "0" : "1"} // default = visible (false on switch)
-    render={({ field: { value, onChange } }) => (
-      <Switch
-        checked={value === "0"} // ON when value is "0"
-        onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
-      />
-    )}
-  />
+            name="isShowPhone"
+            control={control}
+            // defaultValue={data?.user?.isShowPhone === 'true' ? "0" : "1"} // default = visible (false on switch)
+            render={({ field: { value, onChange } }) => (
+              <Switch
+                checked={value === "0"} // ON when value is "0"
+                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+              />
+            )}
+          />
         </div>
 
         {/* Email */}
@@ -230,28 +221,25 @@ const UpdateProfile = () => {
             disabled
             type="email"
             placeholder="Correo Electrónico"
-            {...register("email", {
-             
-            })}
+            {...register("email", {})}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-         
         </div>
         {console.log(data?.user)}
         {/* Show Email */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
           <Controller
-    name="isShowEmail"
-    control={control}
-    // defaultValue={data?.user?.isShowEmail === "true" ? "0" : "1"} // default = visible (false on switch)
-    render={({ field: { value, onChange } }) => (
-      <Switch
-        checked={value === "0"} // ON when value is "0"
-        onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
-      />
-    )}
-  />
+            name="isShowEmail"
+            control={control}
+            // defaultValue={data?.user?.isShowEmail === "true" ? "0" : "1"} // default = visible (false on switch)
+            render={({ field: { value, onChange } }) => (
+              <Switch
+                checked={value === "0"} // ON when value is "0"
+                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+              />
+            )}
+          />
         </div>
 
         {/* Password */}
@@ -266,13 +254,13 @@ const UpdateProfile = () => {
             <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
         </div> */}
-        
+
         {/* Password */}
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
-            {...register("password",)}
+            {...register("password")}
             className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
           />
           {/* Toggle Button */}
@@ -283,8 +271,6 @@ const UpdateProfile = () => {
           >
             {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
           </button>
-
-         
         </div>
 
         {/* Confirm Password */}
@@ -305,12 +291,12 @@ const UpdateProfile = () => {
             </p>
           )}
         </div> */}
-                <div className=" relative">
+        <div className=" relative">
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
-                          validate: (value) =>
+              validate: (value) =>
                 value === password || "Las contraseñas no coinciden",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
@@ -326,7 +312,6 @@ const UpdateProfile = () => {
               <EyeIcon size={20} />
             )}
           </button>
-         
         </div>
 
         {/* Image Upload */}
@@ -335,7 +320,7 @@ const UpdateProfile = () => {
             listType="picture-card"
             fileList={fileList}
             onChange={handleImageChange}
-              onPreview={onPreview}
+            onPreview={onPreview}
             beforeUpload={() => false} // Handle upload manually
             accept="image/*"
             multiple
@@ -357,11 +342,16 @@ const UpdateProfile = () => {
 
         {/* Submit */}
         <div className="flex items-start justify-center gap-5 lg:mt-6">
-          <button onClick={() => navigate(-1)} className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-11 rounded-[20px]">Cancle</button>
-            <button
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-11 rounded-[12px]"
+          >
+            Cancelar
+          </button>
+          <button
             type="submit"
             disabled={RegistrationMutation.isPending}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 md:px-xl  rounded-xl lg:rounded-[20px] transition-all duration-200
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 md:px-xl  rounded-xl lg:rounded-[12px] transition-all duration-200
     ${RegistrationMutation.isPending ? "opacity-60 cursor-not-allowed" : ""}
   `}
           >
@@ -386,7 +376,7 @@ const UpdateProfile = () => {
                     d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                   />
                 </svg>
-                Updating...
+                Actualizando...
               </span>
             ) : (
               "Update"

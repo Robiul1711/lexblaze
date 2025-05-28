@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useLocation } from "react-router-dom";
 
 const AddSlider = () => {
     const axiosPublic=useAxiosPublic();
@@ -19,9 +20,9 @@ const AddSlider = () => {
         },
       });
 
-      console.log(data);
+const {pathname}=useLocation();
   return (
-    <div className="w-full lg:max-w-[500px] xl:max-w-[600px] h-[180px] ">
+    <div className={`w-full lg:max-w-[500px] xl:max-w-[600px] ${pathname === "/" ? "h-[180px] xxs:h-[200px] sm:h-[300px] md:h-[350px] lg:h-[180px]" : "h-[100px] lg:h-[180px]"}  `} >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}

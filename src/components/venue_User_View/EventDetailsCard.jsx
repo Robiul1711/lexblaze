@@ -85,14 +85,14 @@ console.log(data)
         </div>
 
         <div className="flex justify-between items-center flex-wrap gap-4">
-          {data?.user?.isShowEmail==='true' ? null : (
+          {data?.user?.isShowEmail==='false' ? null : (
             <div className="flex items-center gap-2 xlg:gap-3">
               <MessageIcon />
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
 
-          {data?.user?.isShowPhone==='true' ? (
+          {data?.user?.isShowPhone==='false' ? (
             null
           ) : <div className="flex items-center gap-2 xlg:gap-3">
               <button
@@ -119,7 +119,7 @@ console.log(data)
             Website
           </a>
           {console.log(data?.user)}
-          <Title24>Edad {data?.user?.age}</Title24>
+          <Title24>Límite de Edad: {data?.user?.age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>
@@ -130,14 +130,14 @@ console.log(data)
           </p>
         </div>
         {pathname === "/venue-profile-edit" && (
-          <div className=" flex flex-col items-start xxs:flex-row gap-4 justify-between">
+          <div className=" flex  items-start xxs:flex-row gap-4 justify-between">
             <button
               onClick={() => {
                 setIsSubmitting(true);
                 LogOutInMutation.mutate();
               }}
               disabled={isSubmitting}
-              className={`bg-red-600 hover:bg-red-700 text-xl text-white font-semibold h-10 sm:h-11 gap-1 flex items-center justify-center  px-6 rounded-[12px] transition duration-300 ${
+              className={`bg-red-600 hover:bg-red-700 xxs:text-xl text-white  text-base font-semibold h-8 xxs:h-9 sm:h-11 gap-1 flex items-center justify-center px-4  xxs:px-6 rounded-[12px] transition duration-300 ${
                 isSubmitting ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -172,9 +172,12 @@ console.log(data)
 
             <Link
               to="/create-event"
-              className="bg-[#0E1060] py-1 sm:py-2 xlg:py-2 px-6  rounded-xl font-bold text-xl flex items-center justify-center gap-2  text-white"
+              className="bg-[#0E1060] py-1 sm:py-2 xlg:py-2 px-4 xs:px-6 text-base  rounded-xl font-bold xxs:text-xl flex items-center justify-center gap-2  text-white"
             >
+              <div className="xxs:block hidden">
+
               <PlusIcon />
+              </div>
               Crear Evento
             </Link>
           </div>
