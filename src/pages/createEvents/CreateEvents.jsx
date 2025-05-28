@@ -149,7 +149,7 @@ const CreateEvents = () => {
 
     createEventMutation.mutate(updatedData);
   };
-
+console.log(errors)
   const handleStartTimeChange = (time) => {
     setStartTime(time);
     setValue("event_start_time", time);
@@ -324,7 +324,7 @@ const CreateEvents = () => {
                 type="text"
                 placeholder="Compañía/Promotor"
                 {...register("business_name", {
-                  required: "Company name is required",
+                 
                 })}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
@@ -366,7 +366,7 @@ const CreateEvents = () => {
               <textarea
                 placeholder="Descripción del Evento"
                 {...register("event_details", {
-                  required: "Description is required",
+                 
                 })}
                 className="w-full border-2 border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px] rounded-md"
                 disabled={isSubmitting}
@@ -516,9 +516,9 @@ const CreateEvents = () => {
       </form>
       <div
         onClick={handleCancel}
-        className="bg-red-500 mx-auto mt-5 sm:mt-8 text-center cursor-pointer w-[120px] duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
+        className="bg-red-500 mx-auto mt-5 sm:mt-5 text-center cursor-pointer max-w-[150px] duration-300 hover:bg-red-600 text-white sm:px-6 px-10 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
       >
-        Cancel
+     Cancelar
       </div>
 
       {/* Image Preview Modal */}

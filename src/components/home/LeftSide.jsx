@@ -13,9 +13,15 @@ const LeftSide = () => {
     });
 
   return (
-    <div className=''>
-        <img src={data?.[0]?.image} alt="" className='rounded-md object-cover h-full xl:h-[400px] lg:h-[320px] xlg:h-[300px]'/>
-    </div>
+  <div className=" w-full aspect-[4/5]">
+
+  <img
+    src={data?.[0]?.image}
+    alt=""
+    className="  w-full h-full object-cover rounded-md"
+  />
+</div>
+
   )
 }
 

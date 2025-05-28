@@ -44,19 +44,21 @@ const EventPageUserView = () => {
             ) : (
               <TopBanner data={data?.event} />
             )}
-{
-  data?.event?.event_thumb_image && (
-
+           { console.log(data)}
+<div className={`relative w-full ${data?.event?.event_thumb_image && " aspect-[4/5]"}`}>
+  {data?.event?.event_thumb_image && (
     <img
-      src={data?.event?.event_thumb_image}
+      src={data.event.event_thumb_image}
       alt="flyer"
-      className="w-full h-full rounded-md max-w-[580px] mx-auto object-fill"
+      className="absolute max-h-[600px] h-full object-cover rounded-md"
     />
-  )
-}
+  )}
+</div>
+
+
           </div>
 
-          <div className="lg:flex justify-center lg:mb-[150px] mt-20 hidden ">
+          <div className="lg:flex px-4 justify-center lg:mb-[100px]  hidden ">
             <AddSlider />
           </div>
         </div>
@@ -64,7 +66,7 @@ const EventPageUserView = () => {
         <div className="mt-10 lg:mt-10">
           <RightSide />
         </div>
-        <div className="flex px-5  justify-center mb-[100px] mt-10 lg:mt-20 lg:hidden ">
+        <div className="flex   justify-center mb-[50px] sm:mb-[100px] lg:mb-[800px] mt-4 lg:mt-20 lg:hidden ">
           <AddSlider />
         </div>
       </div>

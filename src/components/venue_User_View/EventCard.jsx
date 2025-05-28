@@ -177,11 +177,10 @@ const EventCard = ({ visibleCards }) => {
                 <img
                   src={item.flyer ? item.flyer : item.event_thumb_image}
                   alt={item.title}
-                  className="w-full h-full object-fill"
+                  className="w-full h-full object-cover"
                 />
               </div>
-
-              <div className="absolute bg-black/60 top-0 left-0 w-full h-full">
+              <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
                 {item.event_dates && item.event_dates.length > 0 && (
                   <div className="absolute top-0 right-0">
                     <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
@@ -200,7 +199,7 @@ const EventCard = ({ visibleCards }) => {
 
                   <div className="space-y-1 sm:space-y-4">
                     <p className="sm:text-lg text-white font-semibold">
-                      {item.business_name}
+                      {item?.business_name}
                     </p>
                     <div className="flex items-center justify-between">
                       <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
@@ -224,7 +223,7 @@ const EventCard = ({ visibleCards }) => {
                     <div className="flex items-center justify-between text-primary font-semibold">
                       <div onClick={() => navigate(`/event-user-view/${item.id}`)} className="flex items-center gap-1 hover:underline cursor-pointer">
                         <MapPin className="size-5 lg:size-6" />
-                        <p className="xlg:text-lg">{item.business_address}</p>
+                        <p className="xlg:text-lg">{item?.user?.business_name}</p>
                       </div>
                       {pathname === "/venue-profile-edit" && (
                         <TooltipProvider>

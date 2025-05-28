@@ -23,13 +23,13 @@ const Tutorials = () => {
             <TutorialMiddle />
           </div>
           {/* AddSlider for large screens only */}
-          <div className="hidden xxl:flex justify-center mt-10 ">
+          <div className="hidden lg:flex justify-center mt-10 ">
             <AddSlider />
           </div>
         </div>
 
         {/* RightSide: 30% on large screens */}
-        <div className="lg:basis-[30%] lg:mt-10 mb-[140px]">
+        <div className="lg:basis-[30%] lg:mt-10 mb-[60px]">
           <RightSide />
           {/* AddSlider for mobile only */}
           <div className="flex justify-center lg:hidden mt-4">

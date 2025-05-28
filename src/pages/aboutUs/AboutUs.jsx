@@ -44,7 +44,10 @@ const AboutUs = () => {
 
       {/* Right Sidebar */}
       <div className="flex flex-col items-center gap-4 w-full mb-[80px] md:mb-[100px] lg:mb-0 lg:w-[30%] mt-6 lg:mt-0">
+     <div className="px-3">
+      
         <AboutRigImg />
+     </div>
         <div className="pb-4 lg:pb-6 w-full">
        <AddSlider />  
         </div>

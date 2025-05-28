@@ -17,6 +17,7 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import Title48 from "../common/Title48";
 const EventDetailCardPublic = () => {
   const [showNumber, setShowNumber] = useState(false);
 
@@ -51,19 +52,21 @@ const EventDetailCardPublic = () => {
   });
 
   // number popup
-  const phoneNumber = data?.user?.phone;
-  const handleCallButtonClick = () => {
-    if (phoneNumber) {
-      window.location.href = `tel:${phoneNumber}`;
-    } else {
-      setShowNumber(true);
-    }
-  };
+const phoneNumber = data?.user?.phone;
+
+const handleCallButtonClick = () => {
+  if (phoneNumber) {
+    setShowNumber(true); // Show number after click
+    window.location.href = `tel:${phoneNumber}`;
+  }
+};
+
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <div className="mb-10   w-full">
+         <Title48 title2={data?.user?.business_name} />
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-4">
@@ -72,6 +75,7 @@ const EventDetailCardPublic = () => {
             <RedLocationIcon />
             <Title24>{data?.user?.business_address}</Title24>
           </div>
+        
           {pathname === "/venue-profile-edit" && (
             <Link to={"/update-profile"}>
               {" "}
@@ -79,7 +83,7 @@ const EventDetailCardPublic = () => {
             </Link>
           )}
         </div>
-
+{console.log(data?.user)}
         <div className="flex  items-center gap-2 ">
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>
@@ -92,22 +96,28 @@ const EventDetailCardPublic = () => {
             </div>
           )}
 
-          {data?.user?.isShowPhone==='true' ? (
-            null
-          ) : <div className="flex items-center gap-2 ">
-              <button
-                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
-                onClick={handleCallButtonClick}
-              >
-                <PhoneIcon />
-                {showNumber ? phoneNumber : "Teléfono"}
-              </button>
-            </div>}
+    {data?.user?.isShowPhone === 'true' ? null : (
+  <div className="flex items-center gap-2">
+    <button
+      className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+      onClick={handleCallButtonClick}
+    >
+      <PhoneIcon />
+      {phoneNumber ? (showNumber ? phoneNumber : phoneNumber) : "Teléfono"}
+    </button>
+  </div>
+)}
 
-          <div className="flex items-center gap-1 ">
-            <MenuIcon />
-            <Title24>{data?.user?.business_food_menu}</Title24>
-          </div>
+   <a
+  href={data?.user?.business_food_menu}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-1 text-inherit no-underline"
+>
+  <MenuIcon />
+  <Title24>La Carta</Title24>
+</a>
+
         </div>
         <div className="flex justify-between items-center gap-2 ">
           <a
@@ -118,7 +128,7 @@ const EventDetailCardPublic = () => {
           >
             Website
           </a>
-          <Title24>Edad {data?.user?.age}</Title24>
+          <Title24>Límite de Edad: {data?.user?.age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>

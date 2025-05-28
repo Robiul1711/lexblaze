@@ -17,7 +17,7 @@ const RightSide = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="">
+    <div className="w-full  aspect-[4/5]">
       {isLoading ? (
         pathname === "/about-us" && <LoadingSpinner />
       ) : error ? (
@@ -33,13 +33,13 @@ const RightSide = () => {
   <img
     src={data[0].image}
     alt="Ad"
-    className="rounded-md object-cover xl:h-[400px] lg:h-[300px] xlg:h-[300px]"
+    className=" inset-0 w-full h-full object-cover rounded-md"
   />
 ) : data?.length === 2 ? (
   <img
     src={data[1].image}
     alt="Ad"
-    className="rounded-md object-cover xl:h-[400px] lg:h-[300px] xlg:h-[300px]"
+    className=" inset-0 w-full h-full object-cover rounded-md"
   />
 ) : null}
         </>
