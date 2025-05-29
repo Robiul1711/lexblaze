@@ -50,13 +50,16 @@ const handleDateChange = (selectedDate) => {
           <SearchModal search={search} setSearch={setSearch} />
         )}
       </div>
-      <Link to="/" className="w-[50%] flex items-center justify-center">
+      <div className="w-[50%] flex items-center justify-center">
+      <Link to="/" className="">
         <img
           src={logo}
           alt=""
           className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
         />
       </Link>
+
+      </div>
       <div className={`flex items-center justify-end ${pathname === "/" ? "lg:justify-between" : ""}  w-[25%]`}>
         {pathname === "/" && (
           <TodoEventDropdown />
