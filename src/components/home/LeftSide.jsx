@@ -13,7 +13,10 @@ const LeftSide = () => {
     });
 
   return (
-  <div className=" w-full aspect-[4/5]">
+<>
+{
+  isLoading ? null
+   :   <div className=" w-full aspect-[4/5]">
 
   <img
     src={data?.[0]?.image}
@@ -21,6 +24,8 @@ const LeftSide = () => {
     className="  w-full h-full object-cover rounded-md"
   />
 </div>
+}
+</>
 
   )
 }

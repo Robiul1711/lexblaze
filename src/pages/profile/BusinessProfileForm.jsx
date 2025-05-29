@@ -695,7 +695,7 @@ const BusinessProfileForm = () => {
           <button
             type="submit"
             disabled={RegistrationMutation.isPending}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 md:px-xl lg:text-3xl rounded-xl lg:rounded-[20px] lg:mt-4 transition-all duration-200 ${
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 md:px-xl lg:text-3xl rounded-xl lg:rounded-[12px] lg:mt-4 transition-all duration-200 ${
               RegistrationMutation.isPending
                 ? "opacity-60 cursor-not-allowed"
                 : ""

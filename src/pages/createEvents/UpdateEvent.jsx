@@ -468,7 +468,7 @@ const UpdateEvent = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 rounded-[12px] transition duration-300 flex items-center justify-center gap-2 ${
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 text-sm lg:text-2xl  px-11 rounded-[12px] transition duration-300 flex items-center justify-center gap-2 ${
               isSubmitting ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >

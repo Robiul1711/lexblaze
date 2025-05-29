@@ -157,6 +157,7 @@ const EventCard = ({ visibleCards }) => {
     return 0;
   });
 
+  console.log(sortedEvents);
   return (
     <>
       <DeleteModal
@@ -181,13 +182,34 @@ const EventCard = ({ visibleCards }) => {
                 />
               </div>
               <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
-                {item.event_dates && item.event_dates.length > 0 && (
-                  <div className="absolute top-0 right-0">
-                    <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-                      {getEventDateLabel(item.event_dates)}
-                    </button>
-                  </div>
-                )}
+            
+{item.event_dates && item.event_dates.length > 0 && (
+  (() => {
+    const dateLabel = getEventDateLabel(item.event_dates);
+    const isToday = dateLabel?.startsWith("Hoy");
+    
+    // Get the first valid event date (sorted in getEventDateLabel)
+    const firstDate = item.event_dates
+      .map((d) => new Date(d?.date))
+      .filter((d) => d instanceof Date && !isNaN(d))
+      .sort((a, b) => a - b)[0];
+    
+    const isPastDate = firstDate && firstDate < new Date(new Date().setHours(0, 0, 0, 0));
+    
+    // Only show the button if it's NOT today AND NOT a past date
+    if (!isToday && !isPastDate) {
+      return (
+        <div className="absolute top-0 right-0">
+          <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+            {dateLabel}
+          </button>
+        </div>
+      );
+    }
+    return null;
+  })()
+)}
+
                 <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
                   {item.button && (
                     <div className="absolute top-0 right-0">

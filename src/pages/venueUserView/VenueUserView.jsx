@@ -50,7 +50,7 @@ const VenueUserView = () => {
   };
 // console.log(visibleCards)
   return (
-    <div className="section-padding-x min-h-screen h-full ">
+    <div className="section-padding-x  h-full min-h-screen ">
       <div className="flex flex-col lg:flex-row justify-center xl:justify-between w-full gap-6 ">
         {/* Leftside */}
         <div className="mt-10 hidden xlg:block">
@@ -97,10 +97,10 @@ const VenueUserView = () => {
               <p className="font-bold text-lg">Siguiente</p>
             </div>
           </div>
-             <div className="lg:mt-10 mb-5  xlg:hidden">
+             <div className="lg:mt-10 mb-5 max-w-[500px] mx-auto  xlg:hidden">
           <RightSide />
         </div>
-          <div className="flex justify-center mb-5 sm:mb-[60px] lg:mb-[160px]">
+          <div className="flex justify-center mb-5 sm:mb-[60px]  lg:mb-[160px]">
           <AddSlider />
           </div>
         </div>

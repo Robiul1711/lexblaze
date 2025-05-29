@@ -48,30 +48,40 @@ const EventCardPublic = ({ visibleCards }) => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    
     const date = new Date(dateString);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+    
     const checkDate = new Date(date);
     checkDate.setHours(0, 0, 0, 0);
-
+    
     const options = { day: "2-digit", month: "short" };
     const parts = date
       .toLocaleDateString("es-ES", options)
       .split(" ")
       .map((part) => part.toLowerCase());
     const formattedDate = `${parts[1]} ${parts[0]}`;
-
+    
     if (checkDate.getTime() === today.getTime()) {
       return `Hoy ${formattedDate}`;
     }
-
+    
     return formattedDate;
   };
 
-  // Sort logic: today -> tomorrow -> upcoming -> past
+  // Filter out past events and sort (today -> tomorrow -> future)
   const sortedEvents = [...visibleCards]
-    .filter((item) => item.event_dates?.[0]?.date)
+    .filter((item) => {
+      if (!item.event_dates?.[0]?.date) return false;
+      
+      const eventDate = new Date(item.event_dates[0].date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      return eventDate >= today; // Only keep today or future events
+    })
     .sort((a, b) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -92,17 +102,16 @@ const EventCardPublic = ({ visibleCards }) => {
       const normalizedB = normalize(dateB);
 
       const getRank = (date) => {
-        if (date === today.getTime()) return 0;
-        if (date === tomorrow.getTime()) return 1;
-        if (date > tomorrow.getTime()) return 2;
-        return 3; // Past events
+        if (date === today.getTime()) return 0;    // Today (highest priority)
+        if (date === tomorrow.getTime()) return 1; // Tomorrow
+        return 2; // Future dates
       };
 
       const rankA = getRank(normalizedA);
       const rankB = getRank(normalizedB);
 
       if (rankA !== rankB) return rankA - rankB;
-      return normalizedA - normalizedB;
+      return normalizedA - normalizedB; // If same rank, sort chronologically
     });
 
   const getEventDateLabel = (eventDates) => {
@@ -115,12 +124,10 @@ const EventCardPublic = ({ visibleCards }) => {
 
     if (dates.length === 0) return null;
 
-    const formatDate = (date) =>
-      date.toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
+    const formatDate = (date) => {
+      const options = { day: "numeric", month: "short" };
+      return date.toLocaleDateString("es-ES", options).toLowerCase();
+    };
 
     if (dates.length === 1) {
       return formatDate(dates[0]);
@@ -160,6 +167,11 @@ const EventCardPublic = ({ visibleCards }) => {
     return formatDate(dates[dates.length - 1]);
   };
 
+  // Don't render anything if there are no events
+  if (!sortedEvents || sortedEvents.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <DeleteModal
@@ -189,22 +201,34 @@ const EventCardPublic = ({ visibleCards }) => {
                   </div>
 
                   <div className="absolute bg-black/60 top-0 left-0 w-full h-full">
-                    {item.event_dates && item.event_dates.length > 0 && (
-                      <div className="absolute top-0 right-0">
-                        <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-                          {getEventDateLabel(item.event_dates)}
-                        </button>
-                      </div>
-                    )}
-                    <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
-                      {item.button && (
-                        <div className="absolute top-0 right-0">
-                          <button className="bg-primary text-[#F12617] p-3 font-bold">
-                            {item.button}
-                          </button>
-                        </div>
-                      )}
+                   {item.event_dates && item.event_dates.length > 0 && (() => {
+  const dateLabel = getEventDateLabel(item.event_dates);
+  const isToday = dateLabel?.startsWith("Hoy");
+  
+  const firstDate = item.event_dates
+    .map((d) => new Date(d?.date))
+    .filter((d) => d instanceof Date && !isNaN(d))
+    .sort((a, b) => a - b)[0];
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const isPastOrToday = firstDate && firstDate <= today;
+  
+  // Only show button if not today and not past
+  if (!isPastOrToday && !isToday) {
+    return (
+      <div className="absolute top-0 right-0">
+        <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+          {dateLabel}
+        </button>
+      </div>
+    );
+  }
+  return null;
+})()}
 
+                    <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
                       <div className="space-y-1 sm:space-y-4">
                         <p className="sm:text-lg text-white font-semibold">
                           {item.business_name}

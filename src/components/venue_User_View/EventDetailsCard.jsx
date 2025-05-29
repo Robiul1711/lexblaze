@@ -48,15 +48,15 @@ const EventDetailsCard = () => {
     },
   });
   // number popup
-  const phoneNumber = data?.user?.phone;
-  const handleCallButtonClick = () => {
-    if (phoneNumber) {
-      window.location.href = `tel:${phoneNumber}`;
-    } else {
-      setShowNumber(true);
-    }
-  };
-console.log(data)
+const phoneNumber = data?.user?.phone;
+
+const handleCallButtonClick = () => {
+  if (phoneNumber) {
+    setShowNumber(true); // Show number after click
+    window.location.href = `tel:${phoneNumber}`;
+  }
+};
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
@@ -91,18 +91,17 @@ console.log(data)
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
-
-          {data?.user?.isShowPhone==='false' ? (
-            null
-          ) : <div className="flex items-center gap-2 xlg:gap-3">
-              <button
-                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-1"
-                onClick={handleCallButtonClick}
-              >
-                <PhoneIcon />
-                {showNumber ? phoneNumber : "Teléfono"}
-              </button>
-            </div>}
+    {data?.user?.isShowPhone === 'false' ? null : (
+  <div className="flex items-center gap-2">
+    <button
+      className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+      onClick={handleCallButtonClick}
+    >
+      <PhoneIcon />
+      {phoneNumber ? (showNumber ? phoneNumber : phoneNumber) : "Teléfono"}
+    </button>
+  </div>
+)}
 
           <div className="flex items-center gap-1 xlg:gap-3">
             <MenuIcon />
@@ -118,7 +117,6 @@ console.log(data)
           >
             Website
           </a>
-          {console.log(data?.user)}
           <Title24>Límite de Edad: {data?.user?.age}</Title24>
         </div>
         <div className="mx-auto w-full text-center">

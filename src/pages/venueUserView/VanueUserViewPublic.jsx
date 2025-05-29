@@ -53,7 +53,7 @@ const VanueUserViewPublic = () => {
       <div className="flex flex-col lg:flex-row  justify-center xl:justify-between w-full gap-5">
         
         {/* Left Side */}
-        <div className="hidden max-w-[30%] xlg:block  ">
+        <div className="hidden w-[30%] xlg:block  ">
           <div className="mt-10  top-10">
             <LeftSide />
           </div>
@@ -118,7 +118,7 @@ const VanueUserViewPublic = () => {
         </div>
 
         {/* Right Side */}
-        <div className="hidden max-w-[30%] xlg:block ">
+        <div className="hidden w-[30%] xlg:block ">
           <div className="mt-10  top-10">
             <RightSide />
           </div>
