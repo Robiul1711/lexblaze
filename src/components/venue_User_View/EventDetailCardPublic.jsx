@@ -89,14 +89,14 @@ const handleCallButtonClick = () => {
           <Title24>{data?.user?.business_time} </Title24>
         </div>
         <div className="flex justify-between items-center flex-wrap gap-4">
-          {data?.user?.isShowEmail==='true' ? null : (
+          {data?.user?.isShowEmail==='false' ? null : (
             <div className="flex items-center gap-2 ">
               <MessageIcon />
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
 
-    {data?.user?.isShowPhone === 'true' ? null : (
+    {data?.user?.isShowPhone === 'false' ? null : (
   <div className="flex items-center gap-2">
     <button
       className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"

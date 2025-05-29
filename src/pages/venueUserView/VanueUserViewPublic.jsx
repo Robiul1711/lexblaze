@@ -69,7 +69,7 @@ const VanueUserViewPublic = () => {
             <>
               {/* Top debug/info section */}
               <div className="text-center mt-2">
-                {console.log(visibleCards[0])}
+                {/* {console.log(visibleCards[0])} */}
               </div>
 
               {/* Scroll content removed - now naturally scrolls */}
