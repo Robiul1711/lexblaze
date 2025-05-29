@@ -75,13 +75,13 @@ console.log(data);
           className="w-full  max-h-[200px] sm:max-h-[230px] xl:max-h-[250px] object-cover "
         />
         <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-3  flex  flex-col ">
-          {data.event_dates && data.event_dates.length > 0 && (
+          {/* {data.event_dates && data.event_dates.length > 0 && (
             <div className="absolute top-0 right-0">
               <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
                 {getEventDateLabel(data.event_dates)}
               </button>
             </div>
-          )}
+          )} */}
 
           <div className="space-y-1 sm:space-y-3 absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white flex items-center font-semibold">

@@ -25,7 +25,7 @@ const EventPageUserView = () => {
     <div className="section-padding-x ">
       {/* Title  */}
 
-      <div className="flex w-full flex-col lg:flex-row justify-between gap-5 xl:gap-6  ">
+      <div className="flex w-full flex-col lg:flex-row justify-between gap-5 xl:gap-12  ">
         {/* Leftside  */}
         <div className="hidden mt-10 lg:block">
           <LeftSide />
@@ -44,8 +44,7 @@ const EventPageUserView = () => {
             ) : (
               <TopBanner data={data?.event} />
             )}
-           { console.log(data)}
-<div className={`relative w-full ${data?.event?.event_thumb_image && " aspect-[4/5]"}`}>
+<div className={`relative  lg:mb-2 ${data?.event?.event_thumb_image && " aspect-[4/5]"}`}>
   {data?.event?.event_thumb_image && (
     <img
       src={data.event.event_thumb_image}
@@ -63,7 +62,7 @@ const EventPageUserView = () => {
           </div>
         </div>
         {/* Rightside  */}
-        <div className="mt-10 lg:mt-10">
+        <div className="mt-3 lg:mt-10">
           <RightSide />
         </div>
         <div className="flex   justify-center mb-[50px] sm:mb-[100px] lg:mb-[800px] mt-4 lg:mt-20 lg:hidden ">

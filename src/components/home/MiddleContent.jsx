@@ -155,7 +155,6 @@ const MiddleContent = ({ data, isLoading, error }) => {
                           {item.event_title}
                         </h2>
                       )}
-                      {console.log(item)}
                       <Link
                         to={`/venue-user-view/${item.user_id}`}
                         className="inline-block"

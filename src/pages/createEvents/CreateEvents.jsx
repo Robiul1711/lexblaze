@@ -480,7 +480,7 @@ console.log(errors)
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-1 xlg:py-3 text-2xl px-11 rounded-[12px] transition duration-300 flex items-center justify-center gap-2 ${
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-1 xlg:py-2.5 text-lg sm:text-2xl px-12 sm:px-8 rounded-[12px] transition duration-300 flex items-center justify-center gap-2 ${
               isSubmitting ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -516,7 +516,7 @@ console.log(errors)
       </form>
       <div
         onClick={handleCancel}
-        className="bg-red-500 mx-auto mt-5 sm:mt-5 text-center cursor-pointer max-w-[150px] duration-300 hover:bg-red-600 text-white sm:px-6 px-10 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
+        className="bg-red-500 mx-auto mt-5 sm:mt-5 text-center cursor-pointer max-w-[150px] text-lg duration-300 hover:bg-red-600 text-white sm:px-6 px-10 py-1 sm:py-2 rounded-[12px]  lg:text-2xl font-bold"
       >
      Cancelar
       </div>

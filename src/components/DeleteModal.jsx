@@ -13,9 +13,9 @@ const DeleteModal = ({ open, onOpenChange, onConfirm, isLoading }) => {
             <p>Esta acción eliminará el evento permanentemente.</p>
             <div className="flex justify-center gap-4 mt-6">
               {/* Cancel Button */}
-              <Button variant="outline"  onClick={() => onOpenChange(false)}>
+              <button className="bg-red-400 hover:bg-red-500 text-sm text-white  py-1 px-2 rounded-md"  onClick={() => onOpenChange(false)}>
                 Cancelar
-              </Button>
+              </button>
 
               {/* Delete Button with Loading State */}
               <button

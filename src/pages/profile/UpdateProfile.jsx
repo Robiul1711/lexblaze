@@ -110,8 +110,7 @@ const UpdateProfile = () => {
       setValue("isShowPhone", data.user.isShowPhone === "true" ? "0" : "1");
       setValue("isShowEmail", data.user.isShowEmail === "true" ? "0" : "1");
     }
-  }, [data?.user]);
-console.log(errors)
+  }, [data, setValue]);
   return (
     <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-10 lg:mb-8">
@@ -241,20 +240,6 @@ console.log(errors)
             )}
           />
         </div>
-
-        {/* Password */}
-        {/* <div>
-          <input
-            type="password"
-            placeholder="Contraseña"
-            {...register("password", { required: "Contraseña es requerida" })}
-            className="w-full border-[2px] border-black p-4 lg:p-6"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
-        </div> */}
-
         {/* Password */}
         <div className="relative">
           <input
@@ -273,32 +258,15 @@ console.log(errors)
           </button>
         </div>
 
-        {/* Confirm Password */}
-        {/* <div>
-          <input
-            type="password"
-            placeholder="Confirmar Contraseña"
-            {...register("password_confirmation", {
-              required: "Confirmación de contraseña es requerida",
-              validate: (value) =>
-                value === password || "Las contraseñas no coinciden",
-            })}
-            className="w-full border-[2px] border-black p-4 lg:p-6"
-          />
-          {errors.password_confirmation && (
-            <p className="text-red-500 text-sm">
-              {errors.password_confirmation.message}
-            </p>
-          )}
-        </div> */}
         <div className=" relative">
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
-            {...register("password_confirmation", {
-              validate: (value) =>
-                value === password || "Las contraseñas no coinciden",
-            })}
+        {...register("password_confirmation", {
+  validate: (value) => 
+    !password || value === password || "Las contraseñas no coinciden",
+})}
+            
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           <button
