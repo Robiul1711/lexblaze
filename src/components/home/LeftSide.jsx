@@ -16,7 +16,7 @@ const LeftSide = () => {
 <>
 {
   isLoading ? null
-   :   <div className=" w-full aspect-[4/5]">
+   :   <div className= {`w-full ${data ? "aspect-[4/5]" : "" } `}>
 
   <img
     src={data?.[0]?.image}

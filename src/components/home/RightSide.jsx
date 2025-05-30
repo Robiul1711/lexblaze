@@ -22,7 +22,7 @@ const RightSide = () => {
         pathname === "/about-us" && <LoadingSpinner />
       ) : error ? (
         <p className="text-red-500 font-semibold text-center my-3">
-          Failed to load ads. Please try again later.
+          {/* Failed to load ads. Please try again later. */}
         </p>
       ) : (
         <>
