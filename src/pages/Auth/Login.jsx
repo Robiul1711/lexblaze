@@ -61,7 +61,7 @@ const Login = () => {
           type="email"
           placeholder="Correo Electrónico"
           {...register("email", {
-            required: "Correo electrónico es requerido",
+            required: "Correo electrónico es Obligatorio",
           })}
           className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500"
         />
@@ -75,7 +75,7 @@ const Login = () => {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             {...register("password", {
-              required: "Contraseña es requerida",
+              required: "Contraseña es Obligatorio",
             })}
             className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
           />

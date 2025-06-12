@@ -28,39 +28,39 @@ const router = createBrowserRouter([
       },
       {
         path: "/log-in",
-        element: <Login />,
+        element: <Login />
       },
       {
         path: "/forgot-password",
-        element: <ForgotPassword />,
+        element: <ForgotPassword />
       },
       {
         path: "/VerifyOtp",
-        element: <VerifyOtp />,
+        element: <VerifyOtp />
       },
       {
         path: "/reset-password",
-        element: <ResetPassword />,
+        element: <ResetPassword />
       },
       {
         path: "/about-us",
-        element: <AboutUs />,
+        element: <AboutUs />
       },
       {
         path: "/profile",
-        element: <BusinessProfilePage />,
+        element: <BusinessProfilePage />
       },
       {
         path: "/update-profile",
         element: (
           <PrivateRoute>
-            <UpdateProfile />,
+            <UpdateProfile />
           </PrivateRoute>
         ),
       },
       {
         path: "/tutorials",
-        element: <Tutorials />,
+        element: <Tutorials />
       },
       {
         path: "/create-event",
@@ -74,26 +74,26 @@ const router = createBrowserRouter([
         path: "/update-event/:id",
         element: (
           <PrivateRoute>
-            <UpdateEvent />,
+            <UpdateEvent />
           </PrivateRoute>
         ),
       },
 
       {
         path: "/venue-user-view/:user_id",
-        element: <VanueUserViewPublic />,
+        element: <VanueUserViewPublic />
       },
       {
         path: "/venue-profile-edit",
         element: (
           <PrivateRoute>
-            <VenueUserView />,
+            <VenueUserView />
           </PrivateRoute>
         ),
       },
       {
         path: "/event-user-view/:id",
-        element: <EventPageUserView />,
+        element: <EventPageUserView />
       },
     ],
   },

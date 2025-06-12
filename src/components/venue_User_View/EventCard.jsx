@@ -50,114 +50,74 @@ const EventCard = ({ visibleCards }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    
+
     const date = new Date(dateString);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     // Check if date is today
     const checkDate = new Date(date);
     checkDate.setHours(0, 0, 0, 0);
-    
+
     const options = { day: "2-digit", month: "short" };
     const parts = date
       .toLocaleDateString("es-ES", options)
       .split(" ")
       .map((part) => part.toLowerCase());
-    const formattedDate = `${parts[1]} ${parts[0]}`;
-    
+
+    // Capitalize only the first letter of the month
+    const capitalizedMonth =
+      parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+
+    const formattedDate = `${capitalizedMonth} ${parts[0]}`;
+
     if (checkDate.getTime() === today.getTime()) {
       return `Hoy ${formattedDate}`;
     }
-    
+
     return formattedDate;
   };
 
-  const getEventDateLabel = (eventDates) => {
-    if (!eventDates || eventDates.length === 0) return null;
+  // Group events by date and sort them
+  const groupAndSortEvents = () => {
+    const dateGroups = {};
+    
+    // First, group events by their first date
+    visibleCards.forEach((event) => {
+      const eventDate = event.event_dates?.[0]?.date;
+      if (!eventDate) return;
 
-    const dates = eventDates
-      .map((d) => new Date(d?.date))
-      .filter((d) => d instanceof Date && !isNaN(d))
-      .sort((a, b) => a - b);
-
-    if (dates.length === 0) return null;
-
-    const formatDate = (date) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const checkDate = new Date(date);
-      checkDate.setHours(0, 0, 0, 0);
+      const dateKey = new Date(eventDate).toISOString().split('T')[0]; // YYYY-MM-DD format for consistent grouping
       
-      const options = { day: "2-digit", month: "short" };
-      const parts = date
-        .toLocaleDateString("es-ES", options)
-        .split(" ")
-        .map((part) => part.toLowerCase());
-      const formattedDate = `${parts[1]} ${parts[0]}`;
-      
-      if (checkDate.getTime() === today.getTime()) {
-        return `Hoy ${formattedDate}`;
+      if (!dateGroups[dateKey]) {
+        dateGroups[dateKey] = {
+          date: eventDate,
+          formattedDate: formatDate(eventDate),
+          events: []
+        };
       }
-      return formattedDate;
-    };
+      dateGroups[dateKey].events.push(event);
+    });
 
-    if (dates.length === 1) {
-      return formatDate(dates[0]);
-    }
+    // Convert to array and sort chronologically
+    const sortedGroups = Object.values(dateGroups).sort((a, b) => {
+      return new Date(a.date) - new Date(b.date);
+    });
 
-    const allSameDay = dates.every(
-      (date) => date.getDay() === dates[0].getDay()
-    );
+    // Sort events within each date group (if needed)
+    sortedGroups.forEach(group => {
+      group.events.sort((a, b) => {
+        // Sort by start time if available, otherwise by title
+        return (a.event_start_time || '').localeCompare(b.event_start_time || '') ||
+               a.event_title.localeCompare(b.event_title);
+      });
+    });
 
-    if (allSameDay) {
-      const weekdaysES = [
-        "Domingos",
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes",
-        "Sábados",
-      ];
-      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-    }
-
-    // Check if dates form a continuous range (no missing days)
-    let isContinuous = true;
-    for (let i = 1; i < dates.length; i++) {
-      const diffInDays =
-        (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-      if (diffInDays !== 1) {
-        isContinuous = false;
-        break;
-      }
-    }
-
-    if (isContinuous) {
-      const last = dates[dates.length - 1];
-      return `Hasta ${formatDate(last)}`;
-    }
-
-    return formatDate(dates[dates.length - 1]);
+    return sortedGroups;
   };
 
-  // Sort events with today's events first
-  const sortedEvents = [...visibleCards].sort((a, b) => {
-    const dateA = a.event_dates[0]?.date ? new Date(a.event_dates[0].date) : null;
-    const dateB = b.event_dates[0]?.date ? new Date(b.event_dates[0].date) : null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const isAToday = dateA && new Date(dateA).setHours(0, 0, 0, 0) === today.getTime();
-    const isBToday = dateB && new Date(dateB).setHours(0, 0, 0, 0) === today.getTime();
-    
-    if (isAToday && !isBToday) return -1;
-    if (!isAToday && isBToday) return 1;
-    return 0;
-  });
+  const groupedEvents = groupAndSortEvents();
 
-  console.log(sortedEvents);
   return (
     <>
       <DeleteModal
@@ -168,111 +128,96 @@ const EventCard = ({ visibleCards }) => {
       />
 
       <div className="flex flex-col mt-10">
-        {sortedEvents?.map((item) => (
-          <div key={item.id}>
-            <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[30px] font-belanosima font-bold text-center mb-3 sm:mb-4">
-              {item.event_dates[0]?.date ? formatDate(item.event_dates[0].date) : "N/A"}
+        {groupedEvents.map((group) => (
+          <div key={group.date} className="mb-8">
+            <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[30px] font-belanosima font-bold text-center mb-3 sm:mb-6">
+              {group.formattedDate}
             </h1>
-            <div className="relative rounded mx-auto overflow-hidden shadow-lg mb-5 max-w-[625px] w-full sm:mb-7">
-              <div className="w-full h-[200px] sm:h-[250px]">
-                <img
-                  src={item.flyer ? item.flyer : item.event_thumb_image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
             
-{item.event_dates && item.event_dates.length > 0 && (
-  (() => {
-    const dateLabel = getEventDateLabel(item.event_dates);
-    const isToday = dateLabel?.startsWith("Hoy");
-    
-    // Get the first valid event date (sorted in getEventDateLabel)
-    const firstDate = item.event_dates
-      .map((d) => new Date(d?.date))
-      .filter((d) => d instanceof Date && !isNaN(d))
-      .sort((a, b) => a - b)[0];
-    
-    const isPastDate = firstDate && firstDate < new Date(new Date().setHours(0, 0, 0, 0));
-    
-    // Only show the button if it's NOT today AND NOT a past date
-    if (!isToday && !isPastDate) {
-      return (
-        <div className="absolute top-0 right-0">
-          <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
-            {dateLabel}
-          </button>
-        </div>
-      );
-    }
-    return null;
-  })()
-)}
-
-                <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
-                  {item.button && (
-                    <div className="absolute top-0 right-0">
-                      <button className="bg-primary text-[#F12617] p-3 font-bold">
-                        {item.button}
-                      </button>
-                    </div>
-                  )}
-
-                  <div className="space-y-1 sm:space-y-4">
-                    <p className="sm:text-lg text-white font-semibold">
-                      {item?.business_name}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
-                        {item.event_title}
-                      </h2>
-                      {pathname === "/venue-profile-edit" && (
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Link to={`/update-event/${item.id}`} className="cursor-pointer">
-                                <EditIcon2 />
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent className="bg-primary text-[#F12617] p-3 font-bold">
-                              <p>Edit</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+            <div className="space-y-5">
+              {group.events.map((item) => (
+                <div key={item.id} className="relative rounded mx-auto overflow-hidden shadow-lg max-w-[625px] w-full">
+                  <div className="w-full h-[200px] sm:h-[250px]">
+                    <img
+                      src={item.flyer ? item.flyer : item.event_thumb_image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
+                    <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
+                      {item.button && (
+                        <div className="absolute top-0 right-0">
+                          <button className="bg-primary text-[#F12617] p-3 font-bold">
+                            {item.button}
+                          </button>
+                        </div>
                       )}
-                    </div>
-                    <div className="flex items-center justify-between text-primary font-semibold">
-                      <div onClick={() => navigate(`/event-user-view/${item.id}`)} className="flex items-center gap-1 hover:underline cursor-pointer">
-                        <MapPin className="size-5 lg:size-6" />
-                        <p className="xlg:text-lg">{item?.user?.business_name}</p>
+
+                      <div className="space-y-1 sm:space-y-4">
+                        <p className="sm:text-lg text-white font-semibold">
+                          {item?.business_name}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
+                            {item.event_title}
+                          </h2>
+                          {pathname === "/venue-profile-edit" && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <Link
+                                    to={`/update-event/${item.id}`}
+                                    className="cursor-pointer"
+                                  >
+                                    <EditIcon2 />
+                                  </Link>
+                                </TooltipTrigger>
+                                <TooltipContent className="bg-primary text-[#F12617] p-3 font-bold">
+                                  <p>Edit</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between text-primary font-semibold">
+                          <div
+                            onClick={() => navigate(`/event-user-view/${item.id}`)}
+                            className="flex items-center gap-1 hover:underline cursor-pointer"
+                          >
+                            <MapPin className="size-5 lg:size-6" />
+                            <p className="xlg:text-lg">
+                              {item?.user?.business_name}
+                            </p>
+                          </div>
+                          {pathname === "/venue-profile-edit" && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <button
+                                    onClick={() => handleDeleteClick(item.id)}
+                                    className="cursor-pointer"
+                                  >
+                                    <DeleteIcon className="size-7 text-red-700" />
+                                  </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Delete</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+
+                        <div className="flex items-center max-w-[200px] justify-between gap-4 font-semibold text-white">
+                          <p>{item.price_limite}</p>
+                          <p>{item.event_start_time}</p>
+                        </div>
                       </div>
-                      {pathname === "/venue-profile-edit" && (
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button
-                                onClick={() => handleDeleteClick(item.id)}
-                                className="cursor-pointer"
-                              >
-                                <DeleteIcon className="size-7 text-red-700" />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Delete</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      )}
-                    </div>
-
-                    <div className="flex items-center max-w-[200px] justify-between gap-4 font-semibold text-white">
-                      <p>{item.price_limite}</p>
-                      <p>{item.event_start_time}</p>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         ))}

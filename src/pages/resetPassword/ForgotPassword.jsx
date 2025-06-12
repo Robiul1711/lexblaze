@@ -60,7 +60,7 @@ const ForgotPassword = () => {
           type="email"
           placeholder="Correo Electrónico"
           {...register("email", {
-            required: "Correo electrónico es requerido",
+            required: "Correo electrónico es Obligatorio",
           })}
           className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500"
         />

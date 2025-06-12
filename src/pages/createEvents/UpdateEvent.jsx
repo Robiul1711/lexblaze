@@ -13,20 +13,10 @@ import InstructionModal2 from "@/components/common/InstructionModal2";
 import InstuctionModal from "@/components/common/InstuctionModal";
 import DatePicker from "react-multi-date-picker";
 import { CircleX } from "lucide-react";
+import useCategoryList from "@/hooks/useCategoryList";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
-
-const categoryOptions = [
-  { value: "1", label: "Música en vivo" },
-  { value: "2", label: "Comedia" },
-  { value: "3", label: "Deportivos" },
-  { value: "4", label: "Arte & Cultura" },
-  { value: "5", label: "Comida y Bebida" },
-  { value: "6", label: "Variedad y Otro" },
-  { value: "7", label: "Cine y Televisión" },
-  { value: "8", label: "Talleres y Clases" },
-];
 
 const tagRender = (props) => {
   const { label, closable, onClose } = props;
@@ -51,19 +41,15 @@ const UpdateEvent = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { id } = useParams();
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-  } = useForm();
+  const { register, handleSubmit, setValue, control } = useForm();
 
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [fileList2, setFileList2] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  // category api
+  const category = useCategoryList();
 
   const { data } = useQuery({
     queryKey: ["updateProfileEventsData", id],
@@ -72,7 +58,7 @@ const UpdateEvent = () => {
       return response.data;
     },
   });
-
+  console.log(data);
   useEffect(() => {
     if (data?.events) {
       const event = data.events;
@@ -83,13 +69,15 @@ const UpdateEvent = () => {
       setValue("price_limite", event.price_limite);
       setValue("age_limite", event.age_limite);
       setValue("business_website_link", event.business_website_link);
-      
+
       // Set dates
       if (event.event_dates && event.event_dates.length > 0) {
-        const dates = event.event_dates.map(dateObj => new Date(dateObj.date));
+        const dates = event.event_dates.map(
+          (dateObj) => new Date(dateObj.date)
+        );
         setValue("event_date", dates);
       }
-      
+
       // Set times
       if (event.event_start_time) {
         const start = dayjs(event.event_start_time, "HH:mm");
@@ -99,30 +87,31 @@ const UpdateEvent = () => {
         const end = dayjs(event.event_end_time, "HH:mm");
         setEndTime(end);
       }
-      
-      // Set categories
-      if (event.categories && event.categories.length > 0) {
-        const defaultCategories = event.categories.map(cat => cat.id.toString());
-        setSelectedCategories(defaultCategories);
-        setValue("category_id", defaultCategories);
-      }
-      
+ // Set categories
+    if (event.categories) {
+      const ids = event.categories.map((cat) => cat.id);
+      setValue("category_id", ids);
+    }
       // Set existing images
       if (event.event_thumb_image) {
-        setFileList([{
-          uid: '-1',
-          name: 'existing-image.jpg',
-          status: 'done',
-          url: event.event_thumb_image,
-        }]);
+        setFileList([
+          {
+            uid: "-1",
+            name: "existing-image.jpg",
+            status: "done",
+            url: event.event_thumb_image,
+          },
+        ]);
       }
       if (event.flyer) {
-        setFileList2([{
-          uid: '-2',
-          name: 'existing-flyer.jpg',
-          status: 'done',
-          url: event.flyer,
-        }]);
+        setFileList2([
+          {
+            uid: "-2",
+            name: "existing-flyer.jpg",
+            status: "done",
+            url: event.flyer,
+          },
+        ]);
       }
     }
   }, [data, setValue]);
@@ -130,35 +119,42 @@ const UpdateEvent = () => {
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
       const formDataToSend = new FormData();
-      
+
       // Append all fields to formData
-      Object.keys(formData).forEach(key => {
-        if (key === 'event_date') {
-          formData[key].forEach(date => {
-            formDataToSend.append('event_date[]', dayjs(date).format('YYYY-MM-DD'));
+      Object.keys(formData).forEach((key) => {
+        if (key === "event_date") {
+          formData[key].forEach((date) => {
+            formDataToSend.append(
+              "event_date[]",
+              dayjs(date).format("YYYY-MM-DD")
+            );
           });
-        } else if (key === 'category_id') {
-          formData[key].forEach(catId => {
-            formDataToSend.append('category_id[]', catId);
+        } else if (key === "category_id") {
+          formData[key].forEach((catId) => {
+            formDataToSend.append("category_id[]", catId);
           });
-        } else if (key !== 'event_thumb_image' && key !== 'flyer') {
+        } else if (key !== "event_thumb_image" && key !== "flyer") {
           formDataToSend.append(key, formData[key]);
         }
       });
-      
+
       // Append files if they exist
       if (fileList[0]?.originFileObj) {
-        formDataToSend.append('event_thumb_image', fileList[0].originFileObj);
+        formDataToSend.append("event_thumb_image", fileList[0].originFileObj);
       }
       if (fileList2[0]?.originFileObj) {
-        formDataToSend.append('flyer', fileList2[0].originFileObj);
+        formDataToSend.append("flyer", fileList2[0].originFileObj);
       }
 
-      const response = await axiosSecure.post(`/event/update/${id}`, formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosSecure.post(
+        `/event/update/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response.data;
     },
     onSuccess: (data) => {
@@ -185,7 +181,7 @@ const UpdateEvent = () => {
   };
 
   const handleRemoveImage = (type) => {
-    if (type === 'flyer') {
+    if (type === "flyer") {
       setFileList2([]);
     } else {
       setFileList([]);
@@ -194,7 +190,7 @@ const UpdateEvent = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-    
+
     const updatedData = {
       ...data,
       event_start_time: startTime ? dayjs(startTime).format("HH:mm") : null,
@@ -211,11 +207,14 @@ const UpdateEvent = () => {
   const handleEndTimeChange = (time) => {
     setEndTime(time);
   };
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const handleCategoryChange = (selectedOptions) => {
-    setSelectedCategories(selectedOptions);
-    setValue("category_id", selectedOptions);
-  };
+useEffect(() => {
+  if (data?.events?.categories) {
+    const ids = data.events.categories.map((cat) => cat.id);
+    setSelectedCategories(ids);
+  }
+}, [data?.events?.categories]);
 
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[80px] lg:pb-[150px] px-4">
@@ -223,12 +222,15 @@ const UpdateEvent = () => {
         <Title48 title2="Actualizar Evento" />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 lg:space-y-5">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-3 lg:space-y-5"
+      >
         {/* Date Section */}
         <section>
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
           <InstuctionModal />
-          
+
           {/* Flyer Upload */}
           <div className="flex flex-col items-center gap-2 mb-8">
             <Upload
@@ -240,7 +242,7 @@ const UpdateEvent = () => {
               multiple={false}
               maxCount={1}
               disabled={isSubmitting}
-              onRemove={() => handleRemoveImage('flyer')}
+              onRemove={() => handleRemoveImage("flyer")}
             >
               {fileList2.length < 1 && <UploadIcons />}
             </Upload>
@@ -248,44 +250,43 @@ const UpdateEvent = () => {
               Carga Imagen de Fondo
             </p>
           </div>
-<div className="relative mt-4">
-  <Controller
-    name="event_date"
-    control={control}
-    render={({ field }) => (
-      <>
-        <DatePicker
-          placeholder="Elija Fecha"
-          containerClassName="w-full"
-          inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-          multiple
-          value={field.value || []}
-          onChange={(dates) => {
-            field.onChange(dates);
-          }}
-          format={dateFormat}
-        />
+          <div className="relative mt-4">
+            <Controller
+              name="event_date"
+              control={control}
+              render={({ field }) => (
+                <>
+                  <DatePicker
+                    placeholder="Elija Fecha"
+                    containerClassName="w-full"
+                    inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+                    multiple
+                    value={field.value || []}
+                    onChange={(dates) => {
+                      field.onChange(dates);
+                    }}
+                    format={dateFormat}
+                  />
 
-        {/* Calendar Icon */}
-        <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
-          <InputCalenderIcons />
-        </div>
+                  {/* Calendar Icon */}
+                  <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
+                    <InputCalenderIcons />
+                  </div>
 
-        {/* Reset/Clear Button */}
-        {field.value && field.value.length > 0 && (
-          <button
-            type="button"
-            className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-red-500 focus:outline-none"
-            onClick={() => field.onChange([])}
-          >
-            <CircleX />
-          </button>
-        )}
-      </>
-    )}
-  />
-</div>
-
+                  {/* Reset/Clear Button */}
+                  {field.value && field.value.length > 0 && (
+                    <button
+                      type="button"
+                      className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-red-500 focus:outline-none"
+                      onClick={() => field.onChange([])}
+                    >
+                      <CircleX />
+                    </button>
+                  )}
+                </>
+              )}
+            />
+          </div>
         </section>
 
         {/* Time Section */}
@@ -298,7 +299,7 @@ const UpdateEvent = () => {
               format="HH:mm"
               size="large"
               className="p-6 pr-2 w-full border-2 border-black rounded-md"
-              showNow={false} 
+              showNow={false}
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
               <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
@@ -307,23 +308,28 @@ const UpdateEvent = () => {
             </div>
           </div>
 
- <div className="relative">
-  <TimePicker
-    value={dayjs(endTime).isValid() ? dayjs(endTime) : dayjs("00:00", "HH:mm")}
-    placeholder="Hora Fin"
-    onChange={handleEndTimeChange}
-    format="HH:mm"
-    size="large"
-    className="p-6 pr-2 w-full border-2 border-black rounded-md"
-    showNow={false}
-  />
-  <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
-    <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
-      {dayjs(endTime).isValid() ? dayjs(endTime).format("HH:mm") : "00:00"}
-    </p>
-  </div>
-</div>
-
+          <div className="relative">
+            <TimePicker
+              value={
+                dayjs(endTime).isValid()
+                  ? dayjs(endTime)
+                  : dayjs("00:00", "HH:mm")
+              }
+              placeholder="Hora Fin"
+              onChange={handleEndTimeChange}
+              format="HH:mm"
+              size="large"
+              className="p-6 pr-2 w-full border-2 border-black rounded-md"
+              showNow={false}
+            />
+            <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
+              <p className="px-3 py-2 bg-[#DDDDE3] text-[#029AFF] rounded-xl">
+                {dayjs(endTime).isValid()
+                  ? dayjs(endTime).format("HH:mm")
+                  : "00:00"}
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Event Details Section */}
@@ -384,7 +390,7 @@ const UpdateEvent = () => {
 
             <div>
               <input
-                type="number"
+                type="text"
                 placeholder="Límite de Edad"
                 {...register("age_limite")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
@@ -406,17 +412,27 @@ const UpdateEvent = () => {
 
         {/* Category Section */}
         <section>
-          <Select
-            value={selectedCategories}
-            mode="multiple"
-            placeholder="Categoría del Evento"
-            tagRender={tagRender}
-            options={categoryOptions}
-            size="large"
-            className="w-full custom-select"
-            onChange={handleCategoryChange}
-            disabled={isSubmitting}
-          />
+{/* // Replace your current Select component with this: */}
+<Controller
+  name="category_id"
+  control={control}
+  render={({ field }) => (
+    <Select
+      {...field}
+      mode="multiple"
+      placeholder="Categoría del Evento"
+      tagRender={tagRender}
+      options={category?.data?.map((category) => ({
+        label: category?.category_name,
+        value: category.id,
+      }))}
+      size="large"
+      className="w-full custom-select"
+      disabled={isSubmitting}
+    />
+  )}
+/>
+
           <InstructionModal2 />
         </section>
 
@@ -439,11 +455,11 @@ const UpdateEvent = () => {
               multiple={false}
               maxCount={1}
               disabled={isSubmitting}
-              onRemove={() => handleRemoveImage('thumb')}
+              onRemove={() => handleRemoveImage("thumb")}
             >
               {fileList.length < 1 && <UploadIcons />}
             </Upload>
-            
+
             <p
               type="button"
               className="bg-[#000e8e] text-white sm:px-5 px-3 py-1 rounded-md text-lg  font-bold mt-4"
@@ -459,8 +475,8 @@ const UpdateEvent = () => {
 
         {/* Submit Button */}
         <div className="flex justify-center gap-10 mt-8">
-          <button 
-            onClick={() => navigate(-1)} 
+          <button
+            onClick={() => navigate(-1)}
             className="bg-red-500 duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
           >
             Cancelar

@@ -9,7 +9,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 
@@ -30,7 +29,7 @@ const VenueUserView = () => {
   });
 
 
-  const cardsPerPage = 3;
+  const cardsPerPage = 9;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
   const visibleCards = data?.events?.slice(
     currentPage * cardsPerPage,

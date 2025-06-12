@@ -47,29 +47,35 @@ const EventCardPublic = ({ visibleCards }) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    
-    const date = new Date(dateString);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const checkDate = new Date(date);
-    checkDate.setHours(0, 0, 0, 0);
-    
-    const options = { day: "2-digit", month: "short" };
-    const parts = date
-      .toLocaleDateString("es-ES", options)
-      .split(" ")
-      .map((part) => part.toLowerCase());
-    const formattedDate = `${parts[1]} ${parts[0]}`;
-    
-    if (checkDate.getTime() === today.getTime()) {
-      return `Hoy ${formattedDate}`;
-    }
-    
-    return formattedDate;
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+
+  const date = new Date(dateString);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const checkDate = new Date(date);
+  checkDate.setHours(0, 0, 0, 0);
+
+  const options = { day: "2-digit", month: "short" };
+  const parts = date
+    .toLocaleDateString("es-ES", options)
+    .split(" ")
+    .map((part) => part.toLowerCase());
+
+  // Capitalize the first letter of the month
+  const month = parts[1];
+  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+
+  const formattedDate = `${capitalizedMonth} ${parts[0]}`;
+
+  if (checkDate.getTime() === today.getTime()) {
+    return `Hoy ${formattedDate}`;
+  }
+
+  return formattedDate;
+};
+
 
   // Filter out past events and sort (today -> tomorrow -> future)
   const sortedEvents = [...visibleCards]
@@ -124,10 +130,16 @@ const EventCardPublic = ({ visibleCards }) => {
 
     if (dates.length === 0) return null;
 
-    const formatDate = (date) => {
-      const options = { day: "numeric", month: "short" };
-      return date.toLocaleDateString("es-ES", options).toLowerCase();
-    };
+const formatDate = (date) => {
+  const options = { day: "2-digit", month: "short" };
+  const [day, month] = date
+    .toLocaleDateString("es-ES", options)
+    .split(" ")
+    .map((part) => part.toLowerCase());
+
+  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  return `${capitalizedMonth} ${day}`;
+};
 
     if (dates.length === 1) {
       return formatDate(dates[0]);
@@ -189,6 +201,7 @@ const EventCardPublic = ({ visibleCards }) => {
             <div key={item.id}>
               <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
                 {formattedDate}
+                {console.log(formatDate(eventDate))}
               </h1>
               <Link to={`/event-user-view/${item.id}`}>
                 <div className="relative rounded overflow-hidden shadow-lg mb-5 mx-auto w-full sm:mb-7 xlg:mb-10">

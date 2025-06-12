@@ -14,21 +14,10 @@ import InstuctionModal from "@/components/common/InstuctionModal";
 import InstructionModal2 from "@/components/common/InstructionModal2";
 import DatePicker from "react-multi-date-picker";
 import { CircleX, Eye } from "lucide-react";
+import useCategoryList from "@/hooks/useCategoryList";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY-MM-DD";
-
-const categoryOptions = [
-  { value: "1", label: "Música en vivo" },
-  { value: "2", label: "Comedia" },
-  { value: "3", label: "Deportivos" },
-  { value: "4", label: "Arte & Cultura" },
-  { value: "5", label: "Comida y Bebida" },
-  { value: "6", label: "Variedad y Otro" },
-  { value: "7", label: "Cine y Televisión" },
-  { value: "8", label: "Talleres y Clases" },
-];
-
 const tagRender = (props) => {
   const { label, closable, onClose } = props;
   const onPreventMouseDown = (event) => {
@@ -68,6 +57,9 @@ const CreateEvents = () => {
   const [imageError, setImageError] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
+// category api 
+const category=useCategoryList();
+
 
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
@@ -79,10 +71,11 @@ const CreateEvents = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Event created successfully!");
+      toast.success(data.message || "¡Evento creado exitosamente!");
       navigate("/venue-profile-edit");
     },
     onError: (error) => {
+      console.log(error);
       toast.error(
         error.response?.data?.message ||
           "Failed to create event. Please try again."
@@ -121,7 +114,7 @@ const CreateEvents = () => {
     }
 
     if (!data.category_id || data.category_id.length === 0) {
-      toast.error("Please select at least one category");
+      toast.error("Por favor seleccione al menos una categoría");
       hasError = true;
     }
 
@@ -148,7 +141,9 @@ const CreateEvents = () => {
     };
 
     createEventMutation.mutate(updatedData);
+    console.log("All form data:", updatedData);
   };
+
 console.log(errors)
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -187,7 +182,7 @@ console.log(errors)
   };
 
   const handleCancel = () => {
-    const confirmed = window.confirm("Are you sure you want to cancel?");
+    const confirmed = window.confirm("¿Estás seguro que deseas cancelar?");
     if (confirmed) {
       navigate(-1);
     }
@@ -218,7 +213,7 @@ console.log(errors)
           </Upload>
           {imageError && <p className="text-red-500">{imageError}</p>}
           <p className="bg-[#000e8e] text-white sm:px-5 px-3 py-2 rounded-md text-lg font-bold mt-4">
-            Carga Imagen de Fondo (Requerido)
+            Carga Imagen de Fondo (Obligatorio)
           </p>
         </div>
 
@@ -335,7 +330,7 @@ console.log(errors)
                 type="text"
                 placeholder="Nombre del Evento"
                 {...register("event_title", {
-                  required: "Event title is required",
+                  required: "El título del evento es obligatorio",
                 })}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
@@ -350,7 +345,7 @@ console.log(errors)
                 type="text"
                 placeholder="Ubicación"
                 {...register("business_address", {
-                  required: "Address is required",
+                  required: "La dirección es obligatoria",
                 })}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
@@ -378,7 +373,7 @@ console.log(errors)
                 type="text"
                 placeholder="Precio para Entrar o Gratis"
                 {...register("price_limite", {
-                  required: "Price is required",
+                  required: "Se requiere precio",
                 })}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
@@ -390,7 +385,7 @@ console.log(errors)
 
             <div>
               <input
-                type="number"
+                type="text"
                 placeholder="Límite de Edad"
                 {...register("age_limite")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
@@ -421,7 +416,10 @@ console.log(errors)
                 mode="multiple"
                 placeholder="Categoría del Evento"
                 tagRender={tagRender}
-                options={categoryOptions}
+                options={category?.data?.map((item) => ({
+                  label: item?.category_name,
+                  value: String(item.id),
+                }))}
                 size="large"
                 className="w-full custom-select"
                 onChange={(value) => {
