@@ -65,7 +65,7 @@ const ResetPassword = () => {
             type={showPassword ? "text" : "password"}
             placeholder="Nueva Contraseña"
             {...register("password", {
-              required: "Contraseña es requerida",
+              required: "Contraseña es Obligatorio",
             })}
             className="w-full border-2 border-gray-300 p-4 rounded-md outline-none placeholder:text-gray-500"
           />
@@ -91,7 +91,7 @@ const ResetPassword = () => {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
-              required: "Confirmación de contraseña es requerida",
+              required: "Confirmación de contraseña es Obligatorio",
               validate: (value) =>
                 value === password || "Las contraseñas no coinciden",
             })}

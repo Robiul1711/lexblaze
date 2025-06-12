@@ -83,7 +83,7 @@ const handleCallButtonClick = () => {
             </Link>
           )}
         </div>
-{console.log(data?.user)}
+
         <div className="flex  items-center gap-2 ">
           <WatchIcon />
           <Title24>{data?.user?.business_time} </Title24>

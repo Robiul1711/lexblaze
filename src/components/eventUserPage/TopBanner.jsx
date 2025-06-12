@@ -7,11 +7,10 @@ import { useAuth } from "@/hooks/useAuth";
 const TopBanner = ({ data }) => {
   const { user } = useAuth();
 
-  // const linkPath = user ? "/venue-profile-edit" : "/venue-user-view";
-  // Hasta and Todo Los const
   const getEventDateLabel = (eventDates) => {
     if (!eventDates || eventDates.length === 0) return null;
 
+    // Convert to Date objects and sort
     const dates = eventDates
       .map((d) => new Date(d?.date))
       .filter((d) => d instanceof Date && !isNaN(d))
@@ -19,69 +18,85 @@ const TopBanner = ({ data }) => {
 
     if (dates.length === 0) return null;
 
-    const formatDate = (date) =>
-      date.toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
+    // Month abbreviations in Spanish
+    const monthAbbreviations = [
+      "Ene", "Feb", "Mar", "Abr", "May", "Jun", 
+      "Jul", "Ago", "Set", "Oct", "Nov", "Dic"
+    ];
+
+    // Format a single date as DD/MM/YYYY
+    const formatSingleDate = (date) => {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      return `${day}/${month}/${date.getFullYear()}`;
+    };
+
+    // Format for non-consecutive dates
+    const formatNonConsecutiveDates = (dates) => {
+      // Group dates by month and year
+      const grouped = {};
+      dates.forEach(date => {
+        const key = `${date.getFullYear()}-${date.getMonth()}`;
+        if (!grouped[key]) {
+          grouped[key] = [];
+        }
+        grouped[key].push(date.getDate());
       });
 
-    if (dates.length === 1) {
-      return formatDate(dates[0]);
-    }
+      const parts = [];
+      Object.entries(grouped).forEach(([key, days]) => {
+        const [year, month] = key.split('-');
+        const monthName = monthAbbreviations[parseInt(month)];
+        parts.push(`${days.join(', ')} ${monthName} ${year}`);
+      });
 
-    const allSameDay = dates.every(
-      (date) => date.getDay() === dates[0].getDay()
-    );
+      return parts.join(' y ');
+    };
 
-    if (allSameDay) {
-      const weekdaysES = [
-        "Domingos",
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes",
-        "Sábados",
-      ];
-      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-    }
-
-    // Check if dates form a continuous range (no missing days)
-    let isContinuous = true;
-    for (let i = 1; i < dates.length; i++) {
-      const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-      if (diffInDays !== 1) {
-        isContinuous = false;
-        break;
+    // Check if dates form a continuous range
+    const isContinuousRange = () => {
+      for (let i = 1; i < dates.length; i++) {
+        const prev = dates[i - 1];
+        const curr = dates[i];
+        const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+        if (diff !== 1) return false;
       }
+      return true;
+    };
+
+    // Single date
+    if (dates.length === 1) {
+      return formatSingleDate(dates[0]);
     }
 
-    if (isContinuous) {
-      const last = dates[dates.length - 1];
-      return `Hasta ${formatDate(last)}`;
+    // Continuous date range
+    if (isContinuousRange()) {
+      return `${formatSingleDate(dates[0])} a ${formatSingleDate(dates[dates.length - 1])}`;
     }
 
-    // Random non-continuous dates – just return last date without prefix
-    return formatDate(dates[dates.length - 1]);
+    // Non-consecutive dates
+    return formatNonConsecutiveDates(dates);
   };
-console.log(data);
+
   return (
-    <div className="flex flex-col  mx-auto w-full">
-      <Link to={`/venue-user-view/${data?.user_id}`} className="relative rounded overflow-hidden shadow-lg">
+    <div className="flex flex-col mx-auto w-full">
+      <Link
+        to={`/venue-user-view/${data?.user_id}`}
+        className="relative rounded overflow-hidden shadow-lg h-[200px] sm:h-[230px] xl:h-[250px]"
+      >
         <img
           src={data?.flyer ? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
-          className="w-full  max-h-[200px] sm:max-h-[230px] xl:max-h-[250px] object-cover "
+          className="w-full h-full object-cover"
         />
-        <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-3  flex  flex-col ">
-          {/* {data.event_dates && data.event_dates.length > 0 && (
+        <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-3 flex flex-col">
+          {data.event_dates && data.event_dates.length > 0 && (
             <div className="absolute top-0 right-0">
-              <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+              {/* <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
                 {getEventDateLabel(data.event_dates)}
-              </button>
+              </button> */}
             </div>
-          )} */}
+          )}
 
           <div className="space-y-1 sm:space-y-3 absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white flex items-center font-semibold">
@@ -91,38 +106,21 @@ console.log(data);
               {data?.event_title}
             </h2>
             {user ? (
-              <p
-                // to={`/venue-profile-edit`}
-                className="flex items-center gap-1 hover:underline text-primary font-semibold"
-              >
-                <MapPin className="size-5 sm:size-6 " />
+              <p className="flex items-center gap-1 hover:underline text-primary font-semibold">
+                <MapPin className="size-5 sm:size-6" />
                 <p className="lg:text-lg">{data?.user?.business_name}</p>
               </p>
             ) : (
-              <p
-                
-                className="flex items-center gap-1  text-primary font-semibold"
-              >
-                <MapPin className="size-5 sm:size-6 " />
+              <p className="flex items-center gap-1 text-primary font-semibold">
+                <MapPin className="size-5 sm:size-6" />
                 <p className="lg:text-lg">{data?.user?.business_name}</p>
               </p>
             )}
             <div className="flex items-start gap-2 font-semibold text-white">
-              <p>{data?.event_dates?.[0]?.date}</p>
-
-              {data?.event_dates?.length > 1 &&
-                data?.event_dates[0]?.date !==
-                  data?.event_dates[data.event_dates.length - 1]?.date && (
-                  <>
-                    <span>to</span>
-                    <p>
-                      {data?.event_dates[data.event_dates.length - 1]?.date}
-                    </p>
-                  </>
-                )}
+              <p>{getEventDateLabel(data?.event_dates)}</p>
             </div>
 
-            <div className="flex  items-start gap-2 font-semibold text-white">
+            <div className="flex items-start gap-2 font-semibold text-white">
               <p>
                 {data?.event_start_time === "Invalid Date"
                   ? ""
@@ -130,19 +128,20 @@ console.log(data);
               </p>
               {data?.event_end_time === "Invalid Date"
                 ? ""
-                : data?.event_end_time && <span>to</span>}
+                : data?.event_end_time && <span>a</span>}
 
               <p>
                 {data?.event_end_time === "Invalid Date"
                   ? ""
-                  :data?.event_end_time}
+                  : data?.event_end_time}
               </p>
             </div>
           </div>
         </div>
       </Link>
 
-      <p className="bg-[#0E1060] py-2 px-4 w-full  lg:text-xl font-semibold text-white">
+      {/* Rest of your component remains the same */}
+      <p className="bg-[#0E1060] py-2 px-4 w-full lg:text-xl font-semibold text-white">
         Más Detalles del Evento
       </p>
       {data?.business_website_link && (
@@ -157,7 +156,9 @@ console.log(data);
       )}
       <div className="flex justify-between items-center mt-3">
         <Title24>{data?.price_limite}</Title24>
-        <Title24>Límite de Edad: {data?.age_limite}</Title24>
+        {data?.age_limite && (
+          <Title24>Límite de Edad: {data?.age_limite}</Title24>
+        )}
       </div>
       <div className="pt-10 pb-10 lg:pb-20 max-w-[620px] space-y-5 lg:space-y-10 lg:text-center mx-auto">
         <Title24>{data?.event_details}</Title24>

@@ -44,17 +44,19 @@ const EventPageUserView = () => {
             ) : (
               <TopBanner data={data?.event} />
             )}
-<div className={`relative  lg:mb-2 ${data?.event?.event_thumb_image && " aspect-[4/5]"}`}>
-  {data?.event?.event_thumb_image && (
-    <img
-      src={data.event.event_thumb_image}
-      alt="flyer"
-      className="absolute max-h-[600px] h-full object-cover rounded-md"
-    />
-  )}
-</div>
-
-
+            <div
+              className={`relative  lg:mb-2 ${
+                data?.event?.event_thumb_image && " aspect-[4/5]"
+              }`}
+            >
+              {data?.event?.event_thumb_image && (
+                <img
+                  src={data.event.event_thumb_image}
+                  alt="flyer"
+                  className="absolute max-h-[600px] h-full object-cover rounded-md"
+                />
+              )}
+            </div>
           </div>
 
           <div className="lg:flex px-4 justify-center lg:mb-[100px]  hidden ">

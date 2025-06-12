@@ -9,7 +9,7 @@ export const TodoEventDropdown = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate(); // <-- Init navigate
   const { category, setCategory } = useAuth();
-  const { data: categoryData } = useCategoryList();
+  const categoryData = useCategoryList();
 
   // Reset category when leaving home page
   useEffect(() => {
@@ -20,7 +20,7 @@ export const TodoEventDropdown = () => {
 
   const categoryItems =
     categoryData?.data?.map((item) => ({
-      label: item.category_name,
+      label: item?.category_name,
       key: String(item.id),
     })) || [];
 

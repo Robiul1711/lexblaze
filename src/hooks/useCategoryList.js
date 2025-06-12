@@ -5,13 +5,15 @@ import useAxiosPublic from "./useAxiosPublic";
 const useCategoryList = () => {
   const axiosPublic = useAxiosPublic();
 
-  return useQuery({
+  const {data}= useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
       const response = await axiosPublic.get(`/category/allApiDatas`);
       return response.data;
     },
   });
+
+  return data;
 };
 
 export default useCategoryList;

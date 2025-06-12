@@ -90,7 +90,7 @@
 //             type="text"
 //             placeholder="Nombre del Negocio"
 //             {...register("business_name", {
-//               required: "Este campo es requerido",
+//               required: "Este campo es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-black p-4 lg:p-6"
 //           />
@@ -106,7 +106,7 @@
 //           <textarea
 //             placeholder="Descripción del Negocio"
 //             {...register("business_details", {
-//               required: "Este campo es requerido",
+//               required: "Este campo es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
 //           />
@@ -123,7 +123,7 @@
 //             type="text"
 //             placeholder="Dirección del Negocio"
 //             {...register("business_address", {
-//               required: "Este campo es requerido",
+//               required: "Este campo es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-black p-4 lg:p-6"
 //           />
@@ -140,7 +140,7 @@
 //             type="text"
 //             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
 //             {...register("business_time", {
-//               required: "Este campo es requerido",
+//               required: "Este campo es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-black p-4 lg:p-6"
 //           />
@@ -202,7 +202,7 @@
 //             type="email"
 //             placeholder="Correo Electrónico"
 //             {...register("email", {
-//               required: "Correo electrónico es requerido",
+//               required: "Correo electrónico es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-black p-4 lg:p-6"
 //           />
@@ -230,7 +230,7 @@
 //             type={showPassword ? "text" : "password"}
 //             placeholder="Contraseña"
 //             {...register("password", {
-//               required: "Contraseña es requerida",
+//               required: "Contraseña es Obligatorio",
 //             })}
 //             className="w-full border-[2px] border-[#000] p-4 lg:p-6 rounded-sm outline-none placeholder:text-gray-500 pr-12"
 //           />
@@ -254,7 +254,7 @@
 //             type={showConfirmPassword ? "text" : "password"}
 //             placeholder="Confirmar Contraseña"
 //             {...register("password_confirmation", {
-//               required: "Confirmación de contraseña es requerida",
+//               required: "Confirmación de contraseña es Obligatorio",
 //               validate: (value) =>
 //                 value === password || "Las contraseñas no coinciden",
 //             })}
@@ -460,7 +460,7 @@ const BusinessProfileForm = () => {
             type="text"
             placeholder="Nombre del Negocio"
             {...register("business_name", {
-              required: "Este campo es requerido",
+              required: "Este campo es Obligatorio",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
@@ -476,7 +476,7 @@ const BusinessProfileForm = () => {
           <textarea
             placeholder="Descripción del Negocio"
             {...register("business_details", {
-              required: "Este campo es requerido",
+              required: "Este campo es Obligatorio",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
@@ -493,15 +493,15 @@ const BusinessProfileForm = () => {
             type="text"
             placeholder="Dirección del Negocio"
             {...register("business_address", {
-              required: "Este campo es requerido",
+              // required: "Este campo es Obligatorio",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.business_address && (
+          {/* {errors.business_address && (
             <p className="text-red-500 text-sm">
               {errors.business_address.message}
             </p>
-          )}
+          )} */}
         </div>
 
         {/* Schedule */}
@@ -510,15 +510,15 @@ const BusinessProfileForm = () => {
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
             {...register("business_time", {
-              required: "Este campo es requerido",
+              // required: "Este campo es Obligatorio",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
-          {errors.business_time && (
+          {/* {errors.business_time && (
             <p className="text-red-500 text-sm">
               {errors.business_time.message}
             </p>
-          )}
+          )} */}
         </div>
 
         {/* Website */}
@@ -575,7 +575,7 @@ const BusinessProfileForm = () => {
             type="email"
             placeholder="Correo Electrónico"
             {...register("email", {
-              required: "Correo electrónico es requerido",
+              required: "Correo electrónico es Obligatorio",
             })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
@@ -607,7 +607,7 @@ const BusinessProfileForm = () => {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             {...register("password", {
-              required: "Contraseña es requerida",
+              required: "Contraseña es Obligatorio",
             })}
             className="w-full border-[2px] border-[#000] p-4 lg:p-6 pr-12"
           />
@@ -629,7 +629,7 @@ const BusinessProfileForm = () => {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
             {...register("password_confirmation", {
-              required: "Confirmación de contraseña es requerida",
+              required: "Confirmación de contraseña es Obligatorio",
               validate: (value) =>
                 value === password || "Las contraseñas no coinciden",
             })}

@@ -29,7 +29,7 @@ const VanueUserViewPublic = () => {
     },
   });
 
-  const cardsPerPage = 3;
+  const cardsPerPage = 9;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
   const visibleCards = data?.events?.slice(
     currentPage * cardsPerPage,

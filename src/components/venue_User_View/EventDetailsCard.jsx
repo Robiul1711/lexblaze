@@ -48,14 +48,14 @@ const EventDetailsCard = () => {
     },
   });
   // number popup
-const phoneNumber = data?.user?.phone;
+  const phoneNumber = data?.user?.phone;
 
-const handleCallButtonClick = () => {
-  if (phoneNumber) {
-    setShowNumber(true); // Show number after click
-    window.location.href = `tel:${phoneNumber}`;
-  }
-};
+  const handleCallButtonClick = () => {
+    if (phoneNumber) {
+      setShowNumber(true); // Show number after click
+      window.location.href = `tel:${phoneNumber}`;
+    }
+  };
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -68,56 +68,84 @@ const handleCallButtonClick = () => {
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-5">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center  gap-2 xlg:gap-3">
-            <RedLocationIcon />
-            <Title24>{data?.user?.business_address}</Title24>
-          </div>
+          {data?.user?.business_address ? (
+            <div className="flex items-center gap-2 xlg:gap-3">
+              <RedLocationIcon />
+              <Title24>{data?.user?.business_address}</Title24>
+            </div>
+          ) : null}
+
           {pathname === "/venue-profile-edit" && (
-            <Link to={"/update-profile"}>
+            <Link
+              to={"/update-profile"}
+              className="flex justify-end max-w-[10%] w-full"
+            >
               {" "}
               <EditIcon />
             </Link>
           )}
         </div>
-        <div className="flex  items-center gap-2 xlg:gap-3">
-          <WatchIcon />
-          <Title24>{data?.user?.business_time} </Title24>
-        </div>
+        {data?.user?.business_time ? (
+          <div className="flex items-center gap-2 xlg:gap-3">
+            <WatchIcon />
+            <Title24>{data?.user?.business_time} </Title24>
+          </div>
+        ) : null}
 
         <div className="flex justify-between items-center flex-wrap gap-4">
-          {data?.user?.isShowEmail==='false' ? null : (
+          {data?.user?.isShowEmail === "false" ? null : (
             <div className="flex items-center gap-2 xlg:gap-3">
               <MessageIcon />
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
-    {data?.user?.isShowPhone === 'false' ? null : (
-  <div className="flex items-center gap-2">
-    <button
-      className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
-      onClick={handleCallButtonClick}
-    >
-      <PhoneIcon />
-      {phoneNumber ? (showNumber ? phoneNumber : phoneNumber) : "Teléfono"}
-    </button>
-  </div>
-)}
+          {data?.user?.isShowPhone === "false" ? null : (
+            <div className="flex items-center gap-2">
+              <button
+                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                onClick={handleCallButtonClick}
+              >
+                <PhoneIcon />
+                {phoneNumber
+                  ? showNumber
+                    ? phoneNumber
+                    : phoneNumber
+                  : "Teléfono"}
+              </button>
+            </div>
+          )}
 
-          <div className="flex items-center gap-1 xlg:gap-3">
-            <MenuIcon />
-            <Title24>{data?.user?.business_food_menu}</Title24>
-          </div>
+          {data?.user?.business_food_menu ? (
+            <div className="flex items-center gap-2 xlg:gap-3">
+                <a
+  href={data?.user?.business_food_menu}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-1 text-inherit no-underline"
+>
+  <MenuIcon />
+  <Title24>La Carta</Title24>
+</a>
+            </div>
+          ) : null}
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-3">
-          <a
-            href={data?.user?.business_website_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
-          >
-            Website
-          </a>
-          <Title24>Límite de Edad: {data?.user?.age}</Title24>
+          {data?.user?.business_website_link ? (
+            <a
+              href={data?.user?.business_website_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
+            >
+              Website
+            </a>
+          ) : null}
+
+          {data?.user?.age ? (
+            <div>
+              <Title24>Límite de Edad: {data?.user?.age}</Title24>
+            </div>
+          ) : null}
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>
@@ -173,8 +201,7 @@ const handleCallButtonClick = () => {
               className="bg-[#0E1060] py-1 sm:py-2 xlg:py-2 px-4 xs:px-6 text-base  rounded-xl font-bold xxs:text-xl flex items-center justify-center gap-2  text-white"
             >
               <div className="xxs:block hidden">
-
-              <PlusIcon />
+                <PlusIcon />
               </div>
               Crear Evento
             </Link>

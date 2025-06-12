@@ -7,7 +7,7 @@ import { Settings2 } from "lucide-react";
 
 export const TodoEventDropdownMobile = () => {
   const { category, setCategory } = useAuth();
-  const { data: categoryData } = useCategoryList();
+  const categoryData = useCategoryList();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // Lock scroll when dropdown is open
