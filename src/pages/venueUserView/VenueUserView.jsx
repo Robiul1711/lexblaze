@@ -65,7 +65,7 @@ const VenueUserView = () => {
           
           <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6  `}>
      
-          <div className=" h-screen overflow-y-auto scrollbar-hide">
+          <div className=" overflow-y-auto scrollbar-hide">
             <EventDetailsCard />
             <EventCard visibleCards={visibleCards} />
           </div>
