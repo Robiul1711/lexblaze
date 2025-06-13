@@ -71,10 +71,21 @@ const handleCallButtonClick = () => {
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-4">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-2 ">
-            <RedLocationIcon />
-            <Title24>{data?.user?.business_address}</Title24>
-          </div>
+           {data?.user?.business_address ? (
+  <div className="flex items-center gap-2 xlg:gap-3">
+    <RedLocationIcon />
+    <a
+      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        data.user.business_address
+      )}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:underline "
+    >
+      <Title24>{data.user.business_address}</Title24>
+    </a>
+  </div>
+) : null}
         
           {pathname === "/venue-profile-edit" && (
             <Link to={"/update-profile"}>
@@ -83,32 +94,62 @@ const handleCallButtonClick = () => {
             </Link>
           )}
         </div>
+{
+  data?.user?.business_time ? (
+  <div className="flex items-center gap-2">
+    <WatchIcon />
+    <Title24>{data?.user?.business_time} </Title24>
+  </div>
+) : null
+}
 
-        <div className="flex  items-center gap-2 ">
-          <WatchIcon />
-          <Title24>{data?.user?.business_time} </Title24>
-        </div>
         <div className="flex justify-between items-center flex-wrap gap-4">
           {data?.user?.isShowEmail==='false' ? null : (
             <div className="flex items-center gap-2 ">
-              <MessageIcon />
+              {
+                data?.user?.email && (
+                  
+                  <MessageIcon />
+                )
+              }
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
 
     {data?.user?.isShowPhone === 'false' ? null : (
   <div className="flex items-center gap-2">
-    <button
-      className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
-      onClick={handleCallButtonClick}
-    >
-      <PhoneIcon />
-      {phoneNumber ? (showNumber ? phoneNumber : phoneNumber) : "Teléfono"}
-    </button>
+                {phoneNumber && (
+                  <button
+                    className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                    onClick={handleCallButtonClick}
+                  >
+                    <PhoneIcon />
+                    {phoneNumber
+                      ? showNumber
+                        ? phoneNumber
+                        : phoneNumber
+                      : "Teléfono"}
+                  </button>
+                )}
   </div>
 )}
+{
+  data?.user?.business_food_menu && (
 
-   <a
+    <div className="flex items-center gap-2">
+      <a
+        href={data?.user?.business_food_menu}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-1 text-inherit no-underline"
+      >
+        <MenuIcon />
+        <Title24>La Carta</Title24>
+      </a>
+    </div>
+  )
+}
+   {/* <a
   href={data?.user?.business_food_menu}
   target="_blank"
   rel="noopener noreferrer"
@@ -116,19 +157,29 @@ const handleCallButtonClick = () => {
 >
   <MenuIcon />
   <Title24>La Carta</Title24>
-</a>
+</a> */}
 
         </div>
+        
         <div className="flex justify-between items-center gap-2 ">
-          <a
-            href={data?.user?.business_website_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
-          >
-            Website
-          </a>
-          <Title24>Límite de Edad: {data?.user?.age}</Title24>
+          {
+            data?.user?.business_website_link ? (
+              <a
+                href={data?.user?.business_website_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
+              >
+                Website
+              </a>
+            ) : null
+          }
+         {
+          data?.user?.age && (
+            
+            <Title24>Límite de Edad: {data?.user?.age}</Title24>
+          )
+         }
         </div>
         <div className="mx-auto w-full text-center">
           <Title24>{data?.user?.business_details}</Title24>

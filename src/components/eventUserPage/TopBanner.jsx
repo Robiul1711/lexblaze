@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import Title24 from "../common/Title24";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { use } from "react";
 
 const TopBanner = ({ data }) => {
   const { user } = useAuth();
@@ -80,10 +81,14 @@ const TopBanner = ({ data }) => {
 
   return (
     <div className="flex flex-col mx-auto w-full">
-      <Link
-        to={`/venue-user-view/${data?.user_id}`}
-        className="relative rounded overflow-hidden shadow-lg h-[200px] sm:h-[230px] xl:h-[250px]"
-      >
+     <Link
+  to={
+    user
+      ? `/venue-profile-edit`
+      : `/venue-user-view/${data?.user_id}`
+  }
+  className="relative rounded overflow-hidden shadow-lg h-[200px] sm:h-[230px] xl:h-[250px]"
+>
         <img
           src={data?.flyer ? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
@@ -107,13 +112,14 @@ const TopBanner = ({ data }) => {
             </h2>
             {user ? (
               <p className="flex items-center gap-1 hover:underline text-primary font-semibold">
-                <MapPin className="size-5 sm:size-6" />
-                <p className="lg:text-lg">{data?.user?.business_name}</p>
+                {data?.business_address  && <MapPin className="size-5 sm:size-6" />}
+ 
+                <p className="lg:text-lg">{data?.business_address}</p>
               </p>
             ) : (
               <p className="flex items-center gap-1 text-primary font-semibold">
-                <MapPin className="size-5 sm:size-6" />
-                <p className="lg:text-lg">{data?.user?.business_name}</p>
+            {data?.business_address && <MapPin className="size-5 sm:size-6" />}
+                <p className="lg:text-lg">{data?.business_address}</p>
               </p>
             )}
             <div className="flex items-start gap-2 font-semibold text-white">

@@ -10,6 +10,8 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import AddSlider from "@/components/common/AddSlider";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import ErrorMessage from "@/components/common/ErrorMessage";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 
 const VenueUserView = () => {
@@ -20,7 +22,7 @@ const VenueUserView = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   },[currentPage])
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {
       const response = await axiosSecure.get("/user/event/show");
@@ -29,7 +31,7 @@ const VenueUserView = () => {
   });
 
 
-  const cardsPerPage = 9;
+  const cardsPerPage = 10;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
   const visibleCards = data?.events?.slice(
     currentPage * cardsPerPage,
@@ -47,6 +49,8 @@ const VenueUserView = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+    if (isLoading) return <LoadingSpinner />;
+    if (error) return <ErrorMessage message={error.message} />;
 // console.log(visibleCards)
   return (
     <div className="section-padding-x  h-full min-h-screen ">
@@ -65,7 +69,10 @@ const VenueUserView = () => {
             <EventDetailsCard />
             <EventCard visibleCards={visibleCards} />
           </div>
-          <div className="flex justify-between items-center py-10">
+          {console.log(visibleCards)}
+          {
+            visibleCards.length > 0  && (
+        <div className="flex justify-between items-center py-10">
             <div className="flex flex-col items-center gap-2">
               <button
                 className={`p-1 rounded-full border-[2px] border-black ${
@@ -96,6 +103,9 @@ const VenueUserView = () => {
               <p className="font-bold text-lg">Siguiente</p>
             </div>
           </div>
+            )
+          }
+       
              <div className="lg:mt-10 mb-5 max-w-[500px] mx-auto  xlg:hidden">
           <RightSide />
         </div>

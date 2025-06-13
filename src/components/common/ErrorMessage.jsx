@@ -25,10 +25,10 @@ const ErrorMessage = ({
 
   return (
     <div
-      className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}
+      className={`rounded-lg border items-centert justify-center h-screen p-4 flex ${variantStyles[variant]} ${className}`}
       role="alert"
     >
-      <div className="flex items-start gap-3">
+      <div className="flex  gap-3">
         <AlertTriangle className={`mt-0.5 flex-shrink-0 ${iconColors[variant]}`} />
         <div className="flex-1">
           <h3 className="text-base font-semibold">{title}</h3>

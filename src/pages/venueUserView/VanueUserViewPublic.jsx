@@ -29,7 +29,7 @@ const VanueUserViewPublic = () => {
     },
   });
 
-  const cardsPerPage = 9;
+  const cardsPerPage = 10;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
   const visibleCards = data?.events?.slice(
     currentPage * cardsPerPage,
@@ -79,7 +79,9 @@ const VanueUserViewPublic = () => {
               </div>
 
               {/* Pagination */}
-              <div className="flex justify-between items-center py-10">
+              {
+                visibleCards && visibleCards.length >0 && (
+                      <div className="flex justify-between items-center py-10">
                 <div className="flex flex-col items-center gap-2">
                   <button
                     className={`p-1 rounded-full border-[2px] border-black ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -104,6 +106,9 @@ const VanueUserViewPublic = () => {
                   <p className="font-bold text-lg">Siguiente</p>
                 </div>
               </div>
+                )
+              }
+          
 
               {/* Advertisement */}
               <div className="flex justify-center flex-col gap-3 mb-12 sm:mb-28 lg:mb-[120px]">
