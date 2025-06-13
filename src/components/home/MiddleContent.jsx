@@ -6,7 +6,7 @@ import ErrorMessage from "../common/ErrorMessage";
 
 const MiddleContent = ({ data, isLoading, error }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const cardsPerPage = 5;
+  const cardsPerPage = 10;
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -40,76 +40,78 @@ const MiddleContent = ({ data, isLoading, error }) => {
   };
 
   // Hasta and Todo Los const
-  const getEventDateLabel = (eventDates) => {
-    if (!eventDates || eventDates.length === 0) return null;
+const getEventDateLabel = (eventDates) => {
+  if (!eventDates || eventDates.length === 0) return null;
 
-    const dates = eventDates
-      .map((d) => new Date(d?.date))
-      .filter((d) => d instanceof Date && !isNaN(d))
-      .sort((a, b) => a - b);
+  const dates = eventDates
+    .map((d) => new Date(d?.date))
+    .filter((d) => d instanceof Date && !isNaN(d))
+    .sort((a, b) => a - b);
 
-    if (dates.length === 0) return null;
+  if (dates.length === 0) return null;
 
-    // Format date helper
-    const formatDate = (date) =>
-      date.toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
-
-    // Check if all dates are today
-    const today = new Date();
-    const isSameDay = (a, b) =>
-      a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate();
-
-    const allToday = dates.every((date) => isSameDay(date, today));
-    if (allToday) return null;
-
-    // One date only
-    if (dates.length === 1) {
-      return formatDate(dates[0]);
-    }
-
-    // All same weekday
-    const allSameDay = dates.every(
-      (date) => date.getDay() === dates[0].getDay()
-    );
-
-    if (allSameDay) {
-      const weekdaysES = [
-        "Domingos",
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes",
-        "Sábados",
-      ];
-      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-    }
-
-    // Continuous range
-    let isContinuous = true;
-    for (let i = 1; i < dates.length; i++) {
-      const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-      if (diffInDays !== 1) {
-        isContinuous = false;
-        break;
-      }
-    }
-
-    if (isContinuous) {
-      const last = dates[dates.length - 1];
-      return `Hasta ${formatDate(last)}`;
-    }
-
-    // Otherwise, show last date
-    return formatDate(dates[dates.length - 1]);
+  // Format date helper - modified to capitalize month
+  const formatDate = (date) => {
+    const formatted = date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    // Capitalize the first letter of the month
+    return formatted.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
+  // Check if all dates are today
+  const today = new Date();
+  const isSameDay = (a, b) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+
+  const allToday = dates.every((date) => isSameDay(date, today));
+  if (allToday) return null;
+
+  // One date only
+  if (dates.length === 1) {
+    return formatDate(dates[0]);
+  }
+
+  // All same weekday
+  const allSameDay = dates.every(
+    (date) => date.getDay() === dates[0].getDay()
+  );
+
+  if (allSameDay) {
+    const weekdaysES = [
+      "Domingos",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábados",
+    ];
+    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+  }
+
+  // Continuous range
+  let isContinuous = true;
+  for (let i = 1; i < dates.length; i++) {
+    const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+    if (diffInDays !== 1) {
+      isContinuous = false;
+      break;
+    }
+  }
+
+  if (isContinuous) {
+    const last = dates[dates.length - 1];
+    return `Hasta ${formatDate(last)}`;
+  }
+
+  // Otherwise, show last date
+  return formatDate(dates[dates.length - 1]);
+};
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
       <div className="h-screen overflow-y-auto scrollbar-hide">
@@ -159,11 +161,11 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         to={`/venue-user-view/${item.user_id}`}
                         className="inline-block"
                       >
-                        {item?.user?.business_name && (
+                        {item?.business_address && (
                           <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
                             <MapPin className="size-5 md:size-6 " />
                             <p className="sm:text-lg">
-                              {item?.user?.business_name}
+                              {item?.business_address}
                             </p>
                           </p>
                         )}

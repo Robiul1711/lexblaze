@@ -67,19 +67,31 @@ const EventDetailsCard = () => {
       <SwiperImg data={data?.user?.user_images} />
 
       <div className="flex flex-col gap-4 xlg:gap-4  mt-5">
-        <div className="flex justify-between items-center gap-4">
+        <div
+          className={`${
+            data?.user?.business_address
+              ? "flex justify-between  items-center"
+              : "flex justify-end  items-center"
+          }  gap-4`}
+        >
           {data?.user?.business_address ? (
             <div className="flex items-center gap-2 xlg:gap-3">
               <RedLocationIcon />
-              <Title24>{data?.user?.business_address}</Title24>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  data.user.business_address
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline "
+              >
+                <Title24>{data.user.business_address}</Title24>
+              </a>
             </div>
           ) : null}
 
           {pathname === "/venue-profile-edit" && (
-            <Link
-              to={"/update-profile"}
-              className="flex justify-end max-w-[10%] w-full"
-            >
+            <Link to={"/update-profile"} className="">
               {" "}
               <EditIcon />
             </Link>
@@ -99,33 +111,36 @@ const EventDetailsCard = () => {
               <Title24>{data?.user?.email}</Title24>
             </div>
           )}
+
           {data?.user?.isShowPhone === "false" ? null : (
             <div className="flex items-center gap-2">
-              <button
-                className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
-                onClick={handleCallButtonClick}
-              >
-                <PhoneIcon />
-                {phoneNumber
-                  ? showNumber
-                    ? phoneNumber
-                    : phoneNumber
-                  : "Teléfono"}
-              </button>
+              {phoneNumber && (
+                <button
+                  className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-1"
+                  onClick={handleCallButtonClick}
+                >
+                  <PhoneIcon />
+                  {phoneNumber
+                    ? showNumber
+                      ? phoneNumber
+                      : phoneNumber
+                    : "Teléfono"}
+                </button>
+              )}
             </div>
           )}
 
           {data?.user?.business_food_menu ? (
             <div className="flex items-center gap-2 xlg:gap-3">
-                <a
-  href={data?.user?.business_food_menu}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="flex items-center gap-1 text-inherit no-underline"
->
-  <MenuIcon />
-  <Title24>La Carta</Title24>
-</a>
+              <a
+                href={data?.user?.business_food_menu}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-inherit no-underline"
+              >
+                <MenuIcon />
+                <Title24>La Carta</Title24>
+              </a>
             </div>
           ) : null}
         </div>

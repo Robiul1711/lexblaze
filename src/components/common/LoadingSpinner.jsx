@@ -4,7 +4,7 @@ import { GridLoader } from 'react-spinners';
 const LoadingSpinner = () => {
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-center">
     <GridLoader color="#FDE300"  />
     </div>
   );
