@@ -120,7 +120,7 @@ const handleCallButtonClick = () => {
   <div className="flex items-center gap-2">
                 {phoneNumber && (
                   <button
-                    className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2"
+                    className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-2 hover:underline"
                     onClick={handleCallButtonClick}
                   >
                     <PhoneIcon />
@@ -141,7 +141,7 @@ const handleCallButtonClick = () => {
         href={data?.user?.business_food_menu}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1 text-inherit no-underline"
+        className="flex items-center gap-1 text-inherit hover:underline"
       >
         <MenuIcon />
         <Title24>La Carta</Title24>

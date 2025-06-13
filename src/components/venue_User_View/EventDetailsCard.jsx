@@ -116,7 +116,7 @@ const EventDetailsCard = () => {
             <div className="flex items-center gap-2">
               {phoneNumber && (
                 <button
-                  className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-1"
+                  className="rounded-full xlg:text-[20px] font-semibold flex items-center justify-center gap-1 hover:underline"
                   onClick={handleCallButtonClick}
                 >
                   <PhoneIcon />
@@ -136,7 +136,7 @@ const EventDetailsCard = () => {
                 href={data?.user?.business_food_menu}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-inherit no-underline"
+                className="flex items-center gap-1 text-inherit hover:underline"
               >
                 <MenuIcon />
                 <Title24>La Carta</Title24>
@@ -213,7 +213,7 @@ const EventDetailsCard = () => {
 
             <Link
               to="/create-event"
-              className="bg-[#0E1060] py-1 sm:py-2 xlg:py-2 px-4 xs:px-6 text-base  rounded-xl font-bold xxs:text-xl flex items-center justify-center gap-2  text-white"
+              className="bg-[#0E1060] hover:text-[#0E1060] hover:bg-[#FFFBE0] hover:border-2 border-2 duration-300 hover:border-[#0E1060] py-1 sm:py-2 xlg:py-2 px-4 xs:px-6 text-base  rounded-xl font-bold xxs:text-xl flex items-center justify-center gap-2  text-white"
             >
               <div className="xxs:block hidden">
                 <PlusIcon />
