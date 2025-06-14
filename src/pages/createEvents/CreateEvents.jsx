@@ -154,9 +154,9 @@ const CreateEvents = () => {
         date.year,
         date.month.number - 1,
         date.day
-      ).toISOString();
+      );
     });
-
+console.log(data.event_date)
     const updatedData = {
       ...data,
       event_date: formattedDates,
@@ -166,9 +166,11 @@ const CreateEvents = () => {
       event_thumb_image: thumbFileList[0]?.originFileObj || null,
     };
 
-    createEventMutation.mutate(updatedData);
-  };
+    // createEventMutation.mutate(updatedData);
+    console.log("formattedDates" ,formattedDates);
+    console.log("updatedData", updatedData);
 
+  };
   const handleStartTimeChange = (time) => {
     setStartTime(time);
     setValue("event_start_time", time ? time.toISOString() : null);
