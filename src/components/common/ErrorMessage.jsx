@@ -7,13 +7,14 @@ const ErrorMessage = ({
   variant = 'error',
   className = '',
   onRetry,
-  retryText = 'Retry'
+  retryText = 'Retry',
+  icon: Icon = AlertTriangle
 }) => {
   const variantStyles = {
-    error: 'bg-red-50 text-red-800 border-red-200',
-    warning: 'bg-amber-50 text-amber-800 border-amber-200',
-    info: 'bg-blue-50 text-blue-800 border-blue-200',
-    success: 'bg-green-50 text-green-800 border-green-200'
+    error: 'bg-red-50 text-red-800 border border-red-200',
+    warning: 'bg-amber-50 text-amber-800 border border-amber-200',
+    info: 'bg-blue-50 text-blue-800 border border-blue-200',
+    success: 'bg-green-50 text-green-800 border border-green-200'
   };
 
   const iconColors = {
@@ -25,31 +26,32 @@ const ErrorMessage = ({
 
   return (
     <div
-      className={`rounded-lg border items-centert justify-center h-screen p-4 flex ${variantStyles[variant]} ${className}`}
+      className={`w-full max-w-md mx-auto rounded-xl p-5 flex items-start gap-4 shadow-sm ${variantStyles[variant]} ${className}`}
       role="alert"
     >
-      <div className="flex  gap-3">
-        <AlertTriangle className={`mt-0.5 flex-shrink-0 ${iconColors[variant]}`} />
-        <div className="flex-1">
-          <h3 className="text-base font-semibold">{title}</h3>
-          <p className="mt-1 text-sm leading-relaxed">{message}</p>
-          {onRetry && (
-            <button
-              onClick={onRetry}
-              className={`mt-3 inline-block px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                variant === 'error'
-                  ? 'bg-red-100 hover:bg-red-200'
-                  : variant === 'warning'
-                  ? 'bg-amber-100 hover:bg-amber-200'
-                  : variant === 'info'
-                  ? 'bg-blue-100 hover:bg-blue-200'
-                  : 'bg-green-100 hover:bg-green-200'
-              }`}
-            >
-              {retryText}
-            </button>
-          )}
-        </div>
+      <div className="pt-1">
+        <Icon className={`w-5 h-5 ${iconColors[variant]}`} />
+      </div>
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="mt-1 text-sm text-amber-800 font-semibold">{message}</p>
+
+        {onRetry && (
+          <button
+            onClick={onRetry}
+            className={`mt-3 inline-block px-4 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
+              variant === 'error'
+                ? 'bg-red-100 hover:bg-red-200 text-red-800'
+                : variant === 'warning'
+                ? 'bg-amber-100 hover:bg-amber-200 text-amber-800'
+                : variant === 'info'
+                ? 'bg-blue-100 hover:bg-blue-200 text-blue-800'
+                : 'bg-green-100 hover:bg-green-200 text-green-800'
+            }`}
+          >
+            {retryText}
+          </button>
+        )}
       </div>
     </div>
   );

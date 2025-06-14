@@ -81,9 +81,11 @@ const TopBanner = ({ data }) => {
 
   return (
     <div className="flex flex-col mx-auto w-full">
+      {/* {console.log(data?.user?.email)}
+      {console.log(user?.user?.email)} */}
      <Link
   to={
-    user
+    data?.user?.email === user?.user?.email
       ? `/venue-profile-edit`
       : `/venue-user-view/${data?.user_id}`
   }
@@ -95,13 +97,13 @@ const TopBanner = ({ data }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-3 flex flex-col">
-          {data.event_dates && data.event_dates.length > 0 && (
+          {/* {data.event_dates && data.event_dates.length > 0 && (
             <div className="absolute top-0 right-0">
-              {/* <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+              <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
                 {getEventDateLabel(data.event_dates)}
-              </button> */}
+              </button>
             </div>
-          )}
+          )} */}
 
           <div className="space-y-1 sm:space-y-3 absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white flex items-center font-semibold">
@@ -112,32 +114,33 @@ const TopBanner = ({ data }) => {
             </h2>
             {user ? (
               <p className="flex items-center gap-1 hover:underline text-primary font-semibold">
-                {data?.business_address  && <MapPin className="size-5 sm:size-6" />}
+                {data?.user?.business_name  && <MapPin className="size-5 sm:size-6" />}
  
-                <p className="lg:text-lg">{data?.business_address}</p>
+                <p className="lg:text-lg">{data?.user?.business_name}</p>
               </p>
             ) : (
               <p className="flex items-center gap-1 text-primary font-semibold">
-            {data?.business_address && <MapPin className="size-5 sm:size-6" />}
-                <p className="lg:text-lg">{data?.business_address}</p>
+            {data?.user?.business_name && <MapPin className="size-5 sm:size-6" />}
+                <p className="lg:text-lg">{data?.user?.business_name}</p>
               </p>
             )}
+            {console.log(data)}
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>{getEventDateLabel(data?.event_dates)}</p>
             </div>
 
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>
-                {data?.event_start_time === "Invalid Date"
+                {data?.event_start_time === "Invalid Date" 
                   ? ""
                   : data?.event_start_time}
               </p>
-              {data?.event_end_time === "Invalid Date"
+              {data?.event_end_time === "Invalid Date" || data?.event_end_time === "null"
                 ? ""
                 : data?.event_end_time && <span>a</span>}
 
               <p>
-                {data?.event_end_time === "Invalid Date"
+                {data?.event_end_time === "Invalid Date" || data?.event_end_time === "null"
                   ? ""
                   : data?.event_end_time}
               </p>

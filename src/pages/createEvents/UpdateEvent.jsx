@@ -158,7 +158,7 @@ const UpdateEvent = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      navigate("/venue-profile-edit");
+        navigate(`/event-user-view/${data?.event?.id}`);
       toast.success(data.message || "Event updated successfully!");
     },
     onError: (error) => {
