@@ -17,7 +17,7 @@ import { CircleX, Eye } from "lucide-react";
 import useCategoryList from "@/hooks/useCategoryList";
 
 dayjs.extend(customParseFormat);
-const dateFormat = "YYYY-MM-DD";
+
 const tagRender = (props) => {
   const { label, closable, onClose } = props;
   const onPreventMouseDown = (event) => {
@@ -49,6 +49,7 @@ const CreateEvents = () => {
     formState: { errors },
     trigger,
   } = useForm();
+  
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [flyerFileList, setFlyerFileList] = useState([]);
@@ -57,9 +58,19 @@ const CreateEvents = () => {
   const [imageError, setImageError] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
-// category api 
-const category=useCategoryList();
+  const category = useCategoryList();
 
+  const validateDates = (dates) => {
+    if (!dates || dates.length === 0) return false;
+    return dates.every(date => {
+      try {
+        const jsDate = new Date(date.year, date.month.number - 1, date.day);
+        return !isNaN(jsDate.getTime());
+      } catch {
+        return false;
+      }
+    });
+  };
 
   const createEventMutation = useMutation({
     mutationFn: async (formData) => {
@@ -72,13 +83,13 @@ const category=useCategoryList();
     },
     onSuccess: (data) => {
       toast.success(data.message || "¡Evento creado exitosamente!");
-      navigate("/venue-profile-edit");
+      navigate(`/event-user-view/${data?.event?.id}`);
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(
         error.response?.data?.message ||
-          "Failed to create event. Please try again."
+        "Failed to create event. Please try again."
       );
     },
     onSettled: () => {
@@ -118,7 +129,19 @@ const category=useCategoryList();
       hasError = true;
     }
 
-    const valid = await trigger(["event_date", "event_start_time"]);
+    if (!validateDates(data.event_date)) {
+      toast.error("Please provide valid event dates");
+      hasError = true;
+    }
+
+    const valid = await trigger([
+      "event_date", 
+      "event_start_time",
+      "event_title",
+      "business_address",
+      "price_limite"
+    ]);
+    
     if (!valid || hasError) {
       setIsSubmitting(false);
       return;
@@ -126,34 +149,35 @@ const category=useCategoryList();
 
     setIsSubmitting(true);
 
+    const formattedDates = data.event_date.map(date => {
+      return new Date(
+        date.year,
+        date.month.number - 1,
+        date.day
+      ).toISOString();
+    });
+
     const updatedData = {
       ...data,
-      event_date: data?.event_date?.map(
-        (date) =>
-          `${date.year}-${String(date.month.number).padStart(2, "0")}-${String(
-            date.day
-          ).padStart(2, "0")}`
-      ),
-      event_start_time: dayjs(startTime).format("HH:mm"),
-      event_end_time: dayjs(endTime).format("HH:mm"),
+      event_date: formattedDates,
+      event_start_time: startTime ? dayjs(startTime).format("HH:mm:ss") : null,
+      event_end_time: endTime ? dayjs(endTime).format("HH:mm:ss") : null,
       flyer: flyerFileList[0]?.originFileObj,
       event_thumb_image: thumbFileList[0]?.originFileObj || null,
     };
 
     createEventMutation.mutate(updatedData);
-    console.log("All form data:", updatedData);
   };
 
-console.log(errors)
   const handleStartTimeChange = (time) => {
     setStartTime(time);
-    setValue("event_start_time", time);
+    setValue("event_start_time", time ? time.toISOString() : null);
     trigger("event_start_time");
   };
 
   const handleEndTimeChange = (time) => {
     setEndTime(time);
-    setValue("event_end_time", time);
+    setValue("event_end_time", time ? time.toISOString() : null);
   };
 
   const handleFlyerImageChange = ({ fileList: newFileList }) => {
@@ -195,7 +219,7 @@ console.log(errors)
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        {/* Flyer Upload - REQUIRED */}
+        {/* Flyer Upload */}
         <div className="flex flex-col items-center gap-2 mb-8">
           <Upload
             listType="picture-card"
@@ -217,14 +241,17 @@ console.log(errors)
           </p>
         </div>
 
-        {/* Date */}
+        {/* Date Picker */}
         <div className="mt-4">
           <h1 className="text-2xl md:text-[32px] font-bold">Elija Fecha</h1>
           <InstuctionModal />
           <Controller
             name="event_date"
             control={control}
-            rules={{ required: "La fecha es obligatoria." }}
+            rules={{ 
+              required: "La fecha es obligatoria.",
+              validate: validateDates
+            }}
             render={({ field }) => (
               <div className="relative mt-4">
                 <DatePicker
@@ -235,13 +262,9 @@ console.log(errors)
                   value={field.value}
                   onChange={field.onChange}
                 />
-
-                {/* Calendar Icon */}
                 <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
                   <InputCalenderIcons />
                 </div>
-
-                {/* Reset/Clear Button */}
                 {field.value && field.value.length > 0 && (
                   <button
                     type="button"
@@ -254,7 +277,6 @@ console.log(errors)
               </div>
             )}
           />
-
           {errors.event_date && (
             <p className="text-red-500">{errors.event_date.message}</p>
           )}
@@ -275,7 +297,7 @@ console.log(errors)
                 size="large"
                 className="p-6 pr-2 w-full border-2 border-black rounded-md"
                 disabled={isSubmitting}
-                showNow={false} 
+                showNow={false}
               />
             )}
           />
@@ -284,10 +306,10 @@ console.log(errors)
               {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
             </p>
           </div>
-        </div>
           {errors.event_start_time && (
             <p className="text-red-500">{errors.event_start_time.message}</p>
           )}
+        </div>
 
         {/* End Time */}
         <div className="relative">
@@ -318,9 +340,7 @@ console.log(errors)
               <input
                 type="text"
                 placeholder="Compañía/Promotor"
-                {...register("business_name", {
-                 
-                })}
+                {...register("business_name")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
               />
@@ -351,18 +371,14 @@ console.log(errors)
                 disabled={isSubmitting}
               />
               {errors.business_address && (
-                <p className="text-red-500">
-                  {errors.business_address.message}
-                </p>
+                <p className="text-red-500">{errors.business_address.message}</p>
               )}
             </div>
 
             <div>
               <textarea
                 placeholder="Descripción del Evento"
-                {...register("event_details", {
-                 
-                })}
+                {...register("event_details")}
                 className="w-full border-2 border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px] rounded-md"
                 disabled={isSubmitting}
               />
@@ -434,11 +450,10 @@ console.log(errors)
           {errors.category_id && (
             <p className="text-red-500">{errors.category_id.message}</p>
           )}
-
           <InstructionModal2 />
         </section>
 
-        {/* Thumbnail Image Upload - OPTIONAL */}
+        {/* Thumbnail Image Upload */}
         <section>
           <h1 className="text-2xl lg:text-[32px] font-bold">
             Carga Otra Imagen
@@ -514,9 +529,9 @@ console.log(errors)
       </form>
       <div
         onClick={handleCancel}
-        className="bg-red-500 mx-auto mt-5 sm:mt-5 text-center cursor-pointer max-w-[150px] text-lg duration-300 hover:bg-red-600 text-white sm:px-6 px-10 py-1 sm:py-2 rounded-[12px]  lg:text-2xl font-bold"
+        className="bg-red-500 mx-auto mt-5 sm:mt-5 text-center cursor-pointer max-w-[150px] text-lg duration-300 hover:bg-red-600 text-white sm:px-6 px-10 py-1 sm:py-2 rounded-[12px] lg:text-2xl font-bold"
       >
-     Cancelar
+        Cancelar
       </div>
 
       {/* Image Preview Modal */}

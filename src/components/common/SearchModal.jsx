@@ -161,6 +161,7 @@ const SearchModal = ({ search, setSearch }) => {
                         className="block p-4"
                         onClick={() => setIsOpen(false)}
                       >
+                        {/* {console.log(event)} */}
                         <div className="flex gap-4">
                           <div className="flex-shrink-0">
                             <img

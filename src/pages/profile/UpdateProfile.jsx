@@ -347,7 +347,7 @@ const UpdateProfile = () => {
                 Actualizando...
               </span>
             ) : (
-              "Update"
+              "Actualizar"
             )}
           </button>
         </div>

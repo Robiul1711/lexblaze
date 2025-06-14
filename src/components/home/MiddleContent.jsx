@@ -161,11 +161,11 @@ const getEventDateLabel = (eventDates) => {
                         to={`/venue-user-view/${item.user_id}`}
                         className="inline-block"
                       >
-                        {item?.business_address && (
+                        {item?.user?.business_name && (
                           <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
                             <MapPin className="size-5 md:size-6 " />
                             <p className="sm:text-lg">
-                              {item?.business_address}
+                              {item?.user?.business_name}
                             </p>
                           </p>
                         )}

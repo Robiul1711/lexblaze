@@ -222,8 +222,8 @@ const EventCardPublic = ({ visibleCards }) => {
                           </div>
                           <div className="flex items-center justify-between text-primary font-semibold">
                             <div className="flex items-center gap-1 xlg:text-lg">
-                             {item?.business_address && <MapPin className="size-5 sm:size-6" />}
-                              {item?.business_address}
+                             {item?.user?.business_name && <MapPin className="size-5 sm:size-6" />}
+                              {item?.user?.business_name}
                             </div>
                             {pathname === "/venue-profile-edit" && (
                               <TooltipProvider>

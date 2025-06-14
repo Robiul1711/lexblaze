@@ -211,14 +211,15 @@ visibleCards.forEach((event) => {
                     </TooltipProvider>
                   )}
                 </div>
-                <div className={`${item?.business_address ? "flex items-center justify-between" : "flex items-center justify-end"}  text-primary font-semibold`}>
+                {console.log(item?.user?.business_name)}
+                <div className={`${item?.user?.business_name ? "flex items-center justify-between" : "flex items-center justify-end"}  text-primary font-semibold`}>
                   {
-                    item?.business_address && (
+                    item?.user?.business_name && (
                           <div className="flex items-center gap-1 hover:underline cursor-pointer">
                  
                     <MapPin className="size-5 lg:size-6" />
                     <p className="xlg:text-lg">
-                      {item?.business_address}
+                      {item?.user?.business_name}
                     </p>
                   </div>
                     )
@@ -247,7 +248,7 @@ visibleCards.forEach((event) => {
                 </div>
                 <div className="flex items-center max-w-[200px] justify-between gap-4 font-semibold text-white">
                   <p>{item.price_limite}</p>
-                  <p>{item.event_start_time}</p>
+                <p>{item.event_start_time === "Invalid Date" || item.event_start_time === "null" ? "" : item.event_start_time}</p>
                 </div>
               </div>
             </div>
