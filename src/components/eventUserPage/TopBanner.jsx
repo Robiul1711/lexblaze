@@ -114,14 +114,14 @@ const TopBanner = ({ data }) => {
             </h2>
             {user ? (
               <p className="flex items-center gap-1 hover:underline text-primary font-semibold">
-                {data?.user?.business_name  && <MapPin className="size-5 sm:size-6" />}
+                {data?.business_address  && <MapPin className="size-5 sm:size-6" />}
  
-                <p className="lg:text-lg">{data?.user?.business_name}</p>
+                <p className="lg:text-lg">{data?.business_address}</p>
               </p>
             ) : (
               <p className="flex items-center gap-1 text-primary font-semibold">
-            {data?.user?.business_name && <MapPin className="size-5 sm:size-6" />}
-                <p className="lg:text-lg">{data?.user?.business_name}</p>
+            {data?.business_address && <MapPin className="size-5 sm:size-6" />}
+                <p className="lg:text-lg">{data?.business_address}</p>
               </p>
             )}
             {console.log(data)}

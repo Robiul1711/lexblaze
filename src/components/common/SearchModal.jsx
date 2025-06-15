@@ -161,7 +161,7 @@ const SearchModal = ({ search, setSearch }) => {
                         className="block p-4"
                         onClick={() => setIsOpen(false)}
                       >
-                        {/* {console.log(event)} */}
+                        {console.log(event)}
                         <div className="flex gap-4">
                           <div className="flex-shrink-0">
                             <img
@@ -179,8 +179,8 @@ const SearchModal = ({ search, setSearch }) => {
                                 <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
                                   {event.event_title || 'Evento sin título'}
                                 </h3>
-                                <p className="text-sm text-gray-600 mt-1">
-                                  {event.business_name || 'Negocio desconocido'}
+                                <p className="font-bold  text-gray-600 mt-1">
+                                  {event?.user?.business_name || 'Lugar sin nombre'}
                                 </p>
                               </div>
                               <div className="text-right">

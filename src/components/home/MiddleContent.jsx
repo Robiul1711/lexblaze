@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 const MiddleContent = ({ data, isLoading, error }) => {
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(0);
-  const cardsPerPage = 10;
+  const cardsPerPage = 20;
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -171,11 +171,11 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         className="inline-block"
                       >
                         {console.log(item?.user?.email)}
-                        {item?.user?.business_name && (
+                        {item?.business_address && (
                           <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
                             <MapPin className="size-5 md:size-6 " />
                             <p className="sm:text-lg">
-                              {item?.user?.business_name}
+                              {item?.business_address}
                             </p>
                           </p>
                         )}
@@ -195,7 +195,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
         )}
       </div>
 
-      {events.length > 4 && (
+      {events.length > 20 && (
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center gap-2">
             <button

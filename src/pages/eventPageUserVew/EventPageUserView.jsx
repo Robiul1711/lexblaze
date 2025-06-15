@@ -53,7 +53,7 @@ const EventPageUserView = () => {
                 <img
                   src={data.event.event_thumb_image}
                   alt="flyer"
-                  className="absolute max-h-[600px] h-full object-cover rounded-md"
+                  className="absolute max-h-[600px] h-full w-full  rounded-md"
                 />
               )}
             </div>

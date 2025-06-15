@@ -71,7 +71,7 @@ const Home = () => {
         
         {/* Middle */}
         <div className="w-full lg:w-[60%]">
-          {console.log(data)}
+          {/* {console.log(data)} */}
           <MiddleContent data={data} isLoading={isLoading} error={error} />
     
         </div>
