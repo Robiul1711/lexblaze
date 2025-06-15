@@ -3,8 +3,10 @@ import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorMessage from "../common/ErrorMessage";
+import { useAuth } from "@/hooks/useAuth";
 
 const MiddleContent = ({ data, isLoading, error }) => {
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 10;
 
@@ -22,6 +24,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
   const visibleCards =
     events.length <= 5
       ? events
+      // splice 
       : events.slice(
           currentPage * cardsPerPage,
           (currentPage + 1) * cardsPerPage
@@ -40,78 +43,78 @@ const MiddleContent = ({ data, isLoading, error }) => {
   };
 
   // Hasta and Todo Los const
-const getEventDateLabel = (eventDates) => {
-  if (!eventDates || eventDates.length === 0) return null;
+  const getEventDateLabel = (eventDates) => {
+    if (!eventDates || eventDates.length === 0) return null;
 
-  const dates = eventDates
-    .map((d) => new Date(d?.date))
-    .filter((d) => d instanceof Date && !isNaN(d))
-    .sort((a, b) => a - b);
+    const dates = eventDates
+      .map((d) => new Date(d?.date))
+      .filter((d) => d instanceof Date && !isNaN(d))
+      .sort((a, b) => a - b);
 
-  if (dates.length === 0) return null;
+    if (dates.length === 0) return null;
 
-  // Format date helper - modified to capitalize month
-  const formatDate = (date) => {
-    const formatted = date.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-    // Capitalize the first letter of the month
-    return formatted.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
+    // Format date helper - modified to capitalize month
+    const formatDate = (date) => {
+      const formatted = date.toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+      // Capitalize the first letter of the month
+      return formatted.replace(/\b\w/g, (char) => char.toUpperCase());
+    };
 
-  // Check if all dates are today
-  const today = new Date();
-  const isSameDay = (a, b) =>
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+    // Check if all dates are today
+    const today = new Date();
+    const isSameDay = (a, b) =>
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
 
-  const allToday = dates.every((date) => isSameDay(date, today));
-  if (allToday) return null;
+    const allToday = dates.every((date) => isSameDay(date, today));
+    if (allToday) return null;
 
-  // One date only
-  if (dates.length === 1) {
-    return formatDate(dates[0]);
-  }
-
-  // All same weekday
-  const allSameDay = dates.every(
-    (date) => date.getDay() === dates[0].getDay()
-  );
-
-  if (allSameDay) {
-    const weekdaysES = [
-      "Domingos",
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes",
-      "Sábados",
-    ];
-    return `Todos los ${weekdaysES[dates[0].getDay()]}`;
-  }
-
-  // Continuous range
-  let isContinuous = true;
-  for (let i = 1; i < dates.length; i++) {
-    const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-    if (diffInDays !== 1) {
-      isContinuous = false;
-      break;
+    // One date only
+    if (dates.length === 1) {
+      return formatDate(dates[0]);
     }
-  }
 
-  if (isContinuous) {
-    const last = dates[dates.length - 1];
-    return `Hasta ${formatDate(last)}`;
-  }
+    // All same weekday
+    const allSameDay = dates.every(
+      (date) => date.getDay() === dates[0].getDay()
+    );
 
-  // Otherwise, show last date
-  return formatDate(dates[dates.length - 1]);
-};
+    if (allSameDay) {
+      const weekdaysES = [
+        "Domingos",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábados",
+      ];
+      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+    }
+
+    // Continuous range
+    let isContinuous = true;
+    for (let i = 1; i < dates.length; i++) {
+      const diffInDays = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+      if (diffInDays !== 1) {
+        isContinuous = false;
+        break;
+      }
+    }
+
+    if (isContinuous) {
+      const last = dates[dates.length - 1];
+      return `Hasta ${formatDate(last)}`;
+    }
+
+    // Otherwise, show last date
+    return formatDate(dates[dates.length - 1]);
+  };
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
       <div className="h-screen overflow-y-auto scrollbar-hide">
@@ -126,6 +129,7 @@ const getEventDateLabel = (eventDates) => {
                 key={item.id}
                 className="relative z-30 rounded overflow-hidden shadow-lg mb-4 cursor-pointer"
               >
+                {console.log(item)}
                 <Link to={`/event-user-view/${item.id}`} key={item.id}>
                   <img
                     src={item.flyer ? item.flyer : item.event_thumb_image}
@@ -157,10 +161,16 @@ const getEventDateLabel = (eventDates) => {
                           {item.event_title}
                         </h2>
                       )}
+
                       <Link
-                        to={`/venue-user-view/${item.user_id}`}
+                        to={
+                          item?.user?.email === user?.user?.email
+                            ? `/venue-profile-edit`
+                            : `/venue-user-view/${item?.user_id}`
+                        }
                         className="inline-block"
                       >
+                        {console.log(item?.user?.email)}
                         {item?.user?.business_name && (
                           <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
                             <MapPin className="size-5 md:size-6 " />
