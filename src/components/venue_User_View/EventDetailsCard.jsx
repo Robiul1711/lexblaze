@@ -36,12 +36,14 @@ const EventDetailsCard = () => {
     mutationFn: async (data) => {
       const response = await axiosSecure.post("/logout", data);
       localStorage.removeItem("user"); // or whatever key you used to store user data
-      return response?.data;
+      navigate("/");
     },
     onSuccess: (response) => {
       toast.success(response?.message || "Logout successful");
       window.location.reload();
-      navigate("/log-in");
+      console.log("THis is logout");
+
+      console.log("THis is logout after navigation");
     },
     onSettled: () => {
       setIsSubmitting(false);
