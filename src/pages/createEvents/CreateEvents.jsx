@@ -17,6 +17,7 @@ import { CircleX, Eye } from "lucide-react";
 import useCategoryList from "@/hooks/useCategoryList";
 
 dayjs.extend(customParseFormat);
+const dateFormat = "YYYY-MM-DD";
 
 const tagRender = (props) => {
   const { label, closable, onClose } = props;
@@ -149,14 +150,14 @@ const CreateEvents = () => {
 
     setIsSubmitting(true);
 
-    const formattedDates = data.event_date.map(date => {
-      return new Date(
-        date.year,
-        date.month.number - 1,
-        date.day
-      );
-    });
-console.log(data.event_date)
+const formattedDates = data.event_date.map(date => {
+  return dayjs(new Date(
+    date.year,
+    date.month.number - 1,
+    date.day
+  )).format("YYYY-MM-DD");
+});
+
     const updatedData = {
       ...data,
       event_date: formattedDates,
@@ -166,9 +167,8 @@ console.log(data.event_date)
       event_thumb_image: thumbFileList[0]?.originFileObj || null,
     };
 
-    // createEventMutation.mutate(updatedData);
-    console.log("formattedDates" ,formattedDates);
-    console.log("updatedData", updatedData);
+    createEventMutation.mutate(updatedData);
+ 
 
   };
   const handleStartTimeChange = (time) => {

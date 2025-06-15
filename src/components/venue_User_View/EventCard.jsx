@@ -84,7 +84,7 @@ const EventCard = ({ visibleCards }) => {
     });
 
     const formattedGroups = Object.entries(grouped).map(
-      ([month, days]) => `${days.join(", ")}, ${month}`
+      ([month, days]) => `${days.join(", ")} ${month}`
     );
 
     return formattedGroups.join(" y ");
@@ -211,15 +211,15 @@ visibleCards.forEach((event) => {
                     </TooltipProvider>
                   )}
                 </div>
-                {console.log(item?.user?.business_name)}
-                <div className={`${item?.user?.business_name ? "flex items-center justify-between" : "flex items-center justify-end"}  text-primary font-semibold`}>
+                {console.log(item?.business_address)}
+                <div className={`${item?.business_address ? "flex items-center justify-between" : "flex items-center justify-end"}  text-primary font-semibold`}>
                   {
-                    item?.user?.business_name && (
+                    item?.business_address && (
                           <div className="flex items-center gap-1 hover:underline cursor-pointer">
                  
                     <MapPin className="size-5 lg:size-6" />
                     <p className="xlg:text-lg">
-                      {item?.user?.business_name}
+                      {item?.business_address}
                     </p>
                   </div>
                     )

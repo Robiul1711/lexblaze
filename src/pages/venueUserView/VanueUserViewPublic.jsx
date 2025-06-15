@@ -80,7 +80,7 @@ const VanueUserViewPublic = () => {
 
               {/* Pagination */}
               {
-                visibleCards && visibleCards.length >0 && (
+                visibleCards && visibleCards.length >9 && (
                       <div className="flex justify-between items-center py-10">
                 <div className="flex flex-col items-center gap-2">
                   <button
