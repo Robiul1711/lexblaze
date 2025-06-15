@@ -180,7 +180,7 @@ const SearchModal = ({ search, setSearch }) => {
                                   {event.event_title || 'Evento sin título'}
                                 </h3>
                                 <p className="font-bold  text-gray-600 mt-1">
-                                  static name
+                                  {event?.user?.business_name || '--'}
                                 </p>
                               </div>
                               <div className="text-right">
