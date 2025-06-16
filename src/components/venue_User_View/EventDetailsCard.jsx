@@ -134,28 +134,36 @@ const EventDetailsCard = () => {
 
           {data?.user?.business_food_menu ? (
             <div className="flex items-center gap-2 xlg:gap-3">
-              <a
-                href={data?.user?.business_food_menu}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-inherit hover:underline"
-              >
-                <MenuIcon />
-                <Title24>La Carta</Title24>
-              </a>
+             <a
+  href={
+    data?.user?.business_food_menu?.startsWith('http') 
+      ? data.user.business_food_menu 
+      : `https://${data.user.business_food_menu}`
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-1 text-inherit hover:underline"
+>
+  <MenuIcon />
+  <Title24>La Carta</Title24>
+</a>
             </div>
           ) : null}
         </div>
         <div className="flex justify-between items-center gap-2 xlg:gap-3">
           {data?.user?.business_website_link ? (
-            <a
-              href={data?.user?.business_website_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
-            >
-              Website
-            </a>
+           <a
+  href={
+    data?.user?.business_website_link?.startsWith('http') 
+      ? data.user.business_website_link 
+      : `https://${data.user.business_website_link}`
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+  className="xlg:text-[20px] font-semibold hover:text-[#4888ff] hover:underline"
+>
+  Website
+</a>
           ) : null}
 
           {data?.user?.age ? (
