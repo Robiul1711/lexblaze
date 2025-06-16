@@ -172,8 +172,8 @@ const EventDetailsCard = () => {
             </div>
           ) : null}
         </div>
-        <div className="mx-auto w-full text-center">
-          <Title24>{data?.user?.business_details}</Title24>
+        <div className="mx-auto max-w-[600px] w-full text-center">
+          <Title24 >{data?.user?.business_details}</Title24>
         </div>
         <div className="w-full text-center">
           <p className="bg-[#0E1060] py-1 sm:py-2  w-full rounded-xl font-bold text-xl sm:text-xl text-white">

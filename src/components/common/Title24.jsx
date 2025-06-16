@@ -2,7 +2,7 @@ import React from 'react'
 
 const Title24 = ({children}) => {
   return (
-    <p className=" xlg:text-[20px]  font-semibold">{children}</p>
+    <p className=" xl:text-[20px]  font-semibold">{children}</p>
   )
 }
 
