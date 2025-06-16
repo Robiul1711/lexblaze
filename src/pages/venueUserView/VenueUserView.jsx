@@ -109,7 +109,7 @@ const VenueUserView = () => {
              <div className="lg:mt-10 mb-5 max-w-[500px] mx-auto  xlg:hidden">
           <RightSide />
         </div>
-          <div className="flex justify-center mb-5 sm:mb-[60px]  lg:mb-[160px]">
+          <div className="flex justify-center mb-10 sm:mb-[60px]  lg:mb-[160px]">
           <AddSlider />
           </div>
         </div>
