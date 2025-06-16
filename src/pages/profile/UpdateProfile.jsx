@@ -173,7 +173,7 @@ const UpdateProfile = () => {
         {/* Age Limit */}
         <input
           defaultValue={data?.user?.age}
-          type="number"
+          type="text"
           placeholder="Límite de Edad"
           {...register("age")}
           className="w-full border-[2px] border-black p-4 lg:p-6"
