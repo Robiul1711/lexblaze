@@ -170,7 +170,7 @@ const TopBanner = ({ data }) => {
         )}
       </div>
       <div className="pt-10 pb-10 lg:pb-20 max-w-[620px] space-y-5 lg:space-y-10 lg:text-center mx-auto">
-        <Title24>{data?.event_details}</Title24>
+        <Title24>{data?.event_details }</Title24>
       </div>
     </div>
   );

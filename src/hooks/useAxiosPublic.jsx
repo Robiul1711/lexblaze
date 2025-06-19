@@ -5,7 +5,7 @@ const useAxiosPublic = () => {
  
   const axiosPublic = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
-    timeout: 30000,
+    timeout: 120000,
   });
   axiosPublic.interceptors.request.use((config) => {
     config.headers = {
