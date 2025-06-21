@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className=" flex flex-col items-center justify-center section-padding-x h-screen">
       {/* Title */}
       <Title48 title2="Iniciar Sesión de Negocios" />
 
