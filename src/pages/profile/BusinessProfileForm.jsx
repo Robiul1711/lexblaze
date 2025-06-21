@@ -448,8 +448,8 @@ const BusinessProfileForm = () => {
   };
 
   return (
-    <div className="max-w-[590px] mx-auto mt-10 pb-[120px] lg:pb-[180px] px-4">
-      <div className=" mb-8 ">
+    <div className="max-w-[590px] mx-auto mt-5 lg:mt-10 pb-[70px] sm:pb-[100px] lg:pb-[150px] px-4">
+      <div className=" mb-4 ">
         <Title48 title2="Crear Perfil de Negocio" />
       </div>
 

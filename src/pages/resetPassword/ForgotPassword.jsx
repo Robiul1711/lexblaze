@@ -46,7 +46,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className=" mt-10 lg:mt-16 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className="  flex flex-col items-center h-screen justify-center section-padding-x px-4">
       {/* Title */}
       <Title48 title2="¿Olvidó su contraseña?" />
 

@@ -43,8 +43,8 @@ const UpdateEvent = () => {
   const { id } = useParams();
   const { register, handleSubmit, setValue, control } = useForm();
 
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [fileList, setFileList] = useState([]);
   const [fileList2, setFileList2] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,13 +62,13 @@ const UpdateEvent = () => {
   useEffect(() => {
     if (data?.events) {
       const event = data.events;
-      setValue("business_name", event.business_name);
-      setValue("event_title", event.event_title);
-      setValue("business_address", event.business_address);
-      setValue("event_details", event.event_details);
-      setValue("price_limite", event.price_limite);
-      setValue("age_limite", event.age_limite);
-      setValue("business_website_link", event.business_website_link);
+      setValue("business_name", event.business_name || "");
+      setValue("event_title", event.event_title || "");
+      setValue("business_address", event.business_address || "");
+      setValue("event_details", event.event_details || "");
+      setValue("price_limite", event.price_limite || "");
+      setValue("age_limite", event.age_limite || "");
+      setValue("business_website_link", event.business_website_link || "");
 
       // Set dates
       if (event.event_dates && event.event_dates.length > 0) {
@@ -87,11 +87,11 @@ const UpdateEvent = () => {
         const end = dayjs(event.event_end_time, "HH:mm");
         setEndTime(end);
       }
- // Set categories
-    if (event.categories) {
-      const ids = event.categories.map((cat) => cat.id);
-      setValue("category_id", ids);
-    }
+      // Set categories
+      if (event.categories) {
+        const ids = event.categories.map((cat) => cat.id);
+        setValue("category_id", ids);
+      }
       // Set existing images
       if (event.event_thumb_image) {
         setFileList([
@@ -158,7 +158,7 @@ const UpdateEvent = () => {
       return response.data;
     },
     onSuccess: (data) => {
-        navigate(`/event-user-view/${data?.event?.id}`);
+      navigate(`/event-user-view/${data?.event?.id}`);
       toast.success(data.message || "Event updated successfully!");
     },
     onError: (error) => {
@@ -193,8 +193,8 @@ const UpdateEvent = () => {
 
     const updatedData = {
       ...data,
-      event_start_time: startTime ? dayjs(startTime).format("HH:mm") : null,
-      event_end_time: endTime ? dayjs(endTime).format("HH:mm") : null,
+      event_start_time: startTime ? dayjs(startTime).format("HH:mm") : "",
+      event_end_time: endTime ? dayjs(endTime).format("HH:mm") : "",
     };
 
     createEventMutation.mutate(updatedData);
@@ -209,12 +209,12 @@ const UpdateEvent = () => {
   };
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-useEffect(() => {
-  if (data?.events?.categories) {
-    const ids = data.events.categories.map((cat) => cat.id);
-    setSelectedCategories(ids);
-  }
-}, [data?.events?.categories]);
+  useEffect(() => {
+    if (data?.events?.categories) {
+      const ids = data.events.categories.map((cat) => cat.id);
+      setSelectedCategories(ids);
+    }
+  }, [data?.events?.categories]);
 
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[80px] lg:pb-[150px] px-4">
@@ -412,26 +412,26 @@ useEffect(() => {
 
         {/* Category Section */}
         <section>
-{/* // Replace your current Select component with this: */}
-<Controller
-  name="category_id"
-  control={control}
-  render={({ field }) => (
-    <Select
-      {...field}
-      mode="multiple"
-      placeholder="Categoría del Evento"
-      tagRender={tagRender}
-      options={category?.data?.map((category) => ({
-        label: category?.category_name,
-        value: category.id,
-      }))}
-      size="large"
-      className="w-full custom-select"
-      disabled={isSubmitting}
-    />
-  )}
-/>
+          {/* // Replace your current Select component with this: */}
+          <Controller
+            name="category_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                mode="multiple"
+                placeholder="Categoría del Evento"
+                tagRender={tagRender}
+                options={category?.data?.map((category) => ({
+                  label: category?.category_name,
+                  value: category.id,
+                }))}
+                size="large"
+                className="w-full custom-select"
+                disabled={isSubmitting}
+              />
+            )}
+          />
 
           <InstructionModal2 />
         </section>

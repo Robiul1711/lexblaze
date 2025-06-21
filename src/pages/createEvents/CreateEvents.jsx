@@ -51,8 +51,8 @@ const CreateEvents = () => {
     trigger,
   } = useForm();
   
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [flyerFileList, setFlyerFileList] = useState([]);
   const [thumbFileList, setThumbFileList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,6 +83,7 @@ const CreateEvents = () => {
       return response.data;
     },
     onSuccess: (data) => {
+      console.log(data);
       toast.success(data.message || "¡Evento creado exitosamente!");
       navigate(`/event-user-view/${data?.event?.id}`);
     },
@@ -161,10 +162,10 @@ const formattedDates = data.event_date.map(date => {
     const updatedData = {
       ...data,
       event_date: formattedDates,
-      event_start_time: startTime ? dayjs(startTime).format("HH:mm:ss") : null,
-      event_end_time: endTime ? dayjs(endTime).format("HH:mm:ss") : null,
+      event_start_time: startTime ? dayjs(startTime).format("HH:mm") : '',
+      event_end_time: endTime ? dayjs(endTime).format("HH:mm") : '',
       flyer: flyerFileList[0]?.originFileObj,
-      event_thumb_image: thumbFileList[0]?.originFileObj || null,
+      event_thumb_image: thumbFileList[0]?.originFileObj || '',
     };
 
     createEventMutation.mutate(updatedData);
@@ -173,13 +174,13 @@ const formattedDates = data.event_date.map(date => {
   };
   const handleStartTimeChange = (time) => {
     setStartTime(time);
-    setValue("event_start_time", time ? time.toISOString() : null);
+    setValue("event_start_time", time ? time.toISOString() : '');
     trigger("event_start_time");
   };
 
   const handleEndTimeChange = (time) => {
     setEndTime(time);
-    setValue("event_end_time", time ? time.toISOString() : null);
+    setValue("event_end_time", time ? time.toISOString() : '');
   };
 
   const handleFlyerImageChange = ({ fileList: newFileList }) => {

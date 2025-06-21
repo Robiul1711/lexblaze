@@ -32,7 +32,7 @@ const BusinessProfilePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto">
       {/* Terms and Conditions Modal - Removed close button */}
       <Dialog open={showTermsModal} className="">
         <DialogContent className="border-4  border-[#000e8e] max-h-[90vh] overflow-hidden sm:max-w-[700px] rounded-lg">
