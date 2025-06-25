@@ -5,7 +5,7 @@ import { InputCalenderIcons, UploadIcons } from "@/lib/Icons";
 import { Select, Tag, TimePicker, Upload, Modal } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,7 @@ const tagRender = (props) => {
 const CreateEvents = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const {
     register,
@@ -83,7 +84,7 @@ const CreateEvents = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      // console.log(data);
+     queryClient.invalidateQueries(["profileEventsData"]);
       toast.success(data.message || "¡Evento creado exitosamente!");
       navigate(`/event-user-view/${data?.event?.id}`);
     },

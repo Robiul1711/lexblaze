@@ -69,10 +69,16 @@ body {
 /* Optional: Change arrow color */
 .swiper-button-next:after,
 .swiper-button-prev:after {
-  color: #000; /* Black color */
-  font-size: 24px !important; /* Adjust icon size */
-}
+  color: #767272 !important; /* Black color */
+  font-size: 20px !important; /* Adjust icon size */
 
+}
+.swiper-button-next:after{
+margin-left: 30px !important;
+}
+.swiper-button-prev:after{
+margin-right: 30px !important;
+}
 /* ant  upload  */
 .custom-select .ant-select-selector {
   padding: 1rem !important;

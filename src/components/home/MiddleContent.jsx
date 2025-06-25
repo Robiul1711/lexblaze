@@ -24,8 +24,8 @@ const MiddleContent = ({ data, isLoading, error }) => {
   const visibleCards =
     events.length <= 5
       ? events
-      // splice 
-      : events.slice(
+      : // splice
+        events.slice(
           currentPage * cardsPerPage,
           (currentPage + 1) * cardsPerPage
         );
@@ -117,7 +117,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
   };
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
-      <div className="h-screen overflow-y-auto scrollbar-hide">
+      <div className=" overflow-y-auto scrollbar-hide">
         {visibleCards.length === 0 ? (
           <div className="flex items-center justify-center mt-40">
             <p className="text-xl font-semibold">No events found</p>
@@ -126,9 +126,10 @@ const MiddleContent = ({ data, isLoading, error }) => {
           <>
             {visibleCards.map((item) => (
               <div
-                key={item.id}
-                className="relative z-30 rounded overflow-hidden shadow-lg mb-4 cursor-pointer"
+              key={item.id}
+              className="relative z-30 rounded overflow-hidden shadow-lg mb-4 cursor-pointer"
               >
+                {console.log(item)}
                 {/* {console.log(item)} */}
                 <Link to={`/event-user-view/${item.id}`} key={item.id}>
                   <img
@@ -152,9 +153,16 @@ const MiddleContent = ({ data, isLoading, error }) => {
 
                     <div className="space-y-2  w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2  sm:left-10 transform  -translate-y-1/2 px-4 sm:px-0">
                       {item.business_name && (
-                        <p className="sm:text-lg text-white font-semibold">
+                        <Link
+                           to={
+          item?.user?.email === user?.user?.email
+            ? `/venue-profile-edit`
+            : `/venue-user-view/${item?.user_id}`
+        }
+                          className="sm:text-lg text-white font-semibold"
+                        >
                           {item.business_name}
-                        </p>
+                        </Link>
                       )}
                       {item.event_title && (
                         <h2 className="text-[20px] sm:text-[24px] md:text-[28px] text-white font-extrabold">
@@ -170,15 +178,21 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         }
                         className="inline-block"
                       >
-                        {console.log(item?.user?.email)}
-                        {item?.business_address && (
-                          <p className="flex items-center gap-1  text-primary  font-semibold z-50 hover:underline">
-                            <MapPin className="size-5 md:size-6 " />
-                            <p className="sm:text-lg">
-                              {item?.business_address}
-                            </p>
-                          </p>
-                        )}
+                        {/* {console.log(item?.user?.email)} */}
+                        <Link
+                          to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                            item.business_address
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1 text-primary font-semibold z-[999] hover:underline"
+                        >
+                          <MapPin className="size-5 md:size-6" />
+                          <span className="sm:text-lg">
+                            {item?.business_address}
+                          </span>
+                        </Link>
                       </Link>
                       <div className="flex items-center max-w-[200px] justify-between text-sm sm:text-base font-semibold text-white">
                         {item.price_limite && <p> {item.price_limite}</p>}

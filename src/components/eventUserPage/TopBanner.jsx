@@ -21,14 +21,24 @@ const TopBanner = ({ data }) => {
 
     // Month abbreviations in Spanish
     const monthAbbreviations = [
-      "Ene", "Feb", "Mar", "Abr", "May", "Jun", 
-      "Jul", "Ago", "Set", "Oct", "Nov", "Dic"
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Oct",
+      "Nov",
+      "Dic",
     ];
 
     // Format a single date as DD/MM/YYYY
     const formatSingleDate = (date) => {
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
       return `${day}/${month}/${date.getFullYear()}`;
     };
 
@@ -36,7 +46,7 @@ const TopBanner = ({ data }) => {
     const formatNonConsecutiveDates = (dates) => {
       // Group dates by month and year
       const grouped = {};
-      dates.forEach(date => {
+      dates.forEach((date) => {
         const key = `${date.getFullYear()}-${date.getMonth()}`;
         if (!grouped[key]) {
           grouped[key] = [];
@@ -46,12 +56,12 @@ const TopBanner = ({ data }) => {
 
       const parts = [];
       Object.entries(grouped).forEach(([key, days]) => {
-        const [year, month] = key.split('-');
+        const [year, month] = key.split("-");
         const monthName = monthAbbreviations[parseInt(month)];
-        parts.push(`${days.join(', ')} ${monthName} ${year}`);
+        parts.push(`${days.join(", ")} ${monthName} ${year}`);
       });
 
-      return parts.join(' y ');
+      return parts.join(" y ");
     };
 
     // Check if dates form a continuous range
@@ -72,7 +82,9 @@ const TopBanner = ({ data }) => {
 
     // Continuous date range
     if (isContinuousRange()) {
-      return `${formatSingleDate(dates[0])} a ${formatSingleDate(dates[dates.length - 1])}`;
+      return `${formatSingleDate(dates[0])} a ${formatSingleDate(
+        dates[dates.length - 1]
+      )}`;
     }
 
     // Non-consecutive dates
@@ -83,14 +95,14 @@ const TopBanner = ({ data }) => {
     <div className="flex flex-col mx-auto w-full">
       {/* {console.log(data?.user?.email)}
       {console.log(user?.user?.email)} */}
-     <Link
-  to={
-    data?.user?.email === user?.user?.email
-      ? `/venue-profile-edit`
-      : `/venue-user-view/${data?.user_id}`
-  }
-  className="relative rounded overflow-hidden shadow-lg h-[200px] sm:h-[230px] xl:h-[250px]"
->
+      <Link
+        to={
+          data?.user?.email === user?.user?.email
+            ? `/venue-profile-edit`
+            : `/venue-user-view/${data?.user_id}`
+        }
+        className="relative rounded overflow-hidden shadow-lg h-[200px] sm:h-[230px] xl:h-[250px]"
+      >
         <img
           src={data?.flyer ? data?.flyer : data?.event_thumb_image}
           alt={data?.title}
@@ -112,18 +124,38 @@ const TopBanner = ({ data }) => {
             <h2 className="text-[24px] md:text-[32px] lg:text-xl xl:text-2xl flex items-center text-white font-extrabold">
               {data?.event_title}
             </h2>
-            {user ? (
-              <p className="flex items-center gap-1 hover:underline text-primary font-semibold">
-                {data?.business_address  && <MapPin className="size-5 sm:size-6" />}
- 
-                <p className="lg:text-lg">{data?.business_address}</p>
-              </p>
-            ) : (
-              <p className="flex items-center gap-1 text-primary font-semibold">
-            {data?.business_address && <MapPin className="size-5 sm:size-6" />}
-                <p className="lg:text-lg">{data?.business_address}</p>
-              </p>
-            )}
+            {user
+              ? data?.business_address && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      data.business_address
+                    )}`}
+                    target="_blank"
+                      onClick={(e) => e.stopPropagation()}
+                    rel="noopener noreferrer"
+                   className="inline-flex items-center gap-1 hover:underline text-primary font-semibold"
+
+                  >
+                    <MapPin className="size-5 sm:size-6" />
+                    <span className="lg:text-lg">{data.business_address}</span>
+                  </a>
+                )
+              : data?.business_address && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      data.business_address
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                   className="inline-flex items-center gap-1 hover:underline text-primary font-semibold"
+
+                  >
+                    <MapPin className="size-5 sm:size-6" />
+                    <span className="lg:text-lg">{data.business_address}</span>
+                  </a>
+                )}
+
             {/* {console.log(data)} */}
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>{getEventDateLabel(data?.event_dates)}</p>
@@ -131,16 +163,18 @@ const TopBanner = ({ data }) => {
 
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>
-                {data?.event_start_time === "Invalid Date" 
+                {data?.event_start_time === "Invalid Date"
                   ? ""
                   : data?.event_start_time}
               </p>
-              {data?.event_end_time === "Invalid Date" || data?.event_end_time === "null"
+              {data?.event_end_time === "Invalid Date" ||
+              data?.event_end_time === "null"
                 ? ""
                 : data?.event_end_time && <span>a</span>}
 
               <p>
-                {data?.event_end_time === "Invalid Date" || data?.event_end_time === "null"
+                {data?.event_end_time === "Invalid Date" ||
+                data?.event_end_time === "null"
                   ? ""
                   : data?.event_end_time}
               </p>
@@ -170,7 +204,7 @@ const TopBanner = ({ data }) => {
         )}
       </div>
       <div className="pt-10 pb-10 lg:pb-20 max-w-[620px] space-y-5 lg:space-y-10 lg:text-center mx-auto">
-        <Title24>{data?.event_details }</Title24>
+        <Title24>{data?.event_details}</Title24>
       </div>
     </div>
   );

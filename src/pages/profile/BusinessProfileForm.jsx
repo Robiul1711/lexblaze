@@ -458,7 +458,7 @@ const BusinessProfileForm = () => {
         <div>
           <input
             type="text"
-            placeholder="Nombre del Negocio"
+            placeholder="Nombre del Establecimiento"
             {...register("business_name", {
               required: "Este campo es Obligatorio",
             })}
