@@ -124,7 +124,7 @@ const TopBanner = ({ data }) => {
                 <p className="lg:text-lg">{data?.business_address}</p>
               </p>
             )}
-            {console.log(data)}
+            {/* {console.log(data)} */}
             <div className="flex items-start gap-2 font-semibold text-white">
               <p>{getEventDateLabel(data?.event_dates)}</p>
             </div>

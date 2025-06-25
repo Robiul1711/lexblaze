@@ -22,7 +22,7 @@ const AddSlider = () => {
 
 const {pathname}=useLocation();
   return (
-    <div className={`w-full lg:max-w-[500px] xl:max-w-[600px] ${pathname === "/" ? "h-[180px] xxs:h-[200px] sm:h-[300px] md:h-[350px] lg:h-[180px]" : "h-[100px] lg:h-[180px]"}  `} >
+    <div className={`w-full mx-auto lg:max-w-[500px] xl:max-w-[600px] ${pathname === "/" ? "h-[180px] xxs:h-[200px] sm:h-[300px] md:h-[350px] lg:h-[180px]" : "h-[100px] lg:h-[180px]"}  `} >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -38,7 +38,7 @@ const {pathname}=useLocation();
             <div className="w-full h-full">
               <img
                 src={item?.image}
-                className="w-full h-full object-cover rounded-md"
+                className="w-full h-full object-fill rounded-md"
                 alt={`Slide ${index + 1}`}
               />
             </div>

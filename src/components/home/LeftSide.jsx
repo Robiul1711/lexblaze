@@ -16,12 +16,12 @@ const LeftSide = () => {
 <>
 {
   isLoading ? null
-   :   <div className= {`w-full ${data ? "aspect-[4/5]" : "" } `}>
+   :   <div className= {`w-full ${data ? "w-full  max-w-[450px] mx-auto aspect-[4/5]" : "" } `}>
 
   <img
     src={data?.[0]?.image}
     alt=""
-    className="  w-full h-full object-cover rounded-md"
+    className="  w-full h-full  object-cover rounded-md"
   />
 </div>
 }
