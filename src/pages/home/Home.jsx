@@ -89,7 +89,7 @@ const Home = () => {
           <div className="lg:hidden mb-5 ">
                <RightSide />
           </div>
-          <div className="hidden lg:block">
+          <div className="w-[100%] mx-auto lg:block">
 
           <AddSlider />
           </div>

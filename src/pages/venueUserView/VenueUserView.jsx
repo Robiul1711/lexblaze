@@ -22,7 +22,7 @@ const VenueUserView = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   },[currentPage])
-  const { data, isLoading, error} = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["profileEventsData"],
     queryFn: async () => {
       const response = await axiosSecure.get("/user/event/show");

@@ -221,10 +221,25 @@ const EventCardPublic = ({ visibleCards }) => {
                             )}
                           </div>
                           <div className="flex items-center justify-between text-primary font-semibold">
-                            <div className="flex items-center gap-1 xlg:text-lg">
-                             {item?.business_address && <MapPin className="size-5 sm:size-6" />}
-                              {item?.business_address}
-                            </div>
+                           <div className="flex items-center gap-1 xlg:text-lg">
+  {item?.business_address && (
+    <>
+      <MapPin className="size-5 sm:size-6" />
+      <a
+        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          item.business_address
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:underline text-primary font-semibold"
+        onClick={(e) => e.stopPropagation()} // Optional: prevents event bubbling if needed
+      >
+        {item.business_address}
+      </a>
+    </>
+  )}
+</div>
+
                             {pathname === "/venue-profile-edit" && (
                               <TooltipProvider>
                                 <Tooltip>
