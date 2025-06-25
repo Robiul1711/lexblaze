@@ -27,7 +27,7 @@ const EventPageUserView = () => {
 
       <div className="flex min-h-screen w-full flex-col lg:flex-row justify-between gap-5 xl:gap-12  ">
         {/* Leftside  */}
-        <div className="hidden mt-10 lg:block">
+        <div className="hidden mt-10 lg:block lg:w-[40%]">
           <LeftSide />
         </div>
         {/* Middle  */}
@@ -45,16 +45,16 @@ const EventPageUserView = () => {
               <TopBanner data={data?.event} />
             )}
             <div
-              className={`relative  lg:mb-2 ${
-                data?.event?.event_thumb_image && " aspect-[4/5]"
+              className={`relative  lg:mb-10 ${
+                data?.event?.event_thumb_image && ""
               }`}
             >
               {data?.event?.event_thumb_image && (
-                <div className=" px-0 lg:px-20 " >
+                <div className=" px-0 lg:px-16 " >
                   <img
                   src={data.event.event_thumb_image}
                   alt="flyer"
-                  className=" h-[500px] lg:h-[600px]  rounded-md"
+                  className="h-[400px] sm:h-[450px] lg:h-[480px] mx-auto rounded-md"
                 />
                 </div>
               )}
@@ -66,7 +66,7 @@ const EventPageUserView = () => {
           </div>
         </div>
         {/* Rightside  */}
-        <div className="mt-3 lg:mt-10">
+        <div className="mt-3 lg:mt-10 lg:w-[40%]">
           <RightSide />
         </div>
         <div className="flex   justify-center mb-[50px] sm:mb-[100px] lg:mb-[800px] mt-4 lg:mt-20 lg:hidden ">

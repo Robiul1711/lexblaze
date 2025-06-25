@@ -58,7 +58,7 @@ const UpdateEvent = () => {
       return response.data;
     },
   });
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     if (data?.events) {
       const event = data.events;

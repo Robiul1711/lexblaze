@@ -83,7 +83,7 @@ const CreateEvents = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
       toast.success(data.message || "¡Evento creado exitosamente!");
       navigate(`/event-user-view/${data?.event?.id}`);
     },

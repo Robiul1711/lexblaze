@@ -60,6 +60,7 @@ const UpdateProfile = () => {
         error.response?.data?.error ||
         "Something went wrong, try again later!!";
       toast.error(errorMessage);
+      console.log("RegistrationMutation error:", error)
     },
   });
 

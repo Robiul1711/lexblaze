@@ -129,7 +129,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
                 key={item.id}
                 className="relative z-30 rounded overflow-hidden shadow-lg mb-4 cursor-pointer"
               >
-                {console.log(item)}
+                {/* {console.log(item)} */}
                 <Link to={`/event-user-view/${item.id}`} key={item.id}>
                   <img
                     src={item.flyer ? item.flyer : item.event_thumb_image}

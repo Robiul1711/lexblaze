@@ -15,9 +15,9 @@ const RightSide = () => {
   });
 
   const { pathname } = useLocation();
-
+console.log(data)
   return (
-    <div className="w-full  aspect-[4/5]">
+    <div className="w-full  max-w-[450px] mx-auto aspect-[4/5] ">
       {isLoading ? (
         pathname === "/about-us" && <LoadingSpinner />
       ) : error ? (
@@ -29,19 +29,19 @@ const RightSide = () => {
           <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
             EVENTOS DESTACADOS
           </p>
-         {data?.length === 1 ? (
-  <img
-    src={data[0].image}
-    alt="Ad"
-    className=" inset-0 w-full h-full object-cover rounded-md"
-  />
-) : data?.length === 2 ? (
-  <img
-    src={data[1].image}
-    alt="Ad"
-    className=" inset-0 w-full h-full object-cover rounded-md"
-  />
-) : null}
+        {
+  data?.length > 0 && (() => {
+    const randomAd = data[Math.floor(Math.random() * data.length)];
+    return (
+      <img
+        src={randomAd.image}
+        alt="Ad"
+        className=" w-full h-full object-cover rounded-md "
+      />
+    );
+  })()
+}
+
         </>
       )}
     </div>

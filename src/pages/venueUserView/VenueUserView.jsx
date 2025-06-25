@@ -56,14 +56,14 @@ const VenueUserView = () => {
     <div className="section-padding-x  h-full min-h-screen ">
       <div className="flex flex-col lg:flex-row justify-center xl:justify-between w-full gap-6 ">
         {/* Leftside */}
-        <div className="mt-10 hidden xlg:block">
+        <div className="mt-10 hidden xlg:block lg:w-[40%]">
           <LeftSide />
         </div>
         
         {/* Middle */}
        
           
-          <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6  `}>
+          <div className={`${isLoading ? "" : "lg:bg-[#FFFBE0] "}  lg:px-6  lg:w-[60%] `}>
      
           <div className=" overflow-y-auto scrollbar-hide">
             <EventDetailsCard />
@@ -106,7 +106,7 @@ const VenueUserView = () => {
             )
           }
        
-             <div className="lg:mt-10 mb-5 max-w-[500px] mx-auto  xlg:hidden">
+             <div className="lg:mt-10 mb-5 max-w-[500px] mx-auto  xlg:hidden ">
           <RightSide />
         </div>
           <div className="flex justify-center mb-10 sm:mb-[60px]  lg:mb-[160px]">
@@ -117,7 +117,7 @@ const VenueUserView = () => {
     
         
         {/* Rightside */}
-        <div className="lg:mt-10 mb-32 hidden xlg:block">
+        <div className="lg:mt-10 mb-32 hidden xlg:block lg:w-[40%]">
           <RightSide />
         </div>
       </div>
