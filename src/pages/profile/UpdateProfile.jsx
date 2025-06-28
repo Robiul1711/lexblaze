@@ -37,8 +37,23 @@ const UpdateProfile = () => {
       return response.data;
     },
   });
+
+  // Initialize fileList with existing images when data is loaded
+  useEffect(() => {
+    if (data?.user?.user_images) {
+      const initialFiles = data.user.user_images.map((image) => ({
+        uid: image.id.toString(),
+        name: image.image.split("/").pop(),
+        status: "done",
+        url: image.image,
+      }));
+      setFileList(initialFiles);
+    }
+  }, [data]);
+
   const RegistrationMutation = useMutation({
     mutationFn: async (data) => {
+      console.log(data);
       const response = await axiosSecure.post(
         "/update/business_profile_data",
         data,
@@ -46,9 +61,9 @@ const UpdateProfile = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+        
         }
       );
-
       return response.data;
     },
     onSuccess: (response) => {
@@ -60,13 +75,14 @@ const UpdateProfile = () => {
         error.response?.data?.error ||
         "Something went wrong, try again later!!";
       toast.error(errorMessage);
-      console.log("RegistrationMutation error:", error)
+      console.log("RegistrationMutation error:", error);
+      
     },
   });
 
   const handleImageChange = ({ fileList: newFileList }) => {
     const updatedList = newFileList.map((file) => {
-      if (!file.url && !file.preview) {
+      if (file.originFileObj && !file.url && !file.preview) {
         file.preview = URL.createObjectURL(file.originFileObj);
       }
       return file;
@@ -76,7 +92,7 @@ const UpdateProfile = () => {
   };
 
   const onPreview = async (file) => {
-    let src = file.url;
+    let src = file.url || file.preview;
     if (!src) {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
@@ -91,18 +107,19 @@ const UpdateProfile = () => {
   };
 
   const onSubmit = (formData) => {
-    // console.log("Form Data:", formData);
+    console.log(formData);
     const { image, ...restData } = formData;
 
     // Prepare the complete data object
     const submissionData = {
       ...restData,
-      image: fileList.map((file) => file.originFileObj),
+      image: fileList
+        .filter((file) => file.originFileObj) // Only include newly uploaded files
+        .map((file) => file.originFileObj),
       showPhone: formData.showPhone || false,
       showEmail: formData.showEmail || false,
     };
 
-    // console.log("All form data:", submissionData);
     RegistrationMutation.mutate(submissionData);
   };
 
@@ -110,8 +127,18 @@ const UpdateProfile = () => {
     if (data?.user) {
       setValue("isShowPhone", data.user.isShowPhone === "true" ? "0" : "1");
       setValue("isShowEmail", data.user.isShowEmail === "true" ? "0" : "1");
+      // Set other form values
+      setValue("business_name", data.user.business_name);
+      setValue("business_details", data.user.business_details);
+      setValue("business_address", data.user.business_address);
+      setValue("business_time", data.user.business_time);
+      setValue("business_website_link", data.user.business_website_link);
+      setValue("age", data.user.age);
+      setValue("business_food_menu", data.user.business_food_menu);
+      setValue("phone", data.user.phone);
     }
   }, [data, setValue]);
+
   return (
     <div className="max-w-[650px] mx-auto  mt-8 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-10 lg:mb-8">
@@ -122,28 +149,39 @@ const UpdateProfile = () => {
         {/* Business Name */}
         <div>
           <input
-            defaultValue={data?.user?.business_name}
             type="text"
             placeholder="Nombre del Negocio"
-            {...register("business_name")}
+            {...register("business_name", {
+              required: "Este campo es Obligatorio",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
+          {errors.business_name && (
+            <p className="text-red-500 text-sm">
+              {errors.business_name.message}
+            </p>
+          )}
         </div>
 
         {/* Business Description */}
         <div>
           <textarea
-            defaultValue={data?.user?.business_details}
             placeholder="Descripción del Negocio"
-            {...register("business_details")}
+            {...register("business_details", {
+              required: "Este campo es Obligatorio",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[136px] md:h-[160px] lg:h-[200px]"
           />
+          {errors.business_details && (
+            <p className="text-red-500 text-sm">
+              {errors.business_details.message}
+            </p>
+          )}
         </div>
 
         {/* Address */}
         <div>
           <input
-            defaultValue={data?.user?.business_address}
             type="text"
             placeholder="Dirección del Negocio"
             {...register("business_address")}
@@ -154,7 +192,6 @@ const UpdateProfile = () => {
         {/* Schedule */}
         <div>
           <input
-            defaultValue={data?.user?.business_time}
             type="text"
             placeholder="Horario Comercial (ej. Lun - Sab: 1100-0200, Dom: 1200-1700)"
             {...register("business_time")}
@@ -164,7 +201,6 @@ const UpdateProfile = () => {
 
         {/* Website */}
         <input
-          defaultValue={data?.user?.business_website_link}
           type="text"
           placeholder="Website link"
           {...register("business_website_link")}
@@ -173,7 +209,6 @@ const UpdateProfile = () => {
 
         {/* Age Limit */}
         <input
-          defaultValue={data?.user?.age}
           type="text"
           placeholder="Límite de Edad"
           {...register("age")}
@@ -182,7 +217,6 @@ const UpdateProfile = () => {
 
         {/* Menu */}
         <input
-          defaultValue={data?.user?.business_food_menu}
           type="text"
           placeholder="La Carta (Menú)"
           {...register("business_food_menu")}
@@ -191,7 +225,6 @@ const UpdateProfile = () => {
 
         {/* Phone */}
         <input
-          defaultValue={data?.user?.phone}
           type="text"
           placeholder="Teléfono"
           {...register("phone")}
@@ -204,11 +237,10 @@ const UpdateProfile = () => {
           <Controller
             name="isShowPhone"
             control={control}
-            // defaultValue={data?.user?.isShowPhone === 'true' ? "0" : "1"} // default = visible (false on switch)
             render={({ field: { value, onChange } }) => (
               <Switch
-                checked={value === "0"} // ON when value is "0"
-                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+                checked={value === "0"}
+                onChange={(checked) => onChange(checked ? "0" : "1")}
               />
             )}
           />
@@ -225,22 +257,22 @@ const UpdateProfile = () => {
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
         </div>
-        {console.log(data?.user)}
+
         {/* Show Email */}
         <div className="flex items-center justify-between font-bold lg:text-2xl">
           <label>*Mostrar Correo en el perfil</label>
           <Controller
             name="isShowEmail"
             control={control}
-            // defaultValue={data?.user?.isShowEmail === "true" ? "0" : "1"} // default = visible (false on switch)
             render={({ field: { value, onChange } }) => (
               <Switch
-                checked={value === "0"} // ON when value is "0"
-                onChange={(checked) => onChange(checked ? "0" : "1")} // true => "0", false => "1"
+                checked={value === "0"}
+                onChange={(checked) => onChange(checked ? "0" : "1")}
               />
             )}
           />
         </div>
+
         {/* Password */}
         <div className="relative">
           <input
@@ -263,11 +295,12 @@ const UpdateProfile = () => {
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirmar Contraseña"
-        {...register("password_confirmation", {
-  validate: (value) => 
-    !password || value === password || "Las contraseñas no coinciden",
-})}
-            
+            {...register("password_confirmation", {
+              validate: (value) =>
+                !password ||
+                value === password ||
+                "Las contraseñas no coinciden",
+            })}
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           <button
@@ -285,30 +318,35 @@ const UpdateProfile = () => {
 
         {/* Image Upload */}
         <div className="flex flex-col items-center gap-2 mt-6">
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onChange={handleImageChange}
-            onPreview={onPreview}
-            beforeUpload={() => false} // Handle upload manually
-            accept="image/*"
-            multiple
-            maxCount={5}
-          >
-            {fileList.length < 5 && <UploadIcons />}
-          </Upload>
+ <Upload
+  listType="picture-card"
+  fileList={fileList}
+  onChange={handleImageChange}
+  onPreview={onPreview}
+  beforeUpload={() => false}
+  accept="image/*"
+  multiple
+  maxCount={5}
+  itemRender={(originNode, file, fileList) => {
+    const index = fileList.indexOf(file);
+    return (
+      <div className="relative group">
+        {originNode}
+        <div className="absolute top-1 left-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center z-10">
+          {index + 1}
         </div>
+      </div>
+    );
+  }}
+>
+  {fileList.length < 5 && <UploadIcons />}
+</Upload>
 
-        {/* Terms */}
-        {/* <div className="flex flex-col items-center gap-6 font-bold lg:text-2xl">
-          <input
-            className="size-5 md:size-6 lg:size-7"
-            type="checkbox"
-            {...register("terms", )}
-          />
-        
-        </div> */}
-
+        </div>
+        <p className="text-red-600 text-center text-xs">
+          Si desea actualizar las imágenes, elimine todas las imágenes y
+          actualícelas nuevamente.
+        </p>
         {/* Submit */}
         <div className="flex items-start justify-center gap-5 lg:mt-6">
           <button
@@ -321,8 +359,12 @@ const UpdateProfile = () => {
             type="submit"
             disabled={RegistrationMutation.isPending}
             className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 md:px-xl  rounded-xl lg:rounded-[12px] transition-all duration-200
-    ${RegistrationMutation.isPending ? "opacity-60 cursor-not-allowed" : ""}
-  `}
+              ${
+                RegistrationMutation.isPending
+                  ? "opacity-60 cursor-not-allowed"
+                  : ""
+              }
+            `}
           >
             {RegistrationMutation.isPending ? (
               <span className="flex items-center gap-2">

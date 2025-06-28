@@ -30,7 +30,6 @@ const VenueUserView = () => {
     },
   });
 
-
   const cardsPerPage = 10;
   const totalPages = Math.ceil(data?.events?.length / cardsPerPage) || 1;
   const visibleCards = data?.events?.slice(

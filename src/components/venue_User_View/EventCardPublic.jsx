@@ -13,8 +13,6 @@ import {
 import { useState } from "react";
 import DeleteModal from "../DeleteModal";
 
-// ... all your imports remain unchanged
-
 const EventCardPublic = ({ visibleCards }) => {
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
@@ -49,79 +47,57 @@ const EventCardPublic = ({ visibleCards }) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
+  const isToday = (dateStr) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const checkDate = new Date(date);
-    checkDate.setHours(0, 0, 0, 0);
-
-    const options = { day: "2-digit", month: "short" };
-    const parts = date
-      .toLocaleDateString("es-ES", options)
-      .split(" ")
-      .map((part) => part.toLowerCase());
-
-    const month = parts[1];
-    const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
-
-    const formattedDate = `${capitalizedMonth} ${parts[0]}`;
-
-    if (checkDate.getTime() === today.getTime()) {
-      return `Hoy ${formattedDate}`;
-    }
-
-    return formattedDate;
+    const date = new Date(dateStr);
+    return (
+      today.getFullYear() === date.getFullYear() &&
+      today.getMonth() === date.getMonth() &&
+      today.getDate() === date.getDate()
+    );
   };
 
+const todayStr = new Date().toLocaleDateString("es-ES", {
+  day: "2-digit",
+  month: "short",
+}).replace(/\b\w/g, char => char.toUpperCase()); // "28 Jun"
+
   const sortedEvents = [...visibleCards]
-    .filter((item) => item.event_dates?.[0]?.date)
-    .filter((item) => {
-      const eventDate = new Date(item.event_dates[0].date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return eventDate >= today;
-    })
+    .filter((item) =>
+      item.event_dates?.some((d) => new Date(d.date).toString() !== "Invalid Date")
+    )
+    .filter((item) =>
+      item.event_dates?.some((d) => {
+        const eventDate = new Date(d.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate >= today;
+      })
+    )
     .sort((a, b) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const dateA = new Date(a.event_dates[0].date);
-      const dateB = new Date(b.event_dates[0].date);
-
-      const normalize = (date) => {
-        const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-        return d.getTime();
+      const normalize = (dates) => {
+        const firstValidDate = dates
+          .map((d) => new Date(d.date))
+          .filter((d) => !isNaN(d))
+          .sort((a, b) => a - b)[0];
+        if (!firstValidDate) return Infinity;
+        firstValidDate.setHours(0, 0, 0, 0);
+        return firstValidDate.getTime();
       };
-
-      const normalizedA = normalize(dateA);
-      const normalizedB = normalize(dateB);
-
-      const getRank = (date) => {
-        if (date === today.getTime()) return 0;
-        if (date === tomorrow.getTime()) return 1;
-        return 2;
-      };
-
-      const rankA = getRank(normalizedA);
-      const rankB = getRank(normalizedB);
-
-      if (rankA !== rankB) return rankA - rankB;
-      return normalizedA - normalizedB;
+      return normalize(a.event_dates) - normalize(b.event_dates);
     });
 
-  const groupedEvents = sortedEvents.reduce((acc, event) => {
-    const dateKey = formatDate(event.event_dates[0]?.date || "N/A");
-    if (!acc[dateKey]) {
-      acc[dateKey] = [];
-    }
-    acc[dateKey].push(event);
-    return acc;
-  }, {});
+  const filteredEvents = sortedEvents.filter((item) =>
+    item.event_dates?.some((d) => isToday(d.date))
+  );
+
+  const groupedEvents = filteredEvents.length
+    ? {
+        [`Hoy ${todayStr}`]: filteredEvents,
+      }
+    : {};
+    console.log(todayStr);
 
   const getFormattedEventDatesLabel = (eventDates) => {
     if (!eventDates || eventDates.length === 0) return null;
@@ -135,11 +111,10 @@ const EventCardPublic = ({ visibleCards }) => {
 
     const monthAbbr = [
       "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-      "Jul", "Ago", "Set", "Oct", "Nov", "Dic"
+      "Jul", "Ago", "Set", "Oct", "Nov", "Dic",
     ];
 
     const monthGroups = {};
-
     dates.forEach((date) => {
       const day = String(date.getDate()).padStart(2, "0");
       const month = date.getMonth();
@@ -149,8 +124,9 @@ const EventCardPublic = ({ visibleCards }) => {
       monthGroups[month].push(day);
     });
 
-    const formattedGroups = Object.entries(monthGroups)
-      .map(([monthIndex, days]) => `${days.join(", ")} ${monthAbbr[monthIndex]}`);
+    const formattedGroups = Object.entries(monthGroups).map(
+      ([monthIndex, days]) => `${days.join(", ")} ${monthAbbr[monthIndex]}`
+    );
 
     return formattedGroups.join(" y ");
   };
@@ -168,6 +144,7 @@ const EventCardPublic = ({ visibleCards }) => {
           <div key={dateKey}>
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {dateKey}
+            
             </h1>
 
             {events.map((item) => {
@@ -220,25 +197,26 @@ const EventCardPublic = ({ visibleCards }) => {
                               </TooltipProvider>
                             )}
                           </div>
+
                           <div className="flex items-center justify-between text-primary font-semibold">
-                           <div className="flex items-center gap-1 xlg:text-lg">
-  {item?.business_address && (
-    <>
-      <MapPin className="size-5 sm:size-6" />
-      <a
-        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          item.business_address
-        )}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover:underline text-primary font-semibold"
-        onClick={(e) => e.stopPropagation()} // Optional: prevents event bubbling if needed
-      >
-        {item.business_address}
-      </a>
-    </>
-  )}
-</div>
+                            <div className="flex items-center gap-1 xlg:text-lg">
+                              {item?.business_address && (
+                                <>
+                                  <MapPin className="size-5 sm:size-6" />
+                                  <a
+                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                      item.business_address
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline text-primary font-semibold"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {item.business_address}
+                                  </a>
+                                </>
+                              )}
+                            </div>
 
                             {pathname === "/venue-profile-edit" && (
                               <TooltipProvider>
