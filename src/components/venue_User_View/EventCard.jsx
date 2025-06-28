@@ -10,10 +10,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import DeleteModal from "../DeleteModal";
 
-const monthMap = {
+const MONTH_MAP = {
   0: "Ene",
   1: "Feb",
   2: "Mar",
@@ -28,7 +28,43 @@ const monthMap = {
   11: "Dic",
 };
 
-const EventCard = ({ visibleCards }) => {
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const checkDate = new Date(date);
+  checkDate.setHours(0, 0, 0, 0);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = MONTH_MAP[date.getMonth()];
+  const formattedDate = `${month} ${day}`;
+
+  return checkDate.getTime() === today.getTime()
+    ? `Hoy ${formattedDate}`
+    : formattedDate;
+};
+
+const formatEventDates = (dates = []) => {
+  if (!Array.isArray(dates)) return "";
+
+  const grouped = {};
+
+  dates.forEach((d) => {
+    const date = new Date(d.date);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = MONTH_MAP[date.getMonth()];
+    if (!grouped[month]) grouped[month] = [];
+    grouped[month].push(day);
+  });
+
+  return Object.entries(grouped)
+    .map(([month, days]) => `${days.join(", ")} ${month}`)
+    .join(" y ");
+};
+
+const EventCard = ({ visibleCards = [] }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
@@ -38,9 +74,7 @@ const EventCard = ({ visibleCards }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const deleteEventMutation = useMutation({
-    mutationFn: async (eventId) => {
-      return await axiosSecure.post(`/event/destroy/${eventId}`);
-    },
+    mutationFn: (eventId) => axiosSecure.post(`/event/destroy/${eventId}`),
     onSuccess: () => {
       toast.success("Event deleted successfully!");
       queryClient.invalidateQueries(["events"]);
@@ -52,59 +86,17 @@ const EventCard = ({ visibleCards }) => {
     },
   });
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id, e) => {
+    e.stopPropagation();
     setSelectedEventId(id);
     setIsDialogOpen(true);
   };
 
   const confirmDelete = () => {
-    if (selectedEventId) {
-      deleteEventMutation.mutate(selectedEventId);
-    }
+    selectedEventId && deleteEventMutation.mutate(selectedEventId);
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const checkDate = new Date(date);
-    checkDate.setHours(0, 0, 0, 0);
-
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = monthMap[date.getMonth()];
-    const formattedDate = `${month} ${day}`;
-
-    return checkDate.getTime() === today.getTime()
-      ? `Hoy ${formattedDate}`
-      : formattedDate;
-  };
-
-  const formatEventDates = (dates = []) => {
-    if (!Array.isArray(dates)) return "";
-
-    const grouped = {};
-
-    dates.forEach((d) => {
-      const date = new Date(d.date);
-      const day = date.getDate().toString().padStart(2, "0");
-      const month = monthMap[date.getMonth()];
-      if (!grouped[month]) grouped[month] = [];
-      grouped[month].push(day);
-    });
-
-    const formattedGroups = Object.entries(grouped).map(
-      ([month, days]) => `${days.join(", ")} ${month}`
-    );
-
-    return formattedGroups.join(" y ");
-  };
-
-  const groupAndSortEvents = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
+  const groupedEvents = useMemo(() => {
     const dateGroups = {};
 
     visibleCards.forEach((event) => {
@@ -112,13 +104,7 @@ const EventCard = ({ visibleCards }) => {
       if (!eventDateStr) return;
 
       const eventDate = new Date(eventDateStr);
-
-      // Check if the date is valid
       if (isNaN(eventDate.getTime())) return;
-
-      eventDate.setHours(0, 0, 0, 0);
-
-      if (eventDate.getTime() < today.getTime()) return;
 
       const dateKey = eventDate.toISOString().split("T")[0];
 
@@ -132,23 +118,19 @@ const EventCard = ({ visibleCards }) => {
 
       dateGroups[dateKey].events.push(event);
     });
-    const sortedGroups = Object.values(dateGroups).sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
-    });
 
-    sortedGroups.forEach((group) => {
-      group.events.sort((a, b) => {
-        return (
+    return Object.values(dateGroups)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .map((group) => ({
+        ...group,
+        events: group.events.sort((a, b) =>
           (a.event_start_time || "").localeCompare(b.event_start_time || "") ||
           a.event_title.localeCompare(b.event_title)
-        );
-      });
-    });
+        ),
+      }));
+  }, [visibleCards]);
 
-    return sortedGroups;
-  };
-
-  const groupedEvents = groupAndSortEvents();
+  const isVenueProfileEdit = pathname === "/venue-profile-edit";
 
   return (
     <>
@@ -160,6 +142,10 @@ const EventCard = ({ visibleCards }) => {
       />
 
       <div className="flex flex-col mt-10">
+        {groupedEvents.length === 0 && (
+          <p className="text-center text-gray-500">No events found.</p>
+        )}
+
         {groupedEvents.map((group) => (
           <div key={group.date} className="mb-8">
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[30px] font-belanosima font-bold text-center mb-3 sm:mb-6">
@@ -169,20 +155,23 @@ const EventCard = ({ visibleCards }) => {
             <div className="space-y-5">
               {group.events.map((item) => (
                 <div
-                  onClick={() => navigate(`/event-user-view/${item.id}`)}
                   key={item.id}
+                  onClick={() => navigate(`/event-user-view/${item.id}`)}
                   className="relative rounded mx-auto overflow-hidden shadow-lg cursor-pointer max-w-[625px] w-full"
                 >
                   <p className="absolute top-0 right-0 bg-primary z-20 text-[#F12617] font-semibold px-2 py-1">
                     {formatEventDates(item?.event_dates)}
                   </p>
+
                   <div className="w-full h-[200px] sm:h-[250px]">
                     <img
                       src={item.flyer || item.event_thumb_image}
                       alt={item.title}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
+
                   <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
                     <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
                       {item.button && (
@@ -195,15 +184,18 @@ const EventCard = ({ visibleCards }) => {
                           </button>
                         </div>
                       )}
+
                       <div className="space-y-1 sm:space-y-4">
                         <p className="sm:text-lg text-white font-semibold">
                           {item?.business_name}
                         </p>
+
                         <div className="flex items-center justify-between">
                           <h2 className="text-[20px] md:text-[32px] lg:text-xl xlg:text-[32px] text-white font-extrabold">
                             {item.event_title}
                           </h2>
-                          {pathname === "/venue-profile-edit" && (
+
+                          {isVenueProfileEdit && (
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
@@ -222,13 +214,13 @@ const EventCard = ({ visibleCards }) => {
                             </TooltipProvider>
                           )}
                         </div>
-                        {console.log(item?.business_address)}
+
                         <div
                           className={`${
                             item?.business_address
                               ? "flex items-center justify-between"
                               : "flex items-center justify-end"
-                          }  text-primary font-semibold`}
+                          } text-primary font-semibold`}
                         >
                           {item?.business_address && (
                             <a
@@ -238,7 +230,7 @@ const EventCard = ({ visibleCards }) => {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center gap-1 hover:underline cursor-pointer text-primary font-semibold"
-                              onClick={(e) => e.stopPropagation()} // optional if inside a clickable parent
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <MapPin className="size-5 lg:size-6" />
                               <span className="xlg:text-lg">
@@ -247,15 +239,12 @@ const EventCard = ({ visibleCards }) => {
                             </a>
                           )}
 
-                          {pathname === "/venue-profile-edit" && (
+                          {isVenueProfileEdit && (
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleDeleteClick(item.id);
-                                    }}
+                                    onClick={(e) => handleDeleteClick(item.id, e)}
                                     className="cursor-pointer"
                                   >
                                     <DeleteIcon className="size-7 text-red-700" />
@@ -268,14 +257,10 @@ const EventCard = ({ visibleCards }) => {
                             </TooltipProvider>
                           )}
                         </div>
+
                         <div className="flex items-center max-w-[200px] justify-between gap-4 font-semibold text-white">
                           <p>{item.price_limite}</p>
-                          <p>
-                            {item.event_start_time === "Invalid Date" ||
-                            item.event_start_time === "null"
-                              ? ""
-                              : item.event_start_time}
-                          </p>
+                          <p>{item.event_start_time}</p>
                         </div>
                       </div>
                     </div>

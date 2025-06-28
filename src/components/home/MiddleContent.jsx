@@ -144,7 +144,7 @@ const MiddleContent = ({ data, isLoading, error }) => {
                         const dateLabel = getEventDateLabel(item.event_dates);
                         return dateLabel ? (
                           <div className="absolute top-0 right-0">
-                            <button className="bg-primary text-[#F12617] p-1 text-sm sm:text-base sm:p-2 font-bold">
+                            <button className="bg-primary text-[#F12617] p-1  text-xs sm:text-sm lg:text-base sm:p-2 font-bold">
                               {dateLabel}
                             </button>
                           </div>

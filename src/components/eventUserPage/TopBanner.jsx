@@ -133,7 +133,7 @@ const TopBanner = ({ data }) => {
                     target="_blank"
                       onClick={(e) => e.stopPropagation()}
                     rel="noopener noreferrer"
-                   className="inline-flex items-center gap-1 hover:underline text-primary font-semibold"
+                   className="flex items-center gap-1 hover:underline text-primary font-semibold"
 
                   >
                     <MapPin className="size-5 sm:size-6" />
@@ -148,7 +148,7 @@ const TopBanner = ({ data }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                   className="inline-flex items-center gap-1 hover:underline text-primary font-semibold"
+                   className="flex items-center gap-1 hover:underline text-primary font-semibold"
 
                   >
                     <MapPin className="size-5 sm:size-6" />
