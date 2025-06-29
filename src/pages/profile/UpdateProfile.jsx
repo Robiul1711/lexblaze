@@ -66,6 +66,7 @@ const UpdateProfile = () => {
       );
       return response.data;
     },
+  
     onSuccess: (response) => {
       navigate("/venue-profile-edit");
       toast.success(response?.message);
