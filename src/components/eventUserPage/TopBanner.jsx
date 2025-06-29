@@ -117,7 +117,7 @@ const TopBanner = ({ data }) => {
             </div>
           )} */}
 
-          <div className="space-y-1 sm:space-y-3 absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
+          <div className="space-y-1 sm:space-y-3 flex flex-col items-start absolute top-1/2 transform -translate-y-1/2 w-full text-center sm:text-left px-4">
             <p className="xlg:text-lg sm:text-xl md:text-lg text-white flex items-center font-semibold">
               {data?.business_name}
             </p>
@@ -133,7 +133,7 @@ const TopBanner = ({ data }) => {
                     target="_blank"
                       onClick={(e) => e.stopPropagation()}
                     rel="noopener noreferrer"
-                   className="flex items-center gap-1 hover:underline text-primary font-semibold"
+                   className="inline-flex items-start  gap-1 hover:underline text-primary font-semibold"
 
                   >
                     <MapPin className="size-5 sm:size-6" />
@@ -148,7 +148,7 @@ const TopBanner = ({ data }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                   className="flex items-center gap-1 hover:underline text-primary font-semibold"
+                   className="inline-flex items-start  gap-1 hover:underline text-primary font-semibold"
 
                   >
                     <MapPin className="size-5 sm:size-6" />

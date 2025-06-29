@@ -22,9 +22,7 @@ const EventCardPublic = ({ visibleCards }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const deleteEventMutation = useMutation({
-    mutationFn: async (eventId) => {
-      return await axiosSecure.post(`/event/destroy/${eventId}`);
-    },
+    mutationFn: async (eventId) => axiosSecure.post(`/event/destroy/${eventId}`),
     onSuccess: () => {
       toast.success("Event deleted successfully!");
       queryClient.invalidateQueries(["events"]);
@@ -47,72 +45,34 @@ const EventCardPublic = ({ visibleCards }) => {
     }
   };
 
-  const isToday = (dateStr) => {
-    const today = new Date();
-    const date = new Date(dateStr);
-    return (
-      today.getFullYear() === date.getFullYear() &&
-      today.getMonth() === date.getMonth() &&
-      today.getDate() === date.getDate()
-    );
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const monthAbbr = [
+    "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Set", "Oct", "Nov", "Dic",
+  ];
+
+  const isToday = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d.getTime() === today.getTime();
   };
 
-const todayStr = new Date().toLocaleDateString("es-ES", {
-  day: "2-digit",
-  month: "short",
-}).replace(/\b\w/g, char => char.toUpperCase()); // "28 Jun"
-
-  const sortedEvents = [...visibleCards]
-    .filter((item) =>
-      item.event_dates?.some((d) => new Date(d.date).toString() !== "Invalid Date")
-    )
-    .filter((item) =>
-      item.event_dates?.some((d) => {
-        const eventDate = new Date(d.date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        eventDate.setHours(0, 0, 0, 0);
-        return eventDate >= today;
-      })
-    )
-    .sort((a, b) => {
-      const normalize = (dates) => {
-        const firstValidDate = dates
-          .map((d) => new Date(d.date))
-          .filter((d) => !isNaN(d))
-          .sort((a, b) => a - b)[0];
-        if (!firstValidDate) return Infinity;
-        firstValidDate.setHours(0, 0, 0, 0);
-        return firstValidDate.getTime();
-      };
-      return normalize(a.event_dates) - normalize(b.event_dates);
-    });
-
-  const filteredEvents = sortedEvents.filter((item) =>
-    item.event_dates?.some((d) => isToday(d.date))
-  );
-
-  const groupedEvents = filteredEvents.length
-    ? {
-        [`Hoy ${todayStr}`]: filteredEvents,
-      }
-    : {};
-    console.log(todayStr);
+  const formatGroupLabel = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    const label = `${String(d.getDate()).padStart(2, "0")} ${monthAbbr[d.getMonth()]}`;
+    return isToday(d) ? `Hoy ${label}` : label;
+  };
 
   const getFormattedEventDatesLabel = (eventDates) => {
     if (!eventDates || eventDates.length === 0) return null;
 
     const dates = eventDates
-      .map((d) => new Date(d?.date))
-      .filter((d) => d instanceof Date && !isNaN(d))
+      .map((d) => new Date(d.date))
+      .filter((d) => !isNaN(d) && d >= today)
       .sort((a, b) => a - b);
-
-    if (dates.length === 0) return null;
-
-    const monthAbbr = [
-      "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-      "Jul", "Ago", "Set", "Oct", "Nov", "Dic",
-    ];
 
     const monthGroups = {};
     dates.forEach((date) => {
@@ -124,12 +84,45 @@ const todayStr = new Date().toLocaleDateString("es-ES", {
       monthGroups[month].push(day);
     });
 
-    const formattedGroups = Object.entries(monthGroups).map(
-      ([monthIndex, days]) => `${days.join(", ")} ${monthAbbr[monthIndex]}`
-    );
-
-    return formattedGroups.join(" y ");
+    return Object.entries(monthGroups)
+      .map(([monthIndex, days]) => `${days.join(", ")} ${monthAbbr[monthIndex]}`)
+      .join(" y ");
   };
+
+  const getFirstUpcomingDate = (dates) =>
+    dates
+      ?.map((d) => new Date(d.date))
+      .filter((d) => !isNaN(d) && d >= today)
+      .sort((a, b) => a - b)[0] ?? null;
+
+  // Step 1: Filter and sort events
+  const sortedEvents = [...visibleCards]
+    .filter((item) =>
+      item.event_dates?.some((d) => {
+        const eventDate = new Date(d.date);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate >= today;
+      })
+    )
+    .sort((a, b) => {
+      const aDate = getFirstUpcomingDate(a.event_dates)?.getTime() ?? Infinity;
+      const bDate = getFirstUpcomingDate(b.event_dates)?.getTime() ?? Infinity;
+      return aDate - bDate;
+    });
+
+  // Step 2: Group by first upcoming date
+  const groupedEvents = {};
+  sortedEvents.forEach((event) => {
+    const firstDate = getFirstUpcomingDate(event.event_dates);
+    if (!firstDate) return;
+
+    const label = formatGroupLabel(firstDate);
+
+    if (!groupedEvents[label]) {
+      groupedEvents[label] = [];
+    }
+    groupedEvents[label].push(event);
+  });
 
   return (
     <>
@@ -144,7 +137,6 @@ const todayStr = new Date().toLocaleDateString("es-ES", {
           <div key={dateKey}>
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[40px] font-belanosima font-bold text-center mb-3 sm:mb-4 xlg:mb-5">
               {dateKey}
-            
             </h1>
 
             {events.map((item) => {

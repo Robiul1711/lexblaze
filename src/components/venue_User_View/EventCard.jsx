@@ -98,6 +98,8 @@ const EventCard = ({ visibleCards = [] }) => {
 
   const groupedEvents = useMemo(() => {
     const dateGroups = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     visibleCards.forEach((event) => {
       const eventDateStr = event.event_dates?.[0]?.date;
@@ -105,6 +107,11 @@ const EventCard = ({ visibleCards = [] }) => {
 
       const eventDate = new Date(eventDateStr);
       if (isNaN(eventDate.getTime())) return;
+
+      const eventDateOnly = new Date(eventDate);
+      eventDateOnly.setHours(0, 0, 0, 0);
+
+      if (eventDateOnly < today) return; // ⛔ Exclude past events
 
       const dateKey = eventDate.toISOString().split("T")[0];
 
