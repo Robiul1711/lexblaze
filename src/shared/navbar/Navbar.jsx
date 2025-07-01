@@ -8,8 +8,8 @@ import SearchModal from "@/components/common/SearchModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -20,21 +20,55 @@ const Navbar = () => {
   useEffect(() => {
     if (pathname === "/" && !date) {
       const today = new Date();
-      const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000);
+      const localDate = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+      );
       setDate(localDate.toISOString().split("T")[0]);
     }
-    
+
     // Reset date when not on home page
     if (pathname !== "/") {
       setDate(null);
     }
   }, [pathname, setDate, date]);
+  const today = new Date();
+//   const handleDateChange = (selectedDate) => {
+//   if (selectedDate) {
+//     // Fix timezone shift by removing the offset
+//     const utcDate = new Date(
+//       selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000
+//     );
 
+//     const year = utcDate.getFullYear();
+//     const month = String(utcDate.getMonth() + 1).padStart(2, "0");
+//     const day = String(utcDate.getDate()).padStart(2, "0");
+//     setDate(`${year}-${month}-${day}`); // "YYYY-MM-DD"
+//   } else {
+//     setDate(null);
+//   }
+//   setDropdownVisible(false);
+// };
+
+  // const handleDateChange = (selectedDate) => {
+  //   if (selectedDate) {
+  //     const year = selectedDate.getFullYear();
+  //     const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+  //     const day = String(selectedDate.getDate()).padStart(2, "0");
+  //     setDate(`${year}-${month}-${day}`); // "YYYY-MM-DD"
+  //   } else {
+  //     setDate(null);
+  //   }
+  //   setDropdownVisible(false);
+  // };
 const handleDateChange = (selectedDate) => {
   if (selectedDate) {
-    const year = selectedDate.getFullYear();
-    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() + 1); // Add 1 day
+
+    const year = nextDay.getFullYear();
+    const month = String(nextDay.getMonth() + 1).padStart(2, "0");
+    const day = String(nextDay.getDate()).padStart(2, "0");
+
     setDate(`${year}-${month}-${day}`); // "YYYY-MM-DD"
   } else {
     setDate(null);
@@ -51,27 +85,29 @@ const handleDateChange = (selectedDate) => {
         )}
       </div>
       <div className="w-[50%] flex items-center justify-center">
-      <Link to="/" className="">
-        <img
-          src={logo}
-          alt=""
-          className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
-        />
-      </Link>
-
+        <Link to="/" className="">
+          <img
+            src={logo}
+            alt=""
+            className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
+          />
+        </Link>
       </div>
-      <div className={`flex items-center justify-end ${pathname === "/" ? "lg:justify-between" : ""}  w-[25%]`}>
-        {pathname === "/" && (
-          <TodoEventDropdown />
-        )}
+      <div
+        className={`flex items-center justify-end ${
+          pathname === "/" ? "lg:justify-between" : ""
+        }  w-[25%]`}
+      >
+        {pathname === "/" && <TodoEventDropdown />}
         {pathname === "/" && (
           <Dropdown
             arrow
             dropdownRender={() => (
-              <Calendar 
-                className="rounded-md border bg-white" 
-                onChange={handleDateChange} 
-                value={date ? new Date(date) : null} 
+              <Calendar
+                className="rounded-md border bg-white"
+                onChange={handleDateChange}
+                value={date ? new Date(date) : null}
+                tileDisabled={({ date }) => date < today.setHours(0, 0, 0, 0)} // disables all previous dates
               />
             )}
             trigger={["click"]}

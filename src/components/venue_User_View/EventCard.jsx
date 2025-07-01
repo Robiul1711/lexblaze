@@ -150,7 +150,8 @@ const EventCard = ({ visibleCards = [] }) => {
 
       <div className="flex flex-col mt-10">
         {groupedEvents.length === 0 && (
-          <p className="text-center text-gray-500">No events found.</p>
+          // <p className="text-center text-gray-500">No events here.</p>
+          ""
         )}
 
         {groupedEvents.map((group) => (
