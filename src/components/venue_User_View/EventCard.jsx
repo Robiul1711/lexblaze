@@ -13,56 +13,49 @@ import {
 import { useMemo, useState } from "react";
 import DeleteModal from "../DeleteModal";
 
+// ...all imports same as before
+
 const MONTH_MAP = {
-  0: "Ene",
-  1: "Feb",
-  2: "Mar",
-  3: "Abr",
-  4: "May",
-  5: "Jun",
-  6: "Jul",
-  7: "Ago",
-  8: "Set",
-  9: "Oct",
-  10: "Nov",
-  11: "Dic",
+  0: "Ene", 1: "Feb", 2: "Mar", 3: "Abr", 4: "May", 5: "Jun",
+  6: "Jul", 7: "Ago", 8: "Set", 9: "Oct", 10: "Nov", 11: "Dic",
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return "N/A";
-  const date = new Date(dateString);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-  const checkDate = new Date(date);
-  checkDate.setHours(0, 0, 0, 0);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = MONTH_MAP[date.getMonth()];
-  const formattedDate = `${month} ${day}`;
-
-  return checkDate.getTime() === today.getTime()
-    ? `Hoy ${formattedDate}`
-    : formattedDate;
+const formatGroupLabel = (date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const label = `${String(d.getDate()).padStart(2, "0")} ${MONTH_MAP[d.getMonth()]}`;
+  return d.getTime() === today.getTime() ? `Hoy ${label}` : label;
 };
 
-const formatEventDates = (dates = []) => {
-  if (!Array.isArray(dates)) return "";
+const getFormattedEventDatesLabel = (eventDates) => {
+  if (!eventDates || eventDates.length === 0) return null;
+
+  const dates = eventDates
+    .map((d) => new Date(d.date))
+    .filter((d) => !isNaN(d) && d >= today)
+    .sort((a, b) => a - b);
 
   const grouped = {};
-
-  dates.forEach((d) => {
-    const date = new Date(d.date);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = MONTH_MAP[date.getMonth()];
+  dates.forEach((date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = date.getMonth();
     if (!grouped[month]) grouped[month] = [];
     grouped[month].push(day);
   });
 
   return Object.entries(grouped)
-    .map(([month, days]) => `${days.join(", ")} ${month}`)
+    .map(([monthIndex, days]) => `${days.join(", ")} ${MONTH_MAP[monthIndex]}`)
     .join(" y ");
 };
+
+const getFirstUpcomingDate = (dates) =>
+  dates
+    ?.map((d) => new Date(d.date))
+    .filter((d) => !isNaN(d) && d >= today)
+    .sort((a, b) => a - b)[0] ?? null;
 
 const EventCard = ({ visibleCards = [] }) => {
   const navigate = useNavigate();
@@ -96,46 +89,31 @@ const EventCard = ({ visibleCards = [] }) => {
     selectedEventId && deleteEventMutation.mutate(selectedEventId);
   };
 
-  const groupedEvents = useMemo(() => {
-    const dateGroups = {};
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    visibleCards.forEach((event) => {
-      const eventDateStr = event.event_dates?.[0]?.date;
-      if (!eventDateStr) return;
-
-      const eventDate = new Date(eventDateStr);
-      if (isNaN(eventDate.getTime())) return;
-
-      const eventDateOnly = new Date(eventDate);
-      eventDateOnly.setHours(0, 0, 0, 0);
-
-      if (eventDateOnly < today) return; // ⛔ Exclude past events
-
-      const dateKey = eventDate.toISOString().split("T")[0];
-
-      if (!dateGroups[dateKey]) {
-        dateGroups[dateKey] = {
-          date: eventDateStr,
-          formattedDate: formatDate(eventDateStr),
-          events: [],
-        };
-      }
-
-      dateGroups[dateKey].events.push(event);
+  // STEP 1: Filter and sort future events
+  const sortedEvents = [...visibleCards]
+    .filter((item) =>
+      item.event_dates?.some((d) => {
+        const eventDate = new Date(d.date);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate >= today;
+      })
+    )
+    .sort((a, b) => {
+      const aDate = getFirstUpcomingDate(a.event_dates)?.getTime() ?? Infinity;
+      const bDate = getFirstUpcomingDate(b.event_dates)?.getTime() ?? Infinity;
+      return aDate - bDate;
     });
 
-    return Object.values(dateGroups)
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
-      .map((group) => ({
-        ...group,
-        events: group.events.sort((a, b) =>
-          (a.event_start_time || "").localeCompare(b.event_start_time || "") ||
-          a.event_title.localeCompare(b.event_title)
-        ),
-      }));
-  }, [visibleCards]);
+  // STEP 2: Group by first upcoming date
+  const groupedEvents = {};
+  sortedEvents.forEach((event) => {
+    const firstDate = getFirstUpcomingDate(event.event_dates);
+    if (!firstDate) return;
+
+    const label = formatGroupLabel(firstDate);
+    if (!groupedEvents[label]) groupedEvents[label] = [];
+    groupedEvents[label].push(event);
+  });
 
   const isVenueProfileEdit = pathname === "/venue-profile-edit";
 
@@ -149,26 +127,21 @@ const EventCard = ({ visibleCards = [] }) => {
       />
 
       <div className="flex flex-col mt-10">
-        {groupedEvents.length === 0 && (
-          // <p className="text-center text-gray-500">No events here.</p>
-          ""
-        )}
-
-        {groupedEvents.map((group) => (
-          <div key={group.date} className="mb-8">
+        {Object.entries(groupedEvents).map(([groupLabel, events]) => (
+          <div key={groupLabel} className="mb-8">
             <h1 className="text-[#333] text-xl sm:text-2xl xlg:text-[30px] font-belanosima font-bold text-center mb-3 sm:mb-6">
-              {group.formattedDate}
+              {groupLabel}
             </h1>
 
             <div className="space-y-5">
-              {group.events.map((item) => (
+              {events.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => navigate(`/event-user-view/${item.id}`)}
                   className="relative rounded mx-auto overflow-hidden shadow-lg cursor-pointer max-w-[625px] w-full"
                 >
                   <p className="absolute top-0 right-0 bg-primary z-20 text-[#F12617] font-semibold px-2 py-1">
-                    {formatEventDates(item?.event_dates)}
+                    {getFormattedEventDatesLabel(item?.event_dates)}
                   </p>
 
                   <div className="w-full h-[200px] sm:h-[250px]">

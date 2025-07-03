@@ -17,7 +17,7 @@ const EventCardPublic = ({ visibleCards }) => {
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
   const { pathname } = useLocation();
-
+console.log(visibleCards);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
