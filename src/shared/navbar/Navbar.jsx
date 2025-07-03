@@ -107,7 +107,7 @@ const handleDateChange = (selectedDate) => {
                 className="rounded-md border bg-white"
                 onChange={handleDateChange}
                 value={date ? new Date(date) : null}
-                tileDisabled={({ date }) => date < today.setHours(0, 0, 0, 0)} // disables all previous dates
+                tileDisabled={({ date }) => date < today.setHours(0, 0, 0, 0)} 
               />
             )}
             trigger={["click"]}
