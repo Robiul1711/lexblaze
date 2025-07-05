@@ -342,7 +342,7 @@ const UpdateEvent = () => {
             <div>
               <input
                 type="text"
-                placeholder="Compañía/Promotor"
+                placeholder="Nombre del Establecimiento"
                 {...register("business_name")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}
@@ -476,6 +476,7 @@ const UpdateEvent = () => {
         {/* Submit Button */}
         <div className="flex justify-center gap-10 mt-8">
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="bg-red-500 duration-300 hover:bg-red-600 text-white sm:px-6 px-3 py-2 rounded-[12px] text-sm lg:text-2xl font-bold"
           >

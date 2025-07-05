@@ -7,16 +7,18 @@ import AddSlider from "@/components/common/AddSlider";
 import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import dayjs from "dayjs";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
   const {  date, category } = useAuth();
   const dynamicDate = date;
-  const formattedDate = new Date(dynamicDate).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-  });
+  // const formattedDate = new Date(dynamicDate).toLocaleDateString("en-GB", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "2-digit",
+  // });
+const formattedDate = dayjs(dynamicDate).format("DD/MM/YY");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["events", date, category],
@@ -39,7 +41,31 @@ const Home = () => {
       
       <div className="text-center lg:mt-4 space-y-2 lg:space-y-0 w-full">
         <TodoEventDropdownMobile />
-{
+
+
+
+        {
+  (() => {
+    const today = dayjs();
+    const tomorrow = dayjs().add(1, "day");
+    const current = dayjs(dynamicDate);
+
+    const isToday = current.isSame(today, "day");
+    const isTomorrow = current.isSame(tomorrow, "day");
+
+    const title1 = isToday
+      ? "Ver Eventos de Hoy "
+      : isTomorrow
+      ? "Ver Eventos para Mañana "
+      : "Ver Eventos para el ";
+
+    const title2 = current.format("DD/MM/YY");
+
+    return <Title48 title1={title1} title2={title2} />;
+  })()
+}
+
+{/* {
   (() => {
     const today = new Date();
     const tomorrow = new Date();
@@ -59,7 +85,7 @@ const Home = () => {
 
     return <Title48 title1={title1} title2={formattedDate} />;
   })()
-}
+} */}
       </div>
 
       <div className="flex justify-between w-full gap-8 mt-2 ">

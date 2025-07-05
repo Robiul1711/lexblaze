@@ -85,7 +85,7 @@ const BusinessProfileForm = () => {
     if (fileList.length === 0) {
       setError("image", {
         type: "manual",
-        message: "Se requiere al menos una imagen.",
+        message: "Sube las imágenes una por una",
       });
       return;
     }

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+// import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { DeleteIcon, EditIcon2 } from "@/lib/Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,38 +10,49 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import DeleteModal from "../DeleteModal";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-// ...all imports same as before
+dayjs.extend(isSameOrAfter);
 
 const MONTH_MAP = {
-  0: "Ene", 1: "Feb", 2: "Mar", 3: "Abr", 4: "May", 5: "Jun",
-  6: "Jul", 7: "Ago", 8: "Set", 9: "Oct", 10: "Nov", 11: "Dic",
+  0: "Ene",
+  1: "Feb",
+  2: "Mar",
+  3: "Abr",
+  4: "May",
+  5: "Jun",
+  6: "Jul",
+  7: "Ago",
+  8: "Set",
+  9: "Oct",
+  10: "Nov",
+  11: "Dic",
 };
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const today = dayjs().startOf("day");
 
 const formatGroupLabel = (date) => {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  const label = `${String(d.getDate()).padStart(2, "0")} ${MONTH_MAP[d.getMonth()]}`;
-  return d.getTime() === today.getTime() ? `Hoy ${label}` : label;
+  const d = dayjs(date).startOf("day");
+  const label = `${d.format("DD")} ${MONTH_MAP[d.month()]}`;
+  return d.isSame(today) ? `Hoy ${label}` : label;
 };
 
 const getFormattedEventDatesLabel = (eventDates) => {
   if (!eventDates || eventDates.length === 0) return null;
 
   const dates = eventDates
-    .map((d) => new Date(d.date))
-    .filter((d) => !isNaN(d) && d >= today)
+    .map((d) => dayjs(d.date).startOf("day"))
+    .filter((d) => d.isValid() && d.isSameOrAfter(today))
     .sort((a, b) => a - b);
 
   const grouped = {};
   dates.forEach((date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = date.getMonth();
+    const day = date.format("DD");
+    const month = date.month();
     if (!grouped[month]) grouped[month] = [];
     grouped[month].push(day);
   });
@@ -53,8 +64,8 @@ const getFormattedEventDatesLabel = (eventDates) => {
 
 const getFirstUpcomingDate = (dates) =>
   dates
-    ?.map((d) => new Date(d.date))
-    .filter((d) => !isNaN(d) && d >= today)
+    ?.map((d) => dayjs(d.date).startOf("day"))
+    .filter((d) => d.isValid() && d.isSameOrAfter(today))
     .sort((a, b) => a - b)[0] ?? null;
 
 const EventCard = ({ visibleCards = [] }) => {
@@ -89,22 +100,18 @@ const EventCard = ({ visibleCards = [] }) => {
     selectedEventId && deleteEventMutation.mutate(selectedEventId);
   };
 
-  // STEP 1: Filter and sort future events
   const sortedEvents = [...visibleCards]
     .filter((item) =>
-      item.event_dates?.some((d) => {
-        const eventDate = new Date(d.date);
-        eventDate.setHours(0, 0, 0, 0);
-        return eventDate >= today;
-      })
+      item.event_dates?.some((d) =>
+        dayjs(d.date).startOf("day").isSameOrAfter(today)
+      )
     )
     .sort((a, b) => {
-      const aDate = getFirstUpcomingDate(a.event_dates)?.getTime() ?? Infinity;
-      const bDate = getFirstUpcomingDate(b.event_dates)?.getTime() ?? Infinity;
+      const aDate = getFirstUpcomingDate(a.event_dates)?.valueOf() ?? Infinity;
+      const bDate = getFirstUpcomingDate(b.event_dates)?.valueOf() ?? Infinity;
       return aDate - bDate;
     });
 
-  // STEP 2: Group by first upcoming date
   const groupedEvents = {};
   sortedEvents.forEach((event) => {
     const firstDate = getFirstUpcomingDate(event.event_dates);
@@ -225,7 +232,9 @@ const EventCard = ({ visibleCards = [] }) => {
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <button
-                                    onClick={(e) => handleDeleteClick(item.id, e)}
+                                    onClick={(e) =>
+                                      handleDeleteClick(item.id, e)
+                                    }
                                     className="cursor-pointer"
                                   >
                                     <DeleteIcon className="size-7 text-red-700" />
