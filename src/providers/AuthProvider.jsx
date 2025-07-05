@@ -3,15 +3,19 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+  import dayjs from 'dayjs';
 const AuthProvider = ({ children }) => {
   //only for date start
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-  const day = String(today.getDate()).padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}`;
-  //only for date end
+  // const today = new Date();
+  // const year = today.getFullYear();
+  // const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+  // const day = String(today.getDate()).padStart(2, "0");
+  // const formattedDate = `${year}-${month}-${day}`;
+
+
+// Today
+const formattedDate = dayjs().format('YYYY-MM-DD');
+
 
   const [search, setSearch] = useState("");
   const [date, setDate] = useState(formattedDate);

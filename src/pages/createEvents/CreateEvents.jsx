@@ -343,7 +343,7 @@ const formattedDates = data.event_date.map(date => {
             <div>
               <input
                 type="text"
-                placeholder="Compañía/Promotor"
+                placeholder="Nombre del Establecimiento"
                 {...register("business_name")}
                 className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
                 disabled={isSubmitting}

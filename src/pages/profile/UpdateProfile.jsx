@@ -344,22 +344,21 @@ const UpdateProfile = () => {
 </Upload>
 
         </div>
-        <p className="text-red-600 text-center text-xs">
-          Si desea actualizar las imágenes, elimine todas las imágenes y
-          actualícelas nuevamente.
+        <p className="text-red-600 text-center text-xs lg:text-sm">
+          Sube las imágenes una por una. Si deseas actualizar las imágenes, elimina todas y vuelve a subirlas.
         </p>
         {/* Submit */}
         <div className="flex items-start justify-center gap-5 lg:mt-6">
           <button
             onClick={() => navigate(-1)}
-            className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-11 rounded-[12px]"
+            className="bg-[#FF0000] hover:bg-red-600 text-white font-semibold py-3 px-4 sm:px-11 rounded-[12px]"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={RegistrationMutation.isPending}
-            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-11 md:px-xl  rounded-xl lg:rounded-[12px] transition-all duration-200
+            className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-4 sm:px-11 md:px-xl  rounded-xl lg:rounded-[12px] transition-all duration-200
               ${
                 RegistrationMutation.isPending
                   ? "opacity-60 cursor-not-allowed"
