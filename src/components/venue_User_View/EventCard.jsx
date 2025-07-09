@@ -1,4 +1,3 @@
-// import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { DeleteIcon, EditIcon2 } from "@/lib/Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,18 +18,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 dayjs.extend(isSameOrAfter);
 
 const MONTH_MAP = {
-  0: "Ene",
-  1: "Feb",
-  2: "Mar",
-  3: "Abr",
-  4: "May",
-  5: "Jun",
-  6: "Jul",
-  7: "Ago",
-  8: "Set",
-  9: "Oct",
-  10: "Nov",
-  11: "Dic",
+  0: "Ene", 1: "Feb", 2: "Mar", 3: "Abr", 4: "May", 5: "Jun",
+  6: "Jul", 7: "Ago", 8: "Set", 9: "Oct", 10: "Nov", 11: "Dic",
 };
 
 const today = dayjs().startOf("day");
@@ -38,29 +27,71 @@ const today = dayjs().startOf("day");
 const formatGroupLabel = (date) => {
   const d = dayjs(date).startOf("day");
   const label = `${d.format("DD")} ${MONTH_MAP[d.month()]}`;
-  return d.isSame(today) ? `Hoy ${label}` : label;
+  return d.isSame(today, "day") ? `Hoy ${label}` : label;
 };
 
-const getFormattedEventDatesLabel = (eventDates) => {
-  if (!eventDates || eventDates.length === 0) return null;
+const getEventDateLabelWithoutHoy = (eventDates) => {
+  if (!eventDates || eventDates.length <= 1) return null;
 
   const dates = eventDates
-    .map((d) => dayjs(d.date).startOf("day"))
-    .filter((d) => d.isValid() && d.isSameOrAfter(today))
+    .map(d => dayjs(d.date).startOf("day"))
+    .filter(d => d.isValid())
     .sort((a, b) => a - b);
 
-  const grouped = {};
-  dates.forEach((date) => {
-    const day = date.format("DD");
-    const month = date.month();
-    if (!grouped[month]) grouped[month] = [];
-    grouped[month].push(day);
+  if (dates.length <= 1) return null;
+
+  const allToday = dates.every(date => date.isSame(today, "day"));
+  if (allToday) return null;
+
+  // ✅ Check if 4 or more dates fall on the same day of the week
+  const weekdayCounts = {};
+  dates.forEach(date => {
+    const weekday = date.day(); // 0 = Sunday, 6 = Saturday
+    weekdayCounts[weekday] = (weekdayCounts[weekday] || 0) + 1;
   });
 
-  return Object.entries(grouped)
-    .map(([monthIndex, days]) => `${days.join(", ")} ${MONTH_MAP[monthIndex]}`)
+  const dominantWeekday = Object.entries(weekdayCounts).find(
+    ([, count]) => count >= 4
+  );
+
+  if (dominantWeekday) {
+    const weekdayIndex = Number(dominantWeekday[0]);
+    const weekdaysES = [
+      "Domingos", "Lunes", "Martes", "Miércoles",
+      "Jueves", "Viernes", "Sábados"
+    ];
+    return `Todos los ${weekdaysES[weekdayIndex]}`;
+  }
+
+  // Check if dates are continuous
+  let isContinuous = true;
+  for (let i = 1; i < dates.length; i++) {
+    const diff = dates[i].diff(dates[i - 1], "day");
+    if (diff !== 1) {
+      isContinuous = false;
+      break;
+    }
+  }
+
+  if (isContinuous) {
+    const last = dates[dates.length - 1];
+    const formatted = last.format("DD MMM").replace(/^\w/, c => c.toUpperCase());
+    return `Hasta ${formatted}`;
+  }
+
+  const monthGroups = {};
+  dates.forEach(date => {
+    const day = date.format("DD");
+    const month = date.month();
+    if (!monthGroups[month]) monthGroups[month] = [];
+    monthGroups[month].push(day);
+  });
+
+  return Object.entries(monthGroups)
+    .map(([monthIdx, days]) => `${days.join(", ")} ${MONTH_MAP[monthIdx]}`)
     .join(" y ");
 };
+
 
 const getFirstUpcomingDate = (dates) =>
   dates
@@ -147,9 +178,12 @@ const EventCard = ({ visibleCards = [] }) => {
                   onClick={() => navigate(`/event-user-view/${item.id}`)}
                   className="relative rounded mx-auto overflow-hidden shadow-lg cursor-pointer max-w-[625px] w-full"
                 >
-                  <p className="absolute top-0 right-0 bg-primary z-20 text-[#F12617] font-semibold px-2 py-1">
-                    {getFormattedEventDatesLabel(item?.event_dates)}
-                  </p>
+                  {/* ✅ Yellow tag WITHOUT "Hoy" */}
+                  {getEventDateLabelWithoutHoy(item?.event_dates) && (
+                    <p className="absolute top-0 right-0 bg-primary z-20 text-[#F12617] font-semibold px-2 py-1">
+                      {getEventDateLabelWithoutHoy(item?.event_dates)}
+                    </p>
+                  )}
 
                   <div className="w-full h-[200px] sm:h-[250px]">
                     <img
@@ -162,17 +196,6 @@ const EventCard = ({ visibleCards = [] }) => {
 
                   <div className="absolute bg-black/70 top-0 left-0 w-full h-full">
                     <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
-                      {item.button && (
-                        <div
-                          className="absolute top-0 right-0"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <button className="bg-primary text-[#F12617] p-3 font-bold">
-                            {item.button}
-                          </button>
-                        </div>
-                      )}
-
                       <div className="space-y-1 sm:space-y-4">
                         <p className="sm:text-lg text-white font-semibold">
                           {item?.business_name}
