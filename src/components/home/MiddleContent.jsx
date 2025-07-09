@@ -33,65 +33,80 @@ const MiddleContent = ({ data, isLoading, error }) => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
   };
 
-  const getEventDateLabel = (eventDates) => {
-    if (!eventDates || eventDates.length === 0) return null;
+const getEventDateLabel = (eventDates) => {
+  if (!eventDates || eventDates.length === 0) return null;
 
-    const dates = eventDates
-      .map((d) => new Date(d?.date))
-      .filter((d) => d instanceof Date && !isNaN(d))
-      .sort((a, b) => a - b);
+  const dates = eventDates
+    .map((d) => new Date(d?.date))
+    .filter((d) => d instanceof Date && !isNaN(d))
+    .sort((a, b) => a - b);
 
-    if (dates.length === 0) return null;
+  if (dates.length === 0) return null;
 
-    const today = new Date();
-    const isSameDay = (a, b) =>
-      a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-    const allToday = dates.every((date) => isSameDay(date, today));
-    if (allToday) return null;
+  const isSameDay = (a, b) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
 
-    const allSameDay = dates.every((d) => d.getDay() === dates[0].getDay());
-    if (allSameDay) {
-      const weekdaysES = [
-        "Domingos", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábados",
-      ];
-      return `Todos los ${weekdaysES[dates[0].getDay()]}`;
+  const allToday = dates.every((date) => isSameDay(date, today));
+  if (allToday) return null;
+
+  // ✅ Check if 4+ dates are on the same weekday
+  const weekdayCounts = {};
+  dates.forEach((date) => {
+    const weekday = date.getDay(); // 0 = Sunday
+    weekdayCounts[weekday] = (weekdayCounts[weekday] || 0) + 1;
+  });
+
+  const recurringWeekday = Object.entries(weekdayCounts).find(
+    ([, count]) => count >= 4
+  );
+
+  if (recurringWeekday) {
+    const weekdayNames = [
+      "Domingos", "Lunes", "Martes", "Miércoles",
+      "Jueves", "Viernes", "Sábados"
+    ];
+    return `Todos los ${weekdayNames[recurringWeekday[0]]}`;
+  }
+
+  // Continuous date range
+  let isContinuous = true;
+  for (let i = 1; i < dates.length; i++) {
+    const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+    if (diff !== 1) {
+      isContinuous = false;
+      break;
     }
+  }
 
-    // Check if dates are continuous
-    let isContinuous = true;
-    for (let i = 1; i < dates.length; i++) {
-      const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-      if (diff !== 1) {
-        isContinuous = false;
-        break;
-      }
-    }
-    if (isContinuous) {
-      const last = dates[dates.length - 1];
-      const formatted = last.toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-      });
-      return `Hasta ${formatted.replace(/\b\w/, (c) => c.toUpperCase())}`;
-    }
-
-    // Group by month if not continuous
-    const monthAbbr = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"];
-    const monthGroups = {};
-    dates.forEach((date) => {
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = date.getMonth();
-      if (!monthGroups[month]) monthGroups[month] = [];
-      monthGroups[month].push(day);
+  if (isContinuous) {
+    const last = dates[dates.length - 1];
+    const formatted = last.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
     });
+    return `Hasta ${formatted.replace(/\b\w/, (c) => c.toUpperCase())}`;
+  }
 
-    return Object.entries(monthGroups)
-      .map(([monthIdx, days]) => `${days.join(", ")} ${monthAbbr[monthIdx]}`)
-      .join(" y ");
-  };
+  // Group by month
+  const monthAbbr = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"];
+  const monthGroups = {};
+  dates.forEach((date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = date.getMonth();
+    if (!monthGroups[month]) monthGroups[month] = [];
+    monthGroups[month].push(day);
+  });
+
+  return Object.entries(monthGroups)
+    .map(([monthIdx, days]) => `${days.join(", ")} ${monthAbbr[monthIdx]}`)
+    .join(" y ");
+};
+
 
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
