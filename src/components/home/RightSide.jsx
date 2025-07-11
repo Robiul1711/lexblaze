@@ -15,7 +15,7 @@ const RightSide = () => {
   });
 
   const { pathname } = useLocation();
-console.log(data)
+// console.log(data)
   return (
     <div className="w-full  max-w-[450px] mx-auto aspect-[4/5] ">
       {isLoading ? (

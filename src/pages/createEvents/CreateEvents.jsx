@@ -310,10 +310,10 @@ const formattedDates = data.event_date.map(date => {
               {startTime ? dayjs(startTime).format("HH:mm") : "00:00"}
             </p>
           </div>
+        </div>
           {errors.event_start_time && (
             <p className="text-red-500">{errors.event_start_time.message}</p>
           )}
-        </div>
 
         {/* End Time */}
         <div className="relative">
@@ -430,7 +430,7 @@ const formattedDates = data.event_date.map(date => {
           <Controller
             name="category_id"
             control={control}
-            rules={{ required: "Please select at least one category" }}
+            rules={{ required: "Se requiere al menos una categoría" }}
             render={({ field }) => (
               <Select
                 mode="multiple"

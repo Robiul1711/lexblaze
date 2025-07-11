@@ -178,6 +178,7 @@ const EventCard = ({ visibleCards = [] }) => {
                   onClick={() => navigate(`/event-user-view/${item.id}`)}
                   className="relative rounded mx-auto overflow-hidden shadow-lg cursor-pointer max-w-[625px] w-full"
                 >
+                  {console.log(item)}
                   {/* ✅ Yellow tag WITHOUT "Hoy" */}
                   {getEventDateLabelWithoutHoy(item?.event_dates) && (
                     <p className="absolute top-0 right-0 bg-primary z-20 text-[#F12617] font-semibold px-2 py-1">
