@@ -41,7 +41,15 @@ const UpdateEvent = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { register, handleSubmit, setValue, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm();
 
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -58,7 +66,6 @@ const UpdateEvent = () => {
       return response.data;
     },
   });
-  // console.log(data);
   useEffect(() => {
     if (data?.events) {
       const event = data.events;
@@ -71,9 +78,15 @@ const UpdateEvent = () => {
       setValue("business_website_link", event.business_website_link || "");
 
       // Set dates
+      // if (event.event_dates && event.event_dates.length > 0) {
+      //   const dates = event.event_dates.map(
+      //     (dateObj) => new Date(dateObj.date)
+      //   );
+      //   setValue("event_date", dates);
+      // }
       if (event.event_dates && event.event_dates.length > 0) {
-        const dates = event.event_dates.map(
-          (dateObj) => new Date(dateObj.date)
+        const dates = event.event_dates.map((dateObj) =>
+          dayjs(dateObj.date, "YYYY-MM-DD").toDate()
         );
         setValue("event_date", dates);
       }
@@ -188,7 +201,68 @@ const UpdateEvent = () => {
     }
   };
 
+  const validateForm = (data) => {
+    let isValid = true;
+
+    // Validate required fields
+    if (!startTime) {
+      setError("event_start_time", {
+        type: "required",
+        message: "La hora de inicio es obligatoria.",
+      });
+      isValid = false;
+    } else {
+      clearErrors("event_start_time");
+    }
+
+    if (!data.event_title?.trim()) {
+      setError("event_title", {
+        type: "required",
+        message: "El título del evento es obligatorio.",
+      });
+      isValid = false;
+    } else {
+      clearErrors("event_title");
+    }
+
+    if (!data.business_address?.trim()) {
+      setError("business_address", {
+        type: "required",
+        message: "La dirección es obligatoria.",
+      });
+      isValid = false;
+    } else {
+      clearErrors("business_address");
+    }
+
+    if (!data.price_limite?.trim()) {
+      setError("price_limite", {
+        type: "required",
+        message: "Se requiere precio",
+      });
+      isValid = false;
+    } else {
+      clearErrors("price_limite");
+    }
+
+    if (!data.category_id || data.category_id.length === 0) {
+      setError("category_id", {
+        type: "required",
+        message: "Se requiere al menos una categoría.",
+      });
+      isValid = false;
+    } else {
+      clearErrors("category_id");
+    }
+
+    return isValid;
+  };
+
   const onSubmit = async (data) => {
+    if (!validateForm(data)) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     const updatedData = {
@@ -202,11 +276,15 @@ const UpdateEvent = () => {
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
+    if (time) {
+      clearErrors("event_start_time");
+    }
   };
 
   const handleEndTimeChange = (time) => {
     setEndTime(time);
   };
+
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
@@ -254,6 +332,12 @@ const UpdateEvent = () => {
             <Controller
               name="event_date"
               control={control}
+              rules={{
+                required: "La fecha es obligatoria",
+                validate: (dates) =>
+                  (Array.isArray(dates) && dates.length > 0) ||
+                  "La fecha es obligatoria",
+              }}
               render={({ field }) => (
                 <>
                   <DatePicker
@@ -286,6 +370,11 @@ const UpdateEvent = () => {
                 </>
               )}
             />
+            {errors.event_date && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.event_date.message}
+              </p>
+            )}
           </div>
         </section>
 
@@ -298,7 +387,9 @@ const UpdateEvent = () => {
               onChange={handleStartTimeChange}
               format="HH:mm"
               size="large"
-              className="p-6 pr-2 w-full border-2 border-black rounded-md"
+              className={`p-6 pr-2 w-full border-2 rounded-md ${
+                errors.event_start_time ? "border-red-500" : "border-black"
+              }`}
               showNow={false}
             />
             <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex gap-2 items-center">
@@ -307,6 +398,11 @@ const UpdateEvent = () => {
               </p>
             </div>
           </div>
+          {errors.event_start_time && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.event_start_time.message}
+            </p>
+          )}
 
           <div className="relative">
             <TimePicker
@@ -352,21 +448,35 @@ const UpdateEvent = () => {
             <div>
               <input
                 type="text"
-                placeholder="Nombre del Evento"
-                {...register("event_title")}
-                className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
+                placeholder="Nombre del Evento *"
+                {...register("event_title", { required: true })}
+                className={`w-full border-2 p-4 lg:p-6 rounded-md ${
+                  errors.event_title ? "border-red-500" : "border-black"
+                }`}
                 disabled={isSubmitting}
               />
+              {errors.event_title && (
+                <p className="text-red-500 text-sm mt-1">
+                  El título del evento es obligatorio.
+                </p>
+              )}
             </div>
 
             <div>
               <input
                 type="text"
-                placeholder="Ubicación"
-                {...register("business_address")}
-                className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
+                placeholder="Ubicación *"
+                {...register("business_address", { required: true })}
+                className={`w-full border-2 p-4 lg:p-6 rounded-md ${
+                  errors.business_address ? "border-red-500" : "border-black"
+                }`}
                 disabled={isSubmitting}
               />
+              {errors.business_address && (
+                <p className="text-red-500 text-sm mt-1">
+                  Se requiere ubicación.
+                </p>
+              )}
             </div>
 
             <div>
@@ -381,11 +491,16 @@ const UpdateEvent = () => {
             <div>
               <input
                 type="text"
-                placeholder="Precio para Entrar o Gratis"
-                {...register("price_limite")}
-                className="w-full border-2 border-black p-4 lg:p-6 rounded-md"
+                placeholder="Precio para Entrar o Gratis *"
+                {...register("price_limite", { required: true })}
+                className={`w-full border-2 p-4 lg:p-6 rounded-md ${
+                  errors.price_limite ? "border-red-500" : "border-black"
+                }`}
                 disabled={isSubmitting}
               />
+              {errors.price_limite && (
+                <p className="text-red-500 text-sm mt-1">Se requiere precio.</p>
+              )}
             </div>
 
             <div>
@@ -412,24 +527,33 @@ const UpdateEvent = () => {
 
         {/* Category Section */}
         <section>
-          {/* // Replace your current Select component with this: */}
           <Controller
             name="category_id"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
-              <Select
-                {...field}
-                mode="multiple"
-                placeholder="Categoría del Evento"
-                tagRender={tagRender}
-                options={category?.data?.map((category) => ({
-                  label: category?.category_name,
-                  value: category.id,
-                }))}
-                size="large"
-                className="w-full custom-select"
-                disabled={isSubmitting}
-              />
+              <>
+                <Select
+                  {...field}
+                  mode="multiple"
+                  placeholder="Categoría del Evento *"
+                  tagRender={tagRender}
+                  options={category?.data?.map((category) => ({
+                    label: category?.category_name,
+                    value: category.id,
+                  }))}
+                  size="large"
+                  className={`w-full custom-select ${
+                    errors.category_id ? "border-red-500" : ""
+                  }`}
+                  disabled={isSubmitting}
+                />
+                {errors.category_id && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Se requiere al menos una categoría.
+                  </p>
+                )}
+              </>
             )}
           />
 

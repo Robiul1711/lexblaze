@@ -37,7 +37,10 @@ const getEventDateLabel = (eventDates) => {
   if (!eventDates || eventDates.length === 0) return null;
 
   const dates = eventDates
-    .map((d) => new Date(d?.date))
+    .map((d) => {
+      const [year, month, day] = d.date.split("-").map(Number);
+      return new Date(year, month - 1, day); // Local date
+    })
     .filter((d) => d instanceof Date && !isNaN(d))
     .sort((a, b) => a - b);
 
@@ -54,7 +57,6 @@ const getEventDateLabel = (eventDates) => {
   const allToday = dates.every((date) => isSameDay(date, today));
   if (allToday) return null;
 
-  // ✅ Check if 4+ dates are on the same weekday
   const weekdayCounts = {};
   dates.forEach((date) => {
     const weekday = date.getDay(); // 0 = Sunday
@@ -73,7 +75,7 @@ const getEventDateLabel = (eventDates) => {
     return `Todos los ${weekdayNames[recurringWeekday[0]]}`;
   }
 
-  // Continuous date range
+  // Continuous dates
   let isContinuous = true;
   for (let i = 1; i < dates.length; i++) {
     const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
@@ -122,6 +124,7 @@ const getEventDateLabel = (eventDates) => {
                 key={item.id}
                 className="relative z-30 rounded overflow-hidden shadow-lg mb-4 cursor-pointer"
               >
+                {/* {console.log(item)} */}
                 <Link to={`/event-user-view/${item.id}`}>
                   <img
                     src={item.flyer || item.event_thumb_image}
@@ -133,7 +136,7 @@ const getEventDateLabel = (eventDates) => {
                       const label = getEventDateLabel(item.event_dates);
                       return label ? (
                         <div className="absolute top-0 right-0">
-                          <button className="bg-primary text-[#F12617] p-1 text-xs sm:text-sm xl:text-base xl:p-2 font-bold">
+                          <button className="bg-primary text-[#F12617] p-1 capitalize text-xs sm:text-sm xl:text-base xl:p-2 font-bold">
                             {label}
                           </button>
                         </div>
@@ -154,7 +157,7 @@ const getEventDateLabel = (eventDates) => {
                         </Link>
                       )}
                       {item.event_title && (
-                        <h2 className="text-[20px] sm:text-[24px] md:text-[28px] text-white font-extrabold">
+                        <h2 className="text-[20px] sm:text-[22px] md:text-[24px] text-white font-extrabold">
                           {item.event_title}
                         </h2>
                       )}
@@ -167,7 +170,12 @@ const getEventDateLabel = (eventDates) => {
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1 text-primary font-semibold z-[999] hover:underline"
                       >
-                        <MapPin className="size-5 md:size-6" />
+                        {
+                           item.business_address ? (
+                            <MapPin className="size-5 md:size-6" />
+                          ) : null
+                        }
+                        {/* <MapPin className="size-5 md:size-6" /> */}
                         <span className="sm:text-lg">{item.business_address}</span>
                       </Link>
                       <div className="flex items-center max-w-[200px] justify-between text-sm sm:text-base font-semibold text-white">
