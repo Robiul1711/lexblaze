@@ -3,7 +3,7 @@ import { CalenderIcons } from "@/lib/Icons";
 import MenuDropdown from "./MenuDropdown";
 import { Dropdown } from "antd";
 import { TodoEventDropdown } from "./TodoEventDropdown";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import SearchModal from "@/components/common/SearchModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "react-router-dom";
@@ -37,6 +37,7 @@ const Navbar = () => {
     setDropdownVisible(false);
   };
   //   useEffect(() => {
+
   //     if (pathname === "/" && !date) {
   //       const today = new Date();
   //       const localDate = new Date(
@@ -95,6 +96,10 @@ const Navbar = () => {
   //   setDropdownVisible(false);
   // };
 
+const { setCategory } = useAuth();
+  const handleLogoClick = () => {
+  setCategory(null);  // reset category
+};
   return (
     <header className="bg-secondary w-full sticky top-0 z-40 text-primary section-padding-x py-2 flex justify-between items-center">
       <div className="flex items-center w-[25%] xlg:gap-[150px] xl:gap-[180px] gap-4 sm:gap-10">
@@ -104,13 +109,14 @@ const Navbar = () => {
         )}
       </div>
       <div className="w-[50%] flex items-center justify-center">
-        <Link to="/" className="">
-          <img
-            src={logo}
-            alt=""
-            className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
-          />
-        </Link>
+  <Link to="/" onClick={handleLogoClick} className="">
+  <img
+    src={logo}
+    alt="Logo"
+    className="h-10 sm:h-12 md:h-14 xmd:h-16 lg:h-[70px]"
+  />
+</Link>
+
       </div>
       <div
         className={`flex items-center justify-end ${
@@ -122,13 +128,12 @@ const Navbar = () => {
           <Dropdown
             arrow
             dropdownRender={() => (
-  <Calendar
-  className="rounded-md border bg-white"
-  onChange={handleDateChange}
-  value={date ? dayjs(date, "YYYY-MM-DD").toDate() : null}
-  minDate={new Date()} // disables past dates
-/>
-
+              <Calendar
+                className="rounded-md border bg-white"
+                onChange={handleDateChange}
+                value={date ? dayjs(date, "YYYY-MM-DD").toDate() : null}
+                minDate={new Date()} // disables past dates
+              />
             )}
             trigger={["click"]}
             open={dropdownVisible}

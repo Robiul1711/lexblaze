@@ -23,7 +23,10 @@ const MiddleContent = ({ data, isLoading, error }) => {
   const visibleCards =
     events.length <= 5
       ? events
-      : events.slice(currentPage * cardsPerPage, (currentPage + 1) * cardsPerPage);
+      : events.slice(
+          currentPage * cardsPerPage,
+          (currentPage + 1) * cardsPerPage
+        );
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
@@ -33,82 +36,99 @@ const MiddleContent = ({ data, isLoading, error }) => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
   };
 
-const getEventDateLabel = (eventDates) => {
-  if (!eventDates || eventDates.length === 0) return null;
+  const getEventDateLabel = (eventDates) => {
+    if (!eventDates || eventDates.length === 0) return null;
 
-  const dates = eventDates
-    .map((d) => {
-      const [year, month, day] = d.date.split("-").map(Number);
-      return new Date(year, month - 1, day); // Local date
-    })
-    .filter((d) => d instanceof Date && !isNaN(d))
-    .sort((a, b) => a - b);
+    const dates = eventDates
+      .map((d) => {
+        const [year, month, day] = d.date.split("-").map(Number);
+        return new Date(year, month - 1, day); // Local date
+      })
+      .filter((d) => d instanceof Date && !isNaN(d))
+      .sort((a, b) => a - b);
 
-  if (dates.length === 0) return null;
+    if (dates.length === 0) return null;
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  const isSameDay = (a, b) =>
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+    const isSameDay = (a, b) =>
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
 
-  const allToday = dates.every((date) => isSameDay(date, today));
-  if (allToday) return null;
+    const allToday = dates.every((date) => isSameDay(date, today));
+    if (allToday) return null;
 
-  const weekdayCounts = {};
-  dates.forEach((date) => {
-    const weekday = date.getDay(); // 0 = Sunday
-    weekdayCounts[weekday] = (weekdayCounts[weekday] || 0) + 1;
-  });
-
-  const recurringWeekday = Object.entries(weekdayCounts).find(
-    ([, count]) => count >= 4
-  );
-
-  if (recurringWeekday) {
-    const weekdayNames = [
-      "Domingos", "Lunes", "Martes", "Miércoles",
-      "Jueves", "Viernes", "Sábados"
-    ];
-    return `Todos los ${weekdayNames[recurringWeekday[0]]}`;
-  }
-
-  // Continuous dates
-  let isContinuous = true;
-  for (let i = 1; i < dates.length; i++) {
-    const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
-    if (diff !== 1) {
-      isContinuous = false;
-      break;
-    }
-  }
-
-  if (isContinuous) {
-    const last = dates[dates.length - 1];
-    const formatted = last.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "short",
+    const weekdayCounts = {};
+    dates.forEach((date) => {
+      const weekday = date.getDay(); // 0 = Sunday
+      weekdayCounts[weekday] = (weekdayCounts[weekday] || 0) + 1;
     });
-    return `Hasta ${formatted.replace(/\b\w/, (c) => c.toUpperCase())}`;
-  }
 
-  // Group by month
-  const monthAbbr = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"];
-  const monthGroups = {};
-  dates.forEach((date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = date.getMonth();
-    if (!monthGroups[month]) monthGroups[month] = [];
-    monthGroups[month].push(day);
-  });
+    const recurringWeekday = Object.entries(weekdayCounts).find(
+      ([, count]) => count >= 4
+    );
 
-  return Object.entries(monthGroups)
-    .map(([monthIdx, days]) => `${days.join(", ")} ${monthAbbr[monthIdx]}`)
-    .join(" y ");
-};
+    if (recurringWeekday) {
+      const weekdayNames = [
+        "Domingos",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábados",
+      ];
+      return `Todos los ${weekdayNames[recurringWeekday[0]]}`;
+    }
 
+    // Continuous dates
+    let isContinuous = true;
+    for (let i = 1; i < dates.length; i++) {
+      const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+      if (diff !== 1) {
+        isContinuous = false;
+        break;
+      }
+    }
+
+    if (isContinuous) {
+      const last = dates[dates.length - 1];
+      const formatted = last.toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "short",
+      });
+      return `Hasta ${formatted.replace(/\b\w/, (c) => c.toUpperCase())}`;
+    }
+
+    // Group by month
+    const monthAbbr = [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Oct",
+      "Nov",
+      "Dic",
+    ];
+    const monthGroups = {};
+    dates.forEach((date) => {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = date.getMonth();
+      if (!monthGroups[month]) monthGroups[month] = [];
+      monthGroups[month].push(day);
+    });
+
+    return Object.entries(monthGroups)
+      .map(([monthIdx, days]) => `${days.join(", ")} ${monthAbbr[monthIdx]}`)
+      .join(" y ");
+  };
 
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
@@ -132,16 +152,17 @@ const getEventDateLabel = (eventDates) => {
                     className="w-full h-[200px] md:h-[300px] lg:h-[200px] xl:h-[260px] object-cover"
                   />
                   <div className="absolute bg-black/70 top-0 left-0 w-full h-full p-5 sm:p-[60px]">
-                    {item.event_dates?.length > 0 && (() => {
-                      const label = getEventDateLabel(item.event_dates);
-                      return label ? (
-                        <div className="absolute top-0 right-0">
-                          <button className="bg-primary text-[#F12617] p-1 capitalize text-xs sm:text-sm xl:text-base xl:p-2 font-bold">
-                            {label}
-                          </button>
-                        </div>
-                      ) : null;
-                    })()}
+                    {item.event_dates?.length > 1 &&
+                      (() => {
+                        const label = getEventDateLabel(item.event_dates);
+                        return label ? (
+                          <div className="absolute top-0 right-0">
+                            <button className="bg-primary text-[#F12617] p-1 capitalize text-xs sm:text-sm xl:text-base xl:p-2 font-bold">
+                              {label}
+                            </button>
+                          </div>
+                        ) : null;
+                      })()}
 
                     <div className="space-y-2 w-full max-w-[300px] xlg:max-w-[355px] absolute top-1/2 sm:left-10 transform -translate-y-1/2 px-4 sm:px-0">
                       {item.business_name && (
@@ -170,17 +191,19 @@ const getEventDateLabel = (eventDates) => {
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1 text-primary font-semibold z-[999] hover:underline"
                       >
-                        {
-                           item.business_address ? (
-                            <MapPin className="size-5 md:size-6" />
-                          ) : null
-                        }
+                        {item.business_address ? (
+                          <MapPin className="size-5 md:size-6" />
+                        ) : null}
                         {/* <MapPin className="size-5 md:size-6" /> */}
-                        <span className="sm:text-lg">{item.business_address}</span>
+                        <span className="sm:text-lg">
+                          {item.business_address}
+                        </span>
                       </Link>
                       <div className="flex items-center max-w-[200px] justify-between text-sm sm:text-base font-semibold text-white">
                         {item.price_limite && <p>{item.price_limite}</p>}
-                        {item.event_start_time && <p>{item.event_start_time}</p>}
+                        {item.event_start_time && (
+                          <p>{item.event_start_time}</p>
+                        )}
                       </div>
                     </div>
                   </div>
