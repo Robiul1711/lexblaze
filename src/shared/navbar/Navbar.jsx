@@ -98,6 +98,7 @@ const Navbar = () => {
 
 const { setCategory } = useAuth();
   const handleLogoClick = () => {
+  setDate(null);
   setCategory(null);  // reset category
 };
   return (

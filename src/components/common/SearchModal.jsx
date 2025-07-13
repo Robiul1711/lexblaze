@@ -116,7 +116,7 @@ const SearchModal = ({ search, setSearch }) => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar eventos, lugares o categorías..."
+                  placeholder="Buscar eventos y lugares"
                   className="w-full outline-none text-gray-800 placeholder-gray-400 text-base"
                   autoFocus
                 />
@@ -227,9 +227,7 @@ const SearchModal = ({ search, setSearch }) => {
               ) : (
                 <div className="p-6 text-center">
                   <p className="text-gray-500 font-medium">Buscar eventos</p>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Escribe para encontrar eventos, lugares o categorías
-                  </p>
+                  
                 </div>
               )}
             </div>
