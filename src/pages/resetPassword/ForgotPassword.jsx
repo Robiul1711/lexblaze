@@ -106,6 +106,7 @@ const ForgotPassword = () => {
             )}
           </button>
         </div>
+        
       </form>
     </div>
   );

@@ -4,12 +4,15 @@ import Title48 from "@/components/common/Title48";
 import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react"; // Import the Lucide icons
+import { useOtp } from "@/hooks/useOtp";
+import { useEmail } from "@/hooks/useEmail";
 
 const ResetPassword = () => {
-  const { user, setUser } = useAuth();
+  const {otp} = useOtp();
+  const { resetToken } = useEmail();
+  console.log(resetToken);
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
@@ -31,8 +34,7 @@ const ResetPassword = () => {
       return response?.data;
     },
     onSuccess: (response) => {
-      toast.success(response?.message);
-      setUser(response);
+      toast.success(response?.message);;
       navigate("/log-in");
     },
     onError: (error) => {
@@ -43,20 +45,27 @@ const ResetPassword = () => {
     onSettled: () => setIsSubmitting(false),
   });
 
-  const onSubmit = (data) => {
-    setIsSubmitting(true);
-    ResetPasswordMutation.mutate(data);
-  };
+const onSubmit = (data) => {
+  if (!resetToken) {
+    toast.error("Token de restablecimiento faltante. Verifica tu OTP nuevamente.");
+    return;
+  }
+
+  setIsSubmitting(true);
+  ResetPasswordMutation.mutate({ ...data, token: resetToken });
+
+};
+
 
   return (
-    <div className="lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className=" flex flex-col items-center justify-center h-screen section-padding-x px-4">
       {/* Title */}
       <Title48 title2="Restablecer Contraseña" />
 
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[480px] mt-12 lg:mt-20 space-y-8"
+        className="w-full max-w-[480px] mt-10 space-y-8"
         noValidate
       >
         {/* Password Field */}
@@ -154,15 +163,15 @@ const ResetPassword = () => {
           </button>
         </div>
 
-        {/* Navigation Link */}
+        {/* Navigation Link
         <div className="text-center mt-8">
           <Link
-            to="/forgot-password"
+            to="/log-in"
             className="text-black font-bold text-xl hover:underline"
           >
-            ¿Olvidaste tu contraseña?
+          Ir a Iniciar sesión
           </Link>
-        </div>
+        </div> */}
       </form>
     </div>
   );

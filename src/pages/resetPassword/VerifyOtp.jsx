@@ -10,8 +10,8 @@ import { useEmail } from "@/hooks/useEmail";
 import { useAuth } from "@/hooks/useAuth";
 
 const VerifyOtp = () => {
-  const { user, setUser } = useAuth();
-  const { email } = useEmail();
+  
+  const { email, setResetToken } = useEmail();
   const { otp, setOtp } = useOtp();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
@@ -23,6 +23,7 @@ const VerifyOtp = () => {
     },
     onSuccess: (response) => {
       toast.success(response?.message);
+      setResetToken(response?.reset_token);
       navigate("/reset-password");
     },
     onError: (error) => {
@@ -39,7 +40,7 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="lg:mt-[112px] mt-10 pb-[120px] lg:pb-[220px] flex flex-col items-center justify-center section-padding-x px-4">
+    <div className="h-screen flex flex-col items-center justify-center section-padding-x px-4">
       {/* Title */}
       <Title48 title2="Ingresa tu OTP" />
 
