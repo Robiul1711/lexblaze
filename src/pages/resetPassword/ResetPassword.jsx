@@ -52,7 +52,7 @@ const onSubmit = (data) => {
   }
 
   setIsSubmitting(true);
-  ResetPasswordMutation.mutate({ ...data, token: resetToken });
+  ResetPasswordMutation.mutate({ ...data, reset_token: resetToken });
 
 };
 
