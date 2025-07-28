@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useLocation } from "react-router-dom";
 
+
 const AddSlider = () => {
     const axiosPublic=useAxiosPublic();
     const { data, isLoading, error } = useQuery({
