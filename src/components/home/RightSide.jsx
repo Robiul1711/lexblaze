@@ -7,15 +7,14 @@ import { useLocation } from "react-router-dom";
 const RightSide = () => {
   const axiosPublic = useAxiosPublic();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["adsData"],
+    queryKey: ["adsDataRight"],
     queryFn: async () => {
-      const response = await axiosPublic.get("/adds/allApiDatas");
+      const response = await axiosPublic.get("/adsto");
       return response.data;
     },
   });
-
   const { pathname } = useLocation();
-// console.log(data)
+  // console.log(data)
   return (
     <div className="w-full  max-w-[450px] mx-auto aspect-[4/5] ">
       {isLoading ? (
@@ -29,19 +28,12 @@ const RightSide = () => {
           <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
             EVENTOS DESTACADOS
           </p>
-        {
-  data?.length > 0 && (() => {
-    const randomAd = data[Math.floor(Math.random() * data.length)];
-    return (
-      <img
-        src={randomAd.image}
-        alt="Ad"
-        className=" w-full h-full object-cover rounded-md "
-      />
-    );
-  })()
-}
 
+          <img
+            src={data?.right_side_ads}
+            alt="Ad"
+            className=" w-full h-full object-cover rounded-md "
+          />
         </>
       )}
     </div>
