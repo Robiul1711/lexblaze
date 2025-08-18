@@ -1,8 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import bottomImg from "@/assets/images/img6.png";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -10,21 +8,55 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useLocation } from "react-router-dom";
 
-// 
-
 const AddSlider = () => {
-    const axiosPublic=useAxiosPublic();
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["adsData"],
-        queryFn: async () => {
-          const response = await axiosPublic.get("/adds/allApiDatas");
-          return response.data;
-        },
-      });
+  const axiosPublic = useAxiosPublic();
 
-const {pathname}=useLocation();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["adsData"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/adds/allApiDatas");
+      return response.data;
+    },
+  });
+
+  const { pathname } = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[150px]">
+        <p className="text-gray-500">Loading ads...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[150px]">
+        <p className="text-red-500">Failed to load ads</p>
+      </div>
+    );
+  }
+
+  const downAds = data?.filter(
+    (ad) => ad.type?.toLowerCase() === "down" && ad.status?.toLowerCase() === "active"
+  );
+
+  if (!downAds?.length) {
+    return (
+      <div className="flex justify-center items-center h-[150px]">
+        <p className="text-gray-400">No active ads</p>
+      </div>
+    );
+  }
+
   return (
-    <div className={`w-full mx-auto lg:max-w-[500px] xl:max-w-[600px] ${pathname === "/" ? "h-[180px] xxs:h-[200px] sm:h-[300px] md:h-[350px] lg:h-[180px]" : "h-[100px] lg:h-[180px]"}  `} >
+    <div
+      className={`w-full mx-auto lg:max-w-[500px] xl:max-w-[600px] ${
+        pathname === "/"
+          ? "h-[180px] xxs:h-[200px] sm:h-[300px] md:h-[350px] lg:h-[180px]"
+          : "h-[100px] lg:h-[180px]"
+      }`}
+    >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
@@ -35,9 +67,10 @@ const {pathname}=useLocation();
         loop={true}
         className="w-full h-full"
       >
-        {data?.map((item, index) => (
+        {downAds.map((item, index) => (
           <SwiperSlide key={item.id || index} className="w-full h-full">
             <div className="w-full h-full">
+              {console.log(item)}
               <img
                 src={item?.image}
                 className="w-full h-full object-fill rounded-md"
