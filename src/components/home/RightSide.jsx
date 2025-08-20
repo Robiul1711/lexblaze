@@ -1,55 +1,6 @@
-// import React from "react";
-// import useAxiosPublic from "@/hooks/useAxiosPublic";
-// import { useQuery } from "@tanstack/react-query";
-// import LoadingSpinner from "../common/LoadingSpinner";
-// import { useLocation } from "react-router-dom";
-
-// const RightSide = () => {
-//   const axiosPublic = useAxiosPublic();
-//   const { data, isLoading, error } = useQuery({
-//     queryKey: ["adsDataRight"],
-//     queryFn: async () => {
-//       const response = await axiosPublic.get("/adds/allApiDatas");
-//       return response.data;
-//     },
-//   });
-//   const { pathname } = useLocation();
-//   // console.log(data)
-//   return (
-//     <div className="w-full  max-w-[450px] mx-auto aspect-[4/5] ">
-//       {isLoading ? (
-//         pathname === "/about-us" && <LoadingSpinner />
-//       ) : error ? (
-//         <p className="text-red-500 font-semibold text-center my-3">
-//           {/* Failed to load ads. Please try again later. */}
-//         </p>
-//       ) : (
-//         <>
-//           <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
-//             EVENTOS DESTACADOS
-//           </p>
-
-//           <img
-//             src={data?.right_side_ads}
-//             alt="Ad"
-//             className=" w-full h-full object-cover rounded-md "
-//           />
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default RightSide;
-
-import React from "react";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "../common/LoadingSpinner";
-import { useLocation } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import "swiper/css";
+import React, { useState, useEffect, useRef } from "react";
 
 const RightSide = () => {
   const axiosPublic = useAxiosPublic();
@@ -61,49 +12,86 @@ const RightSide = () => {
     },
   });
 
-  const { pathname } = useLocation();
+  const rightAds =
+    data?.filter((ad) => ad.type === "right" && ad.status === "active") || [];
 
-  // filter only right-side ads
-  const rightAds = data?.filter((ad) => ad.type === "right" && ad.status === "active");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const slideRef = useRef();
+
+  // Auto slide
+  useEffect(() => {
+    if (rightAds.length > 0) {
+      const autoSlide = setInterval(() => {
+        nextSlide();
+      }, 3000);
+      return () => clearInterval(autoSlide);
+    }
+  }, [rightAds.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => prev + 1);
+  };
+
+  // When currentSlide changes, handle infinite loop
+  useEffect(() => {
+    if (!slideRef.current) return;
+    const handleTransitionEnd = () => {
+      if (currentSlide === rightAds.length) {
+        // Jump back to first slide without animation
+        setIsTransitioning(false);
+        setCurrentSlide(0);
+      }
+    };
+
+    slideRef.current.addEventListener("transitionend", handleTransitionEnd);
+    return () => {
+      if (slideRef.current)
+        slideRef.current.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, [currentSlide, rightAds.length]);
+
+  // Restore transition after jump
+  useEffect(() => {
+    if (!isTransitioning) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(true);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isTransitioning]);
+
+  if (isLoading) return <div className="w-full max-w-[450px] mx-auto aspect-[4/5] flex items-center justify-center"></div>;
+  if (error || rightAds.length === 0)
+    return (
+      <div className="w-full max-w-[450px] mx-auto aspect-[4/5] flex items-center justify-center">
+        <p className="text-red-500 font-semibold">No ads available</p>
+      </div>
+    );
+
+  // Clone first slide for smooth infinite loop
+  const slides = [...rightAds, rightAds[0]];
 
   return (
-    <div className="w-full max-w-[450px] mx-auto aspect-[4/5]">
-      {isLoading ? (
-        pathname === "/about-us" && <LoadingSpinner />
-      ) : error ? (
-        <p className="text-red-500 font-semibold text-center my-3"></p>
-      ) : (
-        <>
-          <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
-            EVENTOS DESTACADOS
-          </p>
+    <>
+      <p className="bg-[#D40000] xlg:py-2 w-full py-2 mb-3 rounded-md lg:rounded-xl text-sm text-center font-semibold xl:text-lg text-white">
+        EVENTOS DESTACADOS
+      </p>
 
-          {/* Carousel for right-side ads */}
-          {rightAds?.length > 0 ? (
-            <Swiper
-              modules={[Autoplay]}
-              autoplay={{ delay: 3000, disableOnInteraction: false }}
-              loop={true}
-              spaceBetween={10}
-              slidesPerView={1}
-              className="w-full h-full rounded-md"
-            >
-              {rightAds.map((ad) => (
-                <SwiperSlide key={ad.id}>
-                  <img
-                    src={ad.image}
-                    alt={ad.title}
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          ) : (
-            <p className="text-center text-gray-500">No ads available</p>
-          )}
-        </>
-      )}
-    </div>
+      <div className="relative w-full max-w-[450px] mx-auto aspect-[4/5] overflow-hidden rounded-lg">
+        <div
+          ref={slideRef}
+          className={`flex h-full ${isTransitioning ? "transition-transform duration-700 ease-in-out" : ""}`}
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {slides.map((ad, index) => (
+            <div key={ad._id || index} className="w-full flex-shrink-0">
+              <img src={ad.image} alt={ad.title || `Ad ${index + 1}`} className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
