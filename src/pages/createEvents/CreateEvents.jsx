@@ -259,7 +259,7 @@ const formattedDates = data.event_date.map(date => {
             render={({ field }) => (
               <div className="relative mt-4">
                 <DatePicker
-                  placeholder="Fecha de Inicio"
+                  placeholder="Fecha"
                   containerClassName="w-full"
                   inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
                   multiple
