@@ -8,6 +8,7 @@ import { TodoEventDropdownMobile } from "@/shared/navbar/TodoEventDropdownMobile
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import dayjs from "dayjs";
+import TopAddMobile from "@/components/common/TopAddMobile";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
@@ -36,7 +37,9 @@ const formattedDate = dayjs(dynamicDate).format("DD/MM/YY");
       {/* Title */}
       <div className="lg:hidden my-3 lg:my-0">
         {/* <SlideSwiper data={data} /> */}
-          <AddSlider />
+          {/* <AddSlider /> */}
+          <TopAddMobile />
+            
       </div>
       
       <div className="text-center lg:mt-4 space-y-2 lg:space-y-0 w-full">
