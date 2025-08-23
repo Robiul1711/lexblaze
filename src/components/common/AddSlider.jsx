@@ -48,7 +48,7 @@ const AddSlider = () => {
       </div>
     );
   }
-
+console.log(downAds)
   return (
     <div
       className={`w-full mx-auto lg:max-w-[500px] xl:max-w-[600px] ${
@@ -69,14 +69,13 @@ const AddSlider = () => {
       >
         {downAds.map((item, index) => (
           <SwiperSlide key={item.id || index} className="w-full h-full">
-            <div className="w-full h-full">
-              {console.log(item)}
+            <a href={item.url} target="_blank" className="w-full h-full">
               <img
                 src={item?.image}
                 className="w-full h-full object-fill rounded-md"
                 alt={`Slide ${index + 1}`}
               />
-            </div>
+            </a>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -84,13 +84,13 @@ const LeftSide = () => {
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {slides.map((ad, index) => (
-          <div key={ad._id || index} className="w-full flex-shrink-0">
+          <a href={ad.url} target="_blank" key={ad._id || index} className="w-full flex-shrink-0">
             <img
               src={ad.image}
               alt={ad.title || `Ad ${index + 1}`}
               className="w-full h-full object-cover"
             />
-          </div>
+          </a>
         ))}
       </div>
     </div>
