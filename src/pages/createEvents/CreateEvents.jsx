@@ -215,7 +215,30 @@ const formattedDates = data.event_date.map(date => {
       navigate(-1);
     }
   };
+const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 
+const weekDays = [
+  "Dom",
+  "Lun",
+  "Mié",
+  "Jue",
+  "Vie",
+  "Mar",
+  "Sáb",
+];
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-6 lg:mb-5 text-center">
@@ -258,14 +281,16 @@ const formattedDates = data.event_date.map(date => {
             }}
             render={({ field }) => (
               <div className="relative mt-4">
-                <DatePicker
-                  placeholder="Fecha"
-                  containerClassName="w-full"
-                  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
-                  multiple
-                  value={field.value}
-                  onChange={field.onChange}
-                />
+             <DatePicker
+  placeholder="Fecha"
+  containerClassName="w-full"
+  inputClass="p-6 pr-20 w-full border-2 border-black rounded-md"
+  multiple
+  value={field.value}
+  onChange={field.onChange}
+  months={months}
+  weekDays={weekDays}
+/>
                 <div className="absolute top-1/2 right-10 transform -translate-y-1/2 pointer-events-none">
                   <InputCalenderIcons />
                 </div>
