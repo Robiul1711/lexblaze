@@ -1,6 +1,7 @@
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect, useRef } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const LeftSide = () => {
   const axiosPublic = useAxiosPublic();
@@ -18,7 +19,39 @@ const LeftSide = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   const slideRef = useRef();
+  const containerRef = useRef();
+
+  // The minimum swipe distance required to trigger a slide change
+  const minSwipeDistance = 50;
+
+  // Handle touch start
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  // Handle touch move
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  // Handle touch end - determine if it was a swipe
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+  };
 
   // Auto slide every 3s
   useEffect(() => {
@@ -28,38 +61,22 @@ const LeftSide = () => {
       }, 3000);
       return () => clearInterval(autoSlide);
     }
-  }, [leftAds.length]);
+  }, [leftAds.length, currentSlide]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => prev + 1);
+    if (leftAds.length <= 1) return;
+    setCurrentSlide((prev) => (prev + 1) % leftAds.length);
   };
 
-  // Handle infinite loop using clone
-  useEffect(() => {
-    if (!slideRef.current) return;
+  const prevSlide = () => {
+    if (leftAds.length <= 1) return;
+    setCurrentSlide((prev) => (prev - 1 + leftAds.length) % leftAds.length);
+  };
 
-    const handleTransitionEnd = () => {
-      if (currentSlide === leftAds.length) {
-        // Jump back to first slide without animation
-        setIsTransitioning(false);
-        setCurrentSlide(0);
-      }
-    };
-
-    slideRef.current.addEventListener("transitionend", handleTransitionEnd);
-    return () => {
-      if (slideRef.current)
-        slideRef.current.removeEventListener("transitionend", handleTransitionEnd);
-    };
-  }, [currentSlide, leftAds.length]);
-
-  // Restore transition after jump
-  useEffect(() => {
-    if (!isTransitioning) {
-      const timer = setTimeout(() => setIsTransitioning(true), 50);
-      return () => clearTimeout(timer);
-    }
-  }, [isTransitioning]);
+  // Go to specific slide
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
   if (isLoading)
     return (
@@ -73,26 +90,65 @@ const LeftSide = () => {
       </div>
     );
 
-  // Clone first slide for smooth infinite loop
-  const slides = [...leftAds, leftAds[0]];
-
   return (
     <div className="relative w-full max-w-[450px] mx-auto aspect-[4/5] overflow-hidden rounded-lg">
+      {/* Navigation Arrows */}
+      {leftAds.length > 1 && (
+        <>
+          <button
+            onClick={prevSlide}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all"
+            aria-label="Previous slide"
+          >
+            <FaArrowLeft />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all"
+            aria-label="Next slide"
+          >
+            <FaArrowRight />
+          </button>
+        </>
+      )}
+      
+      {/* Slides Container */}
       <div
-        ref={slideRef}
-        className={`flex h-full ${isTransitioning ? "transition-transform duration-700 ease-in-out" : ""}`}
+        ref={containerRef}
+        className="flex h-full transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
-        {slides.map((ad, index) => (
-          <a href={ad.url} target="_blank" key={ad._id || index} className="w-full flex-shrink-0">
-            <img
-              src={ad.image}
-              alt={ad.title || `Ad ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
-          </a>
+        {leftAds.map((ad, index) => (
+          <div key={ad._id || index} className="w-full flex-shrink-0">
+            <a href={ad.url} target="_blank" rel="noopener noreferrer">
+              <img
+                src={ad.image}
+                alt={ad.title || `Ad ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </a>
+          </div>
         ))}
       </div>
+      
+      {/* Dots Indicator */}
+      {leftAds.length > 1 && (
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+          {leftAds.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentSlide ? "bg-white" : "bg-white/50"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

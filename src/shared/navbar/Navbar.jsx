@@ -12,6 +12,31 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
 const Navbar = () => {
+  const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
+const weekdays = [
+  "Dom",
+  "Lun",
+  "Mar",
+  "Mié",
+  "Jue",
+  "Vie",
+  "Sáb",
+];
+
   const { pathname } = useLocation();
   const { search, setSearch, date, setDate } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -129,12 +154,21 @@ const { setCategory } = useAuth();
           <Dropdown
             arrow
             dropdownRender={() => (
-              <Calendar
-                className="rounded-md border bg-white"
-                onChange={handleDateChange}
-                value={date ? dayjs(date, "YYYY-MM-DD").toDate() : null}
-                minDate={new Date()} // disables past dates
-              />
+               <Calendar
+      className="rounded-md border bg-white"
+      onChange={handleDateChange}
+      value={date ? dayjs(date, "YYYY-MM-DD").toDate() : null}
+      minDate={new Date()}
+
+      // Month-Year in header
+      formatMonthYear={(locale, date) => months[dayjs(date).month()]}
+
+      // Month names in "year view"
+      formatMonth={(locale, date) => months[dayjs(date).month()]}
+
+      // Weekdays (Mon, Tue, etc.)
+      formatShortWeekday={(locale, date) => weekdays[dayjs(date).day()]}
+    />
             )}
             trigger={["click"]}
             open={dropdownVisible}
