@@ -230,15 +230,7 @@ const months = [
   "Diciembre",
 ];
 
-const weekDays = [
-  "Dom",
-  "Lun",
-  "Mié",
-  "Jue",
-  "Vie",
-  "Mar",
-  "Sáb",
-];
+const weekDays = ["Dom", "Lun", "Mar", "Mié","Jue", "Vie", "Sáb"];
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[120px] lg:pb-[150px] px-4">
       <div className="mb-6 lg:mb-5 text-center">

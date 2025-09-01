@@ -293,30 +293,22 @@ const UpdateEvent = () => {
       setSelectedCategories(ids);
     }
   }, [data?.events?.categories]);
-const months = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-];
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
 
-const weekDays = [
-  "Dom",
-  "Lun",
-  "Mié",
-  "Jue",
-  "Vie",
-  "Mar",
-  "Sáb",
-];
+  const weekDays = ["Dom", "Lun", "Mar", "Mié","Jue", "Vie", "Sáb"];
   return (
     <div className="max-w-[590px] mx-auto mt-5 pb-[80px] lg:pb-[150px] px-4">
       <div className="mb-6 lg:mb-5 text-center">
@@ -373,8 +365,8 @@ const weekDays = [
                       field.onChange(dates);
                     }}
                     format={dateFormat}
-                months={months}
-  weekDays={weekDays}
+                    months={months}
+                    weekDays={weekDays}
                   />
 
                   {/* Calendar Icon */}
