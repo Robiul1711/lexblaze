@@ -255,6 +255,7 @@ const weekDays = ["Dom", "Lun", "Mar", "Mié","Jue", "Vie", "Sáb"];
             {flyerFileList.length < 1 && <UploadIcons />}
           </Upload>
           {imageError && <p className="text-red-500">{imageError}</p>}
+         <p>1920 x 1080 pixels or Relación de aspecto 4 x 5</p>
           <p className="bg-[#000e8e] text-white sm:px-5 px-3 py-2 rounded-md text-lg font-bold mt-4">
             Carga Imagen de Fondo (Obligatorio)
           </p>
@@ -497,6 +498,7 @@ const weekDays = ["Dom", "Lun", "Mar", "Mié","Jue", "Vie", "Sáb"];
             >
               {thumbFileList.length < 1 && <UploadIcons />}
             </Upload>
+            1920 x 1080 pixels or Relación de aspecto 4 x 5
             <p
               type="button"
               className="bg-[#000e8e] text-white sm:px-5 px-3 py-1 rounded-md text-lg font-bold mt-4"

@@ -49,7 +49,8 @@ const BusinessProfileForm = () => {
     },
     onError: (error) => {
       const errorMessage =
-        error.response?.data?.error || "Something went wrong, try again later!!";
+        error.response?.data?.error ||
+        "Something went wrong, try again later!!";
       toast.error(errorMessage);
     },
   });
@@ -118,7 +119,9 @@ const BusinessProfileForm = () => {
             className="w-full border-[2px] border-black p-4 lg:p-6"
           />
           {errors.business_name && (
-            <p className="text-red-500 text-sm">{errors.business_name.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_name.message}
+            </p>
           )}
         </div>
 
@@ -132,7 +135,9 @@ const BusinessProfileForm = () => {
             className="w-full border-[2px] border-black p-4 lg:p-6 h-[160px] lg:h-[200px]"
           />
           {errors.business_details && (
-            <p className="text-red-500 text-sm">{errors.business_details.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.business_details.message}
+            </p>
           )}
         </div>
 
@@ -270,7 +275,11 @@ const BusinessProfileForm = () => {
             onClick={() => setShowConfirmPassword((prev) => !prev)}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
           >
-            {showConfirmPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+            {showConfirmPassword ? (
+              <EyeOffIcon size={20} />
+            ) : (
+              <EyeIcon size={20} />
+            )}
           </button>
           {errors.password_confirmation && (
             <p className="text-red-500 text-sm">
@@ -281,30 +290,30 @@ const BusinessProfileForm = () => {
 
         {/* Image Upload */}
         <div className="flex flex-col items-center gap-2 mt-6">
-         <Upload
-  listType="picture-card"
-  fileList={fileList}
-  onChange={handleImageChange}
-  onPreview={onPreview}
-  beforeUpload={() => false}
-  accept="image/*"
-  multiple
-  maxCount={5}
-  itemRender={(originNode, file, fileList) => {
-    const index = fileList.indexOf(file);
-    return (
-      <div className="relative group">
-        {originNode}
-        <div className="absolute top-1 left-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center z-10">
-          {index + 1}
-        </div>
-      </div>
-    );
-  }}
->
-  {fileList.length < 5 && <UploadIcons />}
-</Upload>
-
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleImageChange}
+            onPreview={onPreview}
+            beforeUpload={() => false}
+            accept="image/*"
+            multiple
+            maxCount={5}
+            itemRender={(originNode, file, fileList) => {
+              const index = fileList.indexOf(file);
+              return (
+                <div className="relative group">
+                  {originNode}
+                  <div className="absolute top-1 left-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center z-10">
+                    {index + 1}
+                  </div>
+                </div>
+              );
+            }}
+          >
+            {fileList.length < 5 && <UploadIcons />}
+          </Upload>
+<p>1920 x 1080 pixels or Relación de aspecto 4 x 5</p>
           {errors.image && (
             <p className="text-red-500 text-sm">{errors.image.message}</p>
           )}
@@ -316,12 +325,17 @@ const BusinessProfileForm = () => {
             type="submit"
             disabled={RegistrationMutation.isPending}
             className={`bg-[#11D619] hover:bg-green-600 text-white font-semibold py-3 px-14 lg:text-3xl rounded-xl lg:rounded-[12px] transition-all duration-200 ${
-              RegistrationMutation.isPending ? "opacity-60 cursor-not-allowed" : ""
+              RegistrationMutation.isPending
+                ? "opacity-60 cursor-not-allowed"
+                : ""
             }`}
           >
             {RegistrationMutation.isPending ? (
               <span className="flex items-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"
