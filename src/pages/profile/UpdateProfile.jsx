@@ -342,7 +342,8 @@ const UpdateProfile = () => {
 >
   {fileList.length < 5 && <UploadIcons />}
 </Upload>
-<p>1920 x 1080 pixels or Relación de aspecto 4 x 5</p>
+<p>1920 × 1080 pixels (Relación de aspecto 16:9)</p>
+
         </div>
         <p className="text-red-600 text-center text-xs lg:text-sm">
           Sube las imágenes una por una. Si deseas actualizar las imágenes, elimina todas y vuelve a subirlas.

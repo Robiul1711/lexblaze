@@ -313,7 +313,8 @@ const BusinessProfileForm = () => {
           >
             {fileList.length < 5 && <UploadIcons />}
           </Upload>
-<p>1920 x 1080 pixels or Relación de aspecto 4 x 5</p>
+<p>1920 × 1080 pixels (Relación de aspecto 16:9)</p>
+
           {errors.image && (
             <p className="text-red-500 text-sm">{errors.image.message}</p>
           )}
